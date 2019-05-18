@@ -9,9 +9,13 @@ var c6 = {name : "Eclair noir", hp : 1600, attack : 100, defense : 50, vit : 3, 
 var c7 = {name : "Etoile de jais", hp : 3000, attack : 160, defense : 60, vit : 6, agi : 3, acc : 4, mag : 120, int : 95}
 var c8 = {name : "Etoile blanche", hp : 4000, attack : 190, defense : 90, vit : 7, agi : 9, acc : 8, mag : 900, int : 160}
 var c9 = {name : "Longue plume", hp : 1500, attack : 100, defense : 40, vit : 6, agi : 5, acc : 2, mag : 50, int : 40}
+//listes des valeurs
+
+var i;
+var dmg;
 
 //choix du joueur 1
-var user1 = prompt("Joueur 1 choississez votre personnage :", "Tappez c1~9").toLowerCase();
+var user1 = prompt("Joueur 1 choisissez votre personnage :", "Tappez c1~9").toLowerCase();
 
 switch (user1) {
     case 'c1':
@@ -57,7 +61,7 @@ switch (user1) {
 }
 
 //choix du joueur 2
-var user2 = prompt("Joueur 2 choississez votre personnage :", "Tappez c1~9").toLowerCase();
+var user2 = prompt("Joueur 2 choisissez votre personnage :", "Tappez c1~9").toLowerCase();
 
 switch (user2) {
     case 'c1':
@@ -100,4 +104,42 @@ switch (user2) {
     default:
       console.log("Valeur non reconnue, veuillez entrez une valeur entre c1 et c9")
       break;
+}
+//fonction du combat
+function combat() {
+switch (combatvar) {
+  case'attack':
+//codeblock for attack
+  x.attack - y.defense = dmg;
+  y.hp - dmg = y.hp;
+  console.log(x.name + "a infligé " + dmg + "de dégats à " + y.name + " !");
+    break;
+  case'dodge':
+//codeblock for dodge
+    break;
+  case'trap':
+//codeblock for trap
+    break;
+  case'magi'
+//codeblock for magi
+    break;
+  default:
+    console.log("Valeur incorrect");
+    break;
+  }
+}
+//loop des tours
+for (i = 0; i<100; i++) {
+//choisir quel joueur commence
+  if (x.vit > y.vit) {
+    var combatvar = prompt("choisissez ce que " + x.name + " doit faire","attack, dodge, trap, magi" ).toLowerCase();
+
+} else if (x.vit < y.vit) {
+    var combatvar = prompt("choisissez ce que " + y.name + " doit faire","attack, dodge, trap, magi" ).toLowerCase();
+
+} else if (x.vit = y.vit) {
+
+
+} else {
+  console.log("Erreur");
 }
