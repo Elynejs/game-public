@@ -1,0 +1,103 @@
+//liste des personnages
+
+var c1 = {name : "Fléau", hp : 2000, attack : 150, defense : 40, vit : 8, agi : 9, acc : 6, mag : 0, int : 100}
+var c2 = {name : "Griffe de foudre", hp : 2100, attack : 180, defense : 50, vit : 9, agi : 6, acc : 3, mag : 180, int : 70}
+var c3 = {name : "Etoile du tigre", hp : 3800, attack : 150, defense : 80, vit : 5, agi : 7, acc : 6, mag : 150, int : 90}
+var c4 = {name : "Etoile brisée", hp : 3500, attack : 180, defense : 100, vit : 4, agi : 3, acc : 5, mag : 100, int : 90}
+var c5 = {name : "Carcasse", hp : 3000, attack : 160, defense : 70, vit : 4, agi : 2, acc : 3, mag : 0, int : 30}
+var c6 = {name : "Eclair noir", hp : 1600, attack : 100, defense : 50, vit : 3, agi : 4, acc : 5, mag : 60, int : 60}
+var c7 = {name : "Etoile de jais", hp : 3000, attack : 160, defense : 60, vit : 6, agi : 3, acc : 4, mag : 120, int : 95}
+var c8 = {name : "Etoile blanche", hp : 4000, attack : 190, defense : 90, vit : 7, agi : 9, acc : 8, mag : 900, int : 160}
+var c9 = {name : "Longue plume", hp : 1500, attack : 100, defense : 40, vit : 6, agi : 5, acc : 2, mag : 50, int : 40}
+
+//choix du joueur 1
+var user1 = prompt("Joueur 1 choississez votre personnage :", "Tappez c1~9").toLowerCase();
+
+switch (user1) {
+    case 'c1':
+      console.log("Vous avez choisie Fléau");
+      var x = c1;
+      //définie la valeur x au personnage choisie par le joueur
+      break;
+    case 'c2':
+      console.log("Vous avez choisie Griffe de foudre");
+      var x = c2;
+      break;
+    case 'c3':
+      console.log("Vous avez choisie Etoile du tigre");
+      var x = c3;
+      break;
+    case 'c4':
+      console.log("Vous avez choisie Etoile brisée");
+      var x = c4;
+      break;
+    case 'c5':
+      console.log("Vous avez choisie Carcasse");
+      var x = c5;
+      break;
+    case 'c6':
+      console.log("Vous avez choisie Eclair noir");
+      var x = c6;
+      break;
+    case 'c7':
+      console.log("Vous avez choisie Etoile de jais");
+      var x = c7;
+      break;
+    case 'c8':
+      console.log("Vous avez choisie Etoile blanche");
+      var x = c8;
+      break;
+    case 'c9':
+      console.log("Vous avez choisie Longue plume");
+      var x = c9;
+      break;
+    default:
+      console.log("Valeur non reconnue, veuillez entrez une valeur entre c1 et c9")
+      break;
+}
+
+//choix du joueur 2
+var user2 = prompt("Joueur 2 choississez votre personnage :", "Tappez c1~9").toLowerCase();
+
+switch (user2) {
+    case 'c1':
+      console.log("Vous avez choisie Fléau");
+      var y = c1;
+      //définie la valeur y au personnage choisie par le joueur
+      break;
+    case 'c2':
+      console.log("Vous avez choisie Griffe de foudre");
+      var y = c2;
+      break;
+    case 'c3':
+      console.log("Vous avez choisie Etoile du tigre");
+      var y = c3;
+      break;
+    case 'c4':
+      console.log("Vous avez choisie Etoile brisée");
+      var y = c4;
+      break;
+    case 'c5':
+      console.log("Vous avez choisie Carcasse");
+      var y = c5;
+      break;
+    case 'c6':
+      console.log("Vous avez choisie Eclair noir");
+      var y = c6;
+      break;
+    case 'c7':
+      console.log("Vous avez choisie Etoile de jais");
+      var y = c7;
+      break;
+    case 'c8':
+      console.log("Vous avez choisie Etoile blanche");
+      var y = c8;
+      break;
+    case 'c9':
+      console.log("Vous avez choisie Longue plume");
+      var y = c9;
+      break;
+    default:
+      console.log("Valeur non reconnue, veuillez entrez une valeur entre c1 et c9")
+      break;
+}
