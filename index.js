@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const config = require("./config.json")
 const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
@@ -25,17 +26,23 @@ client.on('ready', () => {
     console.log('Ready!');
 });
 
-//Getting user input on game start
+//Admin commands
 client.on('message', msg => {
+  if (msg.content === "!admin") {
+   msg.reply('placeholder text');
+ }
+});
+//User commands
+client.on('message', msg => { //Getting user input on game start
   if (msg.content === '!startgame') {
     if (playerCount === 0) {
-      msg.channel.send(`${msg.author},`, " is registered as player 1! Waiting for another player...");
-      var playerCount = 1;
+      msg.reply(" is registered as player 1! Waiting for another player...");
+      playerCount = 1;
   }else if (playerCount === 1) {
-      msg.channel.send(`${msg.author},`, " is registered as player 2! Starting the game...");
-      var playerCount = 2;
+      msg.reply(" is registered as player 2! Starting the game...");
+      playerCount = 2;
   }else {
       msg.reply("There is already two registered players."); //failsafe in case someone tries to register when a game is in session
-  }
+        }
   }
 });
