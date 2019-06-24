@@ -1,2 +1,4 @@
-# gameofcats-public
-project discontinued because javascript is a bitch
+# game-public
+List of possible commands :
+  !startgame 
+   => Register yourself as a player, once two players are registered, start the game.
