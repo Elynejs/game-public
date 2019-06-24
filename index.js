@@ -5,8 +5,8 @@ client.login(config.token);
 
 //Miscallaneous variables
 var playerCount = 0;
-var marySue = {tier: "template", name: "Mary Sue", hp : 5000, atk : 500, def : 200, spd : 10, agi : 10, acr : 10, int : 200, mag : 2000, cd : 20, rgn : 100};
-var c1 = {tier: "S", name : "Seize", hp : 3000, attack : 3000, defense : 40, vit : 8, agi : 9, acc : 6, mag : 0, int : 100};
+var c0 = {tier: "Max", name: "template", hp : 5000, atk : 500, def : 200, spd : 10, agi : 10, acr : 10, int : 200, mag : 2000, cd : 20, rgn : 100};
+var c1 = {tier: "S", name : "Seize", hp : 3000, atk : 360, def : 70, spd : 9, agi : 9, acr : 8, int: 179, mag : 1500, cd : 5, rgn : 90};
 var c2 = {};
 var c3 = {};
 var c4 = {};
