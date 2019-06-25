@@ -212,15 +212,17 @@ client.on('message', msg => {
 			msg.reply('is registered as player 1! Waiting for another player...');
 			playerCount = 1;
 			msg.author.id = player1;
+			return player1;
 		}
 		else if (playerCount === 1) {
 			if (msg.author.id === player1) {
 				msg.reply(' is already registered.');
 			}
 			else {
-				msg.reply('is registered as player 2! Starting the game...');
+				msg.reply('is registered as player 2! Type !start to start the game!');
 				playerCount = 2;
 				msg.author.id = player2;
+				return player2;
 			}
 		}
 		else{
@@ -243,6 +245,23 @@ client.on('message', msg => {
 		}
 		else{
 			msg.reply('lack permissions to use this command.');
+		}
+	}
+});
+
+// starting the game
+client.on('message', msg => {
+	if (msg.author.bot) return; // won't react to bots
+	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
+	// destructuring
+	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
+	if (command === 'start') {
+		if (playerCount !== 2) {
+			msg.channel.send('Not enough player registered yet. Please type !register.');
+		}
+		else {
+			msg.channel.send('choose a character by reacting to this message with your character emote.');
 		}
 	}
 });
