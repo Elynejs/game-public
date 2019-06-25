@@ -1,16 +1,21 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-inline-comments */
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-// eslint-disable-next-line no-unused-vars
 const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
 // Miscallaneous variables
+let player1HasChar = false;
+let player2HasChar = false;
+let player1Char;
+let player2Char;
+let gameStarting = false;
 let playerCount = 0;
 let player1;
 let player2;
-let c0 = {
+const c0 = {
 	tier : 'template', // template with max stat for debugging purposes
 	name : 'ricardo milos',
 	hp : 5000,
@@ -24,7 +29,7 @@ let c0 = {
 	cd : 20,
 	rgn : 100,
 };
-let c1 = {
+const c1 = {
 	tier : 'S',
 	name : 'Seize',
 	hp : 3000,
@@ -38,7 +43,7 @@ let c1 = {
 	cd : 5,
 	rgn : 90,
 };
-let c2 = {
+const c2 = {
 	tier : 'S',
 	name : 'Fusoku',
 	hp : 4000,
@@ -52,7 +57,7 @@ let c2 = {
 	cd : 0,
 	rgn : 50,
 };
-let c3 = {
+const c3 = {
 	tier : 'S',
 	name : 'Leoppscaay',
 	hp : 2500,
@@ -66,7 +71,7 @@ let c3 = {
 	cd : 2,
 	rgn : 70,
 };
-let c4 = {
+const c4 = {
 	tier : 'S',
 	name : 'Gold',
 	hp : 3500,
@@ -80,7 +85,7 @@ let c4 = {
 	cd : 10,
 	rgn : 50,
 };
-let c5 = {
+const c5 = {
 	tier : 'A',
 	name : 'Yellow Strike',
 	hp : 1500,
@@ -94,7 +99,7 @@ let c5 = {
 	cd : 5,
 	rgn : 10,
 };
-let c6 = {
+const c6 = {
 	tier : 'A',
 	name : 'Pinky',
 	hp : 1000,
@@ -108,7 +113,7 @@ let c6 = {
 	cd : 3,
 	rgn : 0,
 };
-let c7 = {
+const c7 = {
 	tier : 'A',
 	name : 'Red Queen',
 	hp : 2000,
@@ -122,7 +127,7 @@ let c7 = {
 	cd : 3,
 	rgn : 10,
 };
-let c8 = {
+const c8 = {
 	tier : 'A',
 	name : 'Kairo',
 	hp : 2000,
@@ -136,7 +141,7 @@ let c8 = {
 	cd : 0,
 	rgn : 20,
 };
-let c9 = {
+const c9 = {
 	tier : 'A',
 	name : 'Lyzan',
 	hp : 1500,
@@ -150,7 +155,7 @@ let c9 = {
 	cd : 15,
 	rgn : 100,
 };
-let c10 = {
+const c10 = {
 	tier : 'B',
 	name : 'USaBi',
 	hp : 900,
@@ -164,7 +169,7 @@ let c10 = {
 	cd : 5,
 	rgn : 0,
 };
-let c11 = {
+const c11 = {
 	tier : 'B',
 	name : 'Ell\'Fayrh',
 	hp : 1000,
@@ -178,7 +183,7 @@ let c11 = {
 	cd : 10,
 	rgn : 0,
 };
-let c12 = {
+const c12 = {
 	tier : 'B',
 	name : 'May',
 	hp : 700,
@@ -230,38 +235,208 @@ client.on('message', msg => {
 			// failsafe in case someone tries to register when a game is in session
 		}
 	}
-});
-
-// admin command
-client.on('message', msg => {
-	if (msg.author.bot) return; // won't react to bots
-	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
-	// destructuring
-	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
-	const command = args.shift().toLowerCase();
+	// template for admin command
 	if (command === 'admin') {
-		if (msg.author.id === config.ownerID) {
-			msg.reply('placeholder for template admin command');
+		if (msg.author.id == config.ownerID) {
+			msg.reply('placeholder : template for admin command');
 		}
-		else{
-			msg.reply('lack permissions to use this command.');
+		else {
+			msg.channel.send('You lack permissions to use this command.');
 		}
 	}
-});
-
-// starting the game
-client.on('message', msg => {
-	if (msg.author.bot) return; // won't react to bots
-	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
-	// destructuring
-	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
-	const command = args.shift().toLowerCase();
+	// starting the game
 	if (command === 'start') {
 		if (playerCount !== 2) {
 			msg.channel.send('Not enough player registered yet. Please type !register.');
 		}
 		else {
-			msg.channel.send('choose a character by reacting to this message with your character emote.');
+			msg.channel.send('choose a character by typing "!" + your character');
+			gameStarting = true;
+		}
+	}
+	// character selection
+	if (gameStarting === true) {
+		switch(command) {
+		case'seize':
+			if(msg.author.id == player1) {
+				player1Char = c1;
+				player1HasChar = true;
+				msg.reply('chose Seize.');
+			}
+			else if(msg.author.id == player2) {
+				player2Char = c1;
+				player2HasChar = true;
+				msg.reply('chose Seize.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'fusoku':
+			if (msg.author.id == player1) {
+				player1Char = c2;
+				player1HasChar = true;
+				msg.reply('chose Fusoku.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c2;
+				player2HasChar = true;
+				msg.reply('chose Fusoku.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'leoppscaay':
+			if (msg.author.id == player1) {
+				player1Char = c3;
+				player1HasChar = true;
+				msg.reply('chose Leoppscaay.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c3;
+				player2HasChar = true;
+				msg.reply('chose Leoppscaay.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'gold':
+			if (msg.author.id == player1) {
+				player1Char = c4;
+				player1HasChar = true;
+				msg.reply('chose Gold.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c4;
+				player2HasChar = true;
+				msg.reply('chose Gold.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'yellowstrike':
+			if (msg.author.id == player1) {
+				player1Char = c5;
+				player1HasChar = true;
+				msg.reply('chose Yellow Strike.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c5;
+				player2HasChar = true;
+				msg.reply('chose Yellow Strike.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'pinky': // best char btw kappa
+			if (msg.author.id == player1) {
+				player1Char = c6;
+				player1HasChar = true;
+				msg.reply('chose Pinky.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c6;
+				player2HasChar = true;
+				msg.reply('chose Pinky.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'redqueen':
+			if (msg.author.id == player1) {
+				player1Char = c7;
+				player1HasChar = true;
+				msg.reply('chose Red Queen.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c7;
+				player2HasChar = true;
+				msg.reply('chose Red Queen.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'kairo':
+			if (msg.author.id == player1) {
+				player1Char = c8;
+				player1HasChar = true;
+				msg.reply('chose Kairo.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c8;
+				player2HasChar = true;
+				msg.reply('chose Kairo.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'lyzan':
+			if (msg.author.id == player1) {
+				player1Char = c9;
+				player1HasChar = true;
+				msg.reply('chose Lyzan.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c9;
+				player2HasChar = true;
+				msg.reply('chose Lyzan.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'usabi':
+			if (msg.author.id == player1) {
+				player1Char = c10;
+				player1HasChar = true;
+				msg.reply('chose USaBi.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c10;
+				player2HasChar = true;
+				msg.reply('chose USaBi.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'ellfayrh':
+			if (msg.author.id == player1) {
+				player1Char = c11;
+				player1HasChar = true;
+				msg.reply('chose Ell\'Fayrh.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c11;
+				player2HasChar = true;
+				msg.reply('chose Ell\'Fayrh.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
+		case 'may':
+			if (msg.author.id == player1) {
+				player1Char = c12;
+				player1HasChar = true;
+				msg.reply('chose May.');
+			}
+			else if (msg.author.id == player2) {
+				player2Char = c12;
+				player2HasChar = true;
+				msg.reply('chose May.');
+			}
+			else {
+				msg.reply('is not a registered player.');
+			}
+			break;
 		}
 	}
 });
