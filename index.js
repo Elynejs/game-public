@@ -1,16 +1,18 @@
 /* eslint-disable no-inline-comments */
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const perm = new Discord.Permissions();
 const config = require('./config.json');
+// eslint-disable-next-line no-unused-vars
 const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
 // Miscallaneous variables
 let playerCount = 0;
+let player1;
+let player2;
 let c0 = {
-	tier : 'Max', // template with max stat for debugging purposes
-	name : 'template',
+	tier : 'template', // template with max stat for debugging purposes
+	name : 'ricardo milos',
 	hp : 5000,
 	atk : 500,
 	def : 200,
@@ -148,7 +150,7 @@ let c9 = {
 	cd : 15,
 	rgn : 100,
 };
-let ca = {
+let c10 = {
 	tier : 'B',
 	name : 'USaBi',
 	hp : 900,
@@ -162,7 +164,7 @@ let ca = {
 	cd : 5,
 	rgn : 0,
 };
-let cb = {
+let c11 = {
 	tier : 'B',
 	name : 'Ell\'Fayrh',
 	hp : 1000,
@@ -176,7 +178,7 @@ let cb = {
 	cd : 10,
 	rgn : 0,
 };
-let cc = {
+let c12 = {
 	tier : 'B',
 	name : 'May',
 	hp : 700,
@@ -197,26 +199,50 @@ client.on('ready', () => {
 	console.log('Ready!');
 });
 
-// Admin commands
+// commands
 client.on('message', msg => {
-	if (msg.content === '!admin' && msg.author.perm(0x00000008)) {
-		msg.reply('placeholder text');
-	}
-});
-// User commands
-client.on('message', msg => { // Getting user input on game start
-	if (msg.content === '!startgame') {
+	if (msg.author.bot) return; // won't react to bots
+	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
+	// destructuring
+	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
+	if (command === 'register') {
+	// command for registering as a "player"
 		if (playerCount === 0) {
-			msg.reply(' is registered as player 1! Waiting for another player...');
+			msg.reply('is registered as player 1! Waiting for another player...');
 			playerCount = 1;
+			msg.author.id = player1;
 		}
 		else if (playerCount === 1) {
-			msg.reply(' is registered as player 2! Starting the game...');
-			playerCount = 2;
+			if (msg.author.id === player1) {
+				msg.reply(' is already registered.');
+			}
+			else {
+				msg.reply('is registered as player 2! Starting the game...');
+				playerCount = 2;
+				msg.author.id = player2;
+			}
 		}
 		else{
-			msg.reply('There is already two registered players.');
+			msg.reply('there is already two registered players.');
 			// failsafe in case someone tries to register when a game is in session
+		}
+	}
+});
+
+// admin command
+client.on('message', msg => {
+	if (msg.author.bot) return; // won't react to bots
+	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
+	// destructuring
+	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
+	if (command === 'admin') {
+		if (msg.author.id === config.ownerID) {
+			msg.reply('placeholder for template admin command');
+		}
+		else{
+			msg.reply('lack permissions to use this command.');
 		}
 	}
 });
