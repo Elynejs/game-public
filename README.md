@@ -14,3 +14,7 @@ List of admin commands :
    => check if player1 has succesfully selected a playable character.
   !testchar2
    => check if player2 has succesfully selected a playable character.
+  !testturnPhase
+   => return true if turnPhase is true, false otherwise.
+  !testgameStarting
+   => return true if gameStarting is true, false otherwise.
