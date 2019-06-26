@@ -7,6 +7,7 @@ const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
 // Miscallaneous variables
+let i = 0;
 let turnPhase = false;
 let player1choseChar = false;
 let player2choseChar = false;
@@ -16,7 +17,7 @@ let gameStarting = false;
 let playerCount = 0;
 let player1;
 let player2;
-const c0 = {
+const char = [{
 	tier : 'template', // template with max stat for debugging purposes
 	name : 'ricardo milos',
 	hp : 5000,
@@ -29,8 +30,8 @@ const c0 = {
 	mag : 2000,
 	cd : 20,
 	rgn : 100,
-};
-const c1 = {
+},
+{
 	tier : 'S',
 	name : 'Seize',
 	hp : 3000,
@@ -43,8 +44,8 @@ const c1 = {
 	mag : 1500,
 	cd : 5,
 	rgn : 90,
-};
-const c2 = {
+},
+{
 	tier : 'S',
 	name : 'Fusoku',
 	hp : 4000,
@@ -57,8 +58,8 @@ const c2 = {
 	mag : 0,
 	cd : 0,
 	rgn : 50,
-};
-const c3 = {
+},
+{
 	tier : 'S',
 	name : 'Leoppscaay',
 	hp : 2500,
@@ -71,8 +72,8 @@ const c3 = {
 	mag : 500,
 	cd : 2,
 	rgn : 70,
-};
-const c4 = {
+},
+{
 	tier : 'S',
 	name : 'Gold',
 	hp : 3500,
@@ -85,8 +86,8 @@ const c4 = {
 	mag : 1900,
 	cd : 10,
 	rgn : 50,
-};
-const c5 = {
+},
+{
 	tier : 'A',
 	name : 'Yellow Strike',
 	hp : 1500,
@@ -99,8 +100,8 @@ const c5 = {
 	mag : 800,
 	cd : 5,
 	rgn : 10,
-};
-const c6 = {
+},
+{
 	tier : 'A',
 	name : 'Pinky',
 	hp : 1000,
@@ -113,8 +114,8 @@ const c6 = {
 	mag : 600,
 	cd : 3,
 	rgn : 0,
-};
-const c7 = {
+},
+{
 	tier : 'A',
 	name : 'Red Queen',
 	hp : 2000,
@@ -127,8 +128,8 @@ const c7 = {
 	mag : 300,
 	cd : 3,
 	rgn : 10,
-};
-const c8 = {
+},
+{
 	tier : 'A',
 	name : 'Kairo',
 	hp : 2000,
@@ -141,8 +142,8 @@ const c8 = {
 	mag : 0,
 	cd : 0,
 	rgn : 20,
-};
-const c9 = {
+},
+{
 	tier : 'A',
 	name : 'Lyzan',
 	hp : 1500,
@@ -155,8 +156,8 @@ const c9 = {
 	mag : 1800,
 	cd : 15,
 	rgn : 100,
-};
-const c10 = {
+},
+{
 	tier : 'B',
 	name : 'USaBi',
 	hp : 900,
@@ -169,8 +170,8 @@ const c10 = {
 	mag : 400,
 	cd : 5,
 	rgn : 0,
-};
-const c11 = {
+},
+{
 	tier : 'B',
 	name : 'Ell\'Fayrh',
 	hp : 1000,
@@ -183,8 +184,8 @@ const c11 = {
 	mag : 1400,
 	cd : 10,
 	rgn : 0,
-};
-const c12 = {
+},
+{
 	tier : 'B',
 	name : 'May',
 	hp : 700,
@@ -197,7 +198,8 @@ const c12 = {
 	mag : 150,
 	cd : 3,
 	rgn : 5,
-};
+}];
+const totalChar = char.length;
 
 // Defining bot activity
 client.on('ready', () => {
@@ -237,22 +239,43 @@ client.on('message', msg => {
 		}
 	}
 	// template for admin command
-	if (command === 'testchar') {
+	if (command === 'testchar1') {
 		if (msg.member.id === config.ownerID) {
-			if (player1choseChar === true && player1Char.name.toLowerCase() === 'may') {
-				console.log('object working!');
-			}
-			else {
-				console.log('object not working!');
+			for (; i < totalChar; i++) {
+				if (player1choseChar === true && player1Char.name === char[i].name) {
+					console.log('player1 chose a recognized character.');
+				}
+				else {
+					console.log('player1 chose an unrecognized character or the object is not working properly.');
+				}
 			}
 		}
 		else {
 			msg.channel.send('You lack permissions to use this command.');
 		}
 	}
-	if (command === 'testturnPhase') {
+	if (command === 'testchar2') {
 		if (msg.member.id === config.ownerID) {
-			console.log(turnPhase);
+			for (; i < totalChar; i++) {
+				if (player2choseChar === true && player2Char.name === char[i].name) {
+					console.log('player2 chose a recognized character.');
+				}
+				else {
+					console.log('player2 chose an unrecognized character or the object is not working properly.');
+				}
+			}
+		}
+		else {
+			msg.channel.send('You lack permissions to use this command.');
+		}
+	}
+	if (command === 'faststart') {
+		if (msg.member.id === config.ownerID) {
+			player1 = config.testID1;
+			player2 = config.testID2;
+			playerCount = 2;
+			gameStarting = true;
+			console.log('fast started the game with elynejs as player1 and elyne3 as player2.');
 		}
 		else {
 			msg.channel.send('You lack permissions to use this command.');
@@ -286,7 +309,7 @@ client.on('message', msg => {
 		case'seize':
 			if(msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c1;
+					player1Char = char[1];
 					player1choseChar = true;
 					msg.reply('chose Seize.');
 				}
@@ -296,7 +319,7 @@ client.on('message', msg => {
 			}
 			else if(msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c1;
+					player2Char = char[1];
 					player2choseChar = true;
 					msg.reply('chose Seize.');
 				}
@@ -311,7 +334,7 @@ client.on('message', msg => {
 		case 'fusoku':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c2;
+					player1Char = char[2];
 					player1choseChar = true;
 					msg.reply('chose Fusoku.');
 				}
@@ -321,7 +344,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c2;
+					player2Char = char[2];
 					player2choseChar = true;
 					msg.reply('chose Fusoku.');
 				}
@@ -336,7 +359,7 @@ client.on('message', msg => {
 		case 'leoppscaay':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c3;
+					player1Char = char[3];
 					player1choseChar = true;
 					msg.reply('chose Leoppscaay.');
 				}
@@ -346,7 +369,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c3;
+					player2Char = char[3];
 					player2choseChar = true;
 					msg.reply('chose Leoppscaay.');
 				}
@@ -361,7 +384,7 @@ client.on('message', msg => {
 		case 'gold':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c4;
+					player1Char = char[4];
 					player1choseChar = true;
 					msg.reply('chose Gold.');
 				}
@@ -371,7 +394,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c4;
+					player2Char = char[4];
 					player2choseChar = true;
 					msg.reply('chose Gold.');
 				}
@@ -386,7 +409,7 @@ client.on('message', msg => {
 		case 'yellowstrike':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c5;
+					player1Char = char[5];
 					player1choseChar = true;
 					msg.reply('chose Yellow Strike.');
 				}
@@ -396,7 +419,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c5;
+					player2Char = char[5];
 					player2choseChar = true;
 					msg.reply('chose Yellow Strike.');
 				}
@@ -411,7 +434,7 @@ client.on('message', msg => {
 		case 'pinky': // best char btw kappa
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c6;
+					player1Char = char[6];
 					player1choseChar = true;
 					msg.reply('chose Pinky.');
 					console.log(player1);
@@ -422,7 +445,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c6;
+					player2Char = char[6];
 					player2choseChar = true;
 					msg.reply('chose Pinky.');
 					console.log(player2);
@@ -438,7 +461,7 @@ client.on('message', msg => {
 		case 'redqueen':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c7;
+					player1Char = char[7];
 					player1choseChar = true;
 					msg.reply('chose Red Queen.');
 				}
@@ -448,7 +471,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c7;
+					player2Char = char[7];
 					player2choseChar = true;
 					msg.reply('chose Red Queen.');
 				}
@@ -463,7 +486,7 @@ client.on('message', msg => {
 		case 'kairo':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c8;
+					player1Char = char[8];
 					player1choseChar = true;
 					msg.reply('chose Kairo.');
 				}
@@ -473,7 +496,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c8;
+					player2Char = char[8];
 					player2choseChar = true;
 					msg.reply('chose Kairo.');
 				}
@@ -488,7 +511,7 @@ client.on('message', msg => {
 		case 'lyzan':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c9;
+					player1Char = char[9];
 					player1choseChar = true;
 					msg.reply('chose Lyzan.');
 				}
@@ -498,7 +521,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c9;
+					player2Char = char[9];
 					player2choseChar = true;
 					msg.reply('chose Lyzan.');
 				}
@@ -513,7 +536,7 @@ client.on('message', msg => {
 		case 'usabi':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c10;
+					player1Char = char[10];
 					player1choseChar = true;
 					msg.reply('chose USaBi.');
 				}
@@ -523,7 +546,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c10;
+					player2Char = char[10];
 					player2choseChar = true;
 					msg.reply('chose USaBi.');
 				}
@@ -538,7 +561,7 @@ client.on('message', msg => {
 		case 'ellfayrh':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c11;
+					player1Char = char[11];
 					player1choseChar = true;
 					msg.reply('chose Ell\'Fayrh.');
 				}
@@ -548,7 +571,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c11;
+					player2Char = char[11];
 					player2choseChar = true;
 					msg.reply('chose Ell\'Fayrh.');
 				}
@@ -563,7 +586,7 @@ client.on('message', msg => {
 		case 'may':
 			if (msg.author.id == player1) {
 				if (player1choseChar !== true) {
-					player1Char = c12;
+					player1Char = char[12];
 					player1choseChar = true;
 					msg.reply('chose May.');
 					console.log(player1);
@@ -574,7 +597,7 @@ client.on('message', msg => {
 			}
 			else if (msg.author.id == player2) {
 				if (player2choseChar !== true) {
-					player2Char = c12;
+					player2Char = char[12];
 					player2choseChar = true;
 					msg.reply('chose May.');
 					console.log(player2);
