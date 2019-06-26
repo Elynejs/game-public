@@ -7,8 +7,9 @@ const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
 // Miscallaneous variables
-let player1HasChar = false;
-let player2HasChar = false;
+let turnPhase = false;
+let player1choseChar = false;
+let player2choseChar = false;
 let player1Char;
 let player2Char;
 let gameStarting = false;
@@ -216,18 +217,18 @@ client.on('message', msg => {
 		if (playerCount === 0) {
 			msg.reply('is registered as player 1! Waiting for another player...');
 			playerCount = 1;
-			msg.author.id = player1;
-			return player1;
+			player1 = msg.member.id;
+			console.log(player1);
 		}
 		else if (playerCount === 1) {
-			if (msg.author.id === player1) {
+			if (msg.member.id === player1) {
 				msg.reply(' is already registered.');
 			}
 			else {
 				msg.reply('is registered as player 2! Type !start to start the game!');
 				playerCount = 2;
-				msg.author.id = player2;
-				return player2;
+				player2 = msg.member.id;
+				console.log(player2);
 			}
 		}
 		else{
@@ -236,9 +237,30 @@ client.on('message', msg => {
 		}
 	}
 	// template for admin command
-	if (command === 'admin') {
-		if (msg.author.id == config.ownerID) {
-			msg.reply('placeholder : template for admin command');
+	if (command === 'testchar') {
+		if (msg.member.id === config.ownerID) {
+			if (player1choseChar === true && player1Char.name.toLowerCase() === 'may') {
+				console.log('object working!');
+			}
+			else {
+				console.log('object not working!');
+			}
+		}
+		else {
+			msg.channel.send('You lack permissions to use this command.');
+		}
+	}
+	if (command === 'testturnPhase') {
+		if (msg.member.id === config.ownerID) {
+			console.log(turnPhase);
+		}
+		else {
+			msg.channel.send('You lack permissions to use this command.');
+		}
+	}
+	if (command === 'testgameStarting') {
+		if (msg.member.id === config.ownerID) {
+			console.log(gameStarting);
 		}
 		else {
 			msg.channel.send('You lack permissions to use this command.');
@@ -250,23 +272,37 @@ client.on('message', msg => {
 			msg.channel.send('Not enough player registered yet. Please type !register.');
 		}
 		else {
-			msg.channel.send('choose a character by typing "!" + your character');
+			msg.channel.send('choose a character by typing "!" + your character. You can type !list to see the list of characters.');
 			gameStarting = true;
 		}
+	}
+	// list command
+	if (command === 'list') {
+		msg.reply('https://imgur.com/xndU0DE');
 	}
 	// character selection
 	if (gameStarting === true) {
 		switch(command) {
 		case'seize':
 			if(msg.author.id == player1) {
-				player1Char = c1;
-				player1HasChar = true;
-				msg.reply('chose Seize.');
+				if (player1choseChar !== true) {
+					player1Char = c1;
+					player1choseChar = true;
+					msg.reply('chose Seize.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if(msg.author.id == player2) {
-				player2Char = c1;
-				player2HasChar = true;
-				msg.reply('chose Seize.');
+				if (player2choseChar !== true) {
+					player2Char = c1;
+					player2choseChar = true;
+					msg.reply('chose Seize.');
+				}
+				else{
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -274,14 +310,24 @@ client.on('message', msg => {
 			break;
 		case 'fusoku':
 			if (msg.author.id == player1) {
-				player1Char = c2;
-				player1HasChar = true;
-				msg.reply('chose Fusoku.');
+				if (player1choseChar !== true) {
+					player1Char = c2;
+					player1choseChar = true;
+					msg.reply('chose Fusoku.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c2;
-				player2HasChar = true;
-				msg.reply('chose Fusoku.');
+				if (player2choseChar !== true) {
+					player2Char = c2;
+					player2choseChar = true;
+					msg.reply('chose Fusoku.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -289,14 +335,24 @@ client.on('message', msg => {
 			break;
 		case 'leoppscaay':
 			if (msg.author.id == player1) {
-				player1Char = c3;
-				player1HasChar = true;
-				msg.reply('chose Leoppscaay.');
+				if (player1choseChar !== true) {
+					player1Char = c3;
+					player1choseChar = true;
+					msg.reply('chose Leoppscaay.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c3;
-				player2HasChar = true;
-				msg.reply('chose Leoppscaay.');
+				if (player2choseChar !== true) {
+					player2Char = c3;
+					player2choseChar = true;
+					msg.reply('chose Leoppscaay.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -304,14 +360,24 @@ client.on('message', msg => {
 			break;
 		case 'gold':
 			if (msg.author.id == player1) {
-				player1Char = c4;
-				player1HasChar = true;
-				msg.reply('chose Gold.');
+				if (player1choseChar !== true) {
+					player1Char = c4;
+					player1choseChar = true;
+					msg.reply('chose Gold.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c4;
-				player2HasChar = true;
-				msg.reply('chose Gold.');
+				if (player2choseChar !== true) {
+					player2Char = c4;
+					player2choseChar = true;
+					msg.reply('chose Gold.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -319,14 +385,24 @@ client.on('message', msg => {
 			break;
 		case 'yellowstrike':
 			if (msg.author.id == player1) {
-				player1Char = c5;
-				player1HasChar = true;
-				msg.reply('chose Yellow Strike.');
+				if (player1choseChar !== true) {
+					player1Char = c5;
+					player1choseChar = true;
+					msg.reply('chose Yellow Strike.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c5;
-				player2HasChar = true;
-				msg.reply('chose Yellow Strike.');
+				if (player2choseChar !== true) {
+					player2Char = c5;
+					player2choseChar = true;
+					msg.reply('chose Yellow Strike.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -334,14 +410,26 @@ client.on('message', msg => {
 			break;
 		case 'pinky': // best char btw kappa
 			if (msg.author.id == player1) {
-				player1Char = c6;
-				player1HasChar = true;
-				msg.reply('chose Pinky.');
+				if (player1choseChar !== true) {
+					player1Char = c6;
+					player1choseChar = true;
+					msg.reply('chose Pinky.');
+					console.log(player1);
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c6;
-				player2HasChar = true;
-				msg.reply('chose Pinky.');
+				if (player2choseChar !== true) {
+					player2Char = c6;
+					player2choseChar = true;
+					msg.reply('chose Pinky.');
+					console.log(player2);
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -349,14 +437,24 @@ client.on('message', msg => {
 			break;
 		case 'redqueen':
 			if (msg.author.id == player1) {
-				player1Char = c7;
-				player1HasChar = true;
-				msg.reply('chose Red Queen.');
+				if (player1choseChar !== true) {
+					player1Char = c7;
+					player1choseChar = true;
+					msg.reply('chose Red Queen.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c7;
-				player2HasChar = true;
-				msg.reply('chose Red Queen.');
+				if (player2choseChar !== true) {
+					player2Char = c7;
+					player2choseChar = true;
+					msg.reply('chose Red Queen.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -364,14 +462,24 @@ client.on('message', msg => {
 			break;
 		case 'kairo':
 			if (msg.author.id == player1) {
-				player1Char = c8;
-				player1HasChar = true;
-				msg.reply('chose Kairo.');
+				if (player1choseChar !== true) {
+					player1Char = c8;
+					player1choseChar = true;
+					msg.reply('chose Kairo.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c8;
-				player2HasChar = true;
-				msg.reply('chose Kairo.');
+				if (player2choseChar !== true) {
+					player2Char = c8;
+					player2choseChar = true;
+					msg.reply('chose Kairo.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -379,14 +487,24 @@ client.on('message', msg => {
 			break;
 		case 'lyzan':
 			if (msg.author.id == player1) {
-				player1Char = c9;
-				player1HasChar = true;
-				msg.reply('chose Lyzan.');
+				if (player1choseChar !== true) {
+					player1Char = c9;
+					player1choseChar = true;
+					msg.reply('chose Lyzan.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c9;
-				player2HasChar = true;
-				msg.reply('chose Lyzan.');
+				if (player2choseChar !== true) {
+					player2Char = c9;
+					player2choseChar = true;
+					msg.reply('chose Lyzan.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -394,14 +512,24 @@ client.on('message', msg => {
 			break;
 		case 'usabi':
 			if (msg.author.id == player1) {
-				player1Char = c10;
-				player1HasChar = true;
-				msg.reply('chose USaBi.');
+				if (player1choseChar !== true) {
+					player1Char = c10;
+					player1choseChar = true;
+					msg.reply('chose USaBi.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c10;
-				player2HasChar = true;
-				msg.reply('chose USaBi.');
+				if (player2choseChar !== true) {
+					player2Char = c10;
+					player2choseChar = true;
+					msg.reply('chose USaBi.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -409,14 +537,24 @@ client.on('message', msg => {
 			break;
 		case 'ellfayrh':
 			if (msg.author.id == player1) {
-				player1Char = c11;
-				player1HasChar = true;
-				msg.reply('chose Ell\'Fayrh.');
+				if (player1choseChar !== true) {
+					player1Char = c11;
+					player1choseChar = true;
+					msg.reply('chose Ell\'Fayrh.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c11;
-				player2HasChar = true;
-				msg.reply('chose Ell\'Fayrh.');
+				if (player2choseChar !== true) {
+					player2Char = c11;
+					player2choseChar = true;
+					msg.reply('chose Ell\'Fayrh.');
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -424,14 +562,26 @@ client.on('message', msg => {
 			break;
 		case 'may':
 			if (msg.author.id == player1) {
-				player1Char = c12;
-				player1HasChar = true;
-				msg.reply('chose May.');
+				if (player1choseChar !== true) {
+					player1Char = c12;
+					player1choseChar = true;
+					msg.reply('chose May.');
+					console.log(player1);
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else if (msg.author.id == player2) {
-				player2Char = c12;
-				player2HasChar = true;
-				msg.reply('chose May.');
+				if (player2choseChar !== true) {
+					player2Char = c12;
+					player2choseChar = true;
+					msg.reply('chose May.');
+					console.log(player2);
+				}
+				else {
+					msg.reply('already chose a character.');
+				}
 			}
 			else {
 				msg.reply('is not a registered player.');
@@ -440,3 +590,8 @@ client.on('message', msg => {
 		}
 	}
 });
+
+if (player1choseChar === true && player2choseChar === true) {
+	gameStarting = false;
+	turnPhase = true;
+}
