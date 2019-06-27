@@ -7,7 +7,9 @@ const { Client, Attachment } = require('discord.js');
 client.login(config.token);
 
 // Miscallaneous variables
-let i = 0;
+let dmg = 0;
+let gamePhase = false;
+let gameEnd = false;
 let turnPhase = false;
 let player1choseChar = false;
 let player2choseChar = false;
@@ -15,21 +17,31 @@ let player1Char;
 let player2Char;
 let gameStarting = false;
 let playerCount = 0;
-let player1;
-let player2;
+const player1 = {
+	id : 0,
+	choseAction : false,
+	username : '',
+};
+const player2 = {
+	id : 0,
+	choseAction : false,
+	username : '',
+};
 const char = [{
-	tier : 'template', // template with max stat for debugging purposes
-	name : 'ricardo milos',
-	hp : 5000,
-	atk : 500,
-	def : 200,
-	spd : 10,
-	agi : 10,
-	acr : 10,
-	int : 200,
-	mag : 2000,
-	cd : 20,
-	rgn : 100,
+	tier : 'S', // template with max stat for debugging purposes
+	name : 'maxvalue', // name of the character
+	hp : 5000, // vitality, when it falls to 0 the character is unusable
+	atk : 500, // maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
+	def : 200, // damage points reduced from the attack function of the opponent
+	spd : 10, // the character with the highest SPD will have his action executed first
+	agi : 10, // determine how good the character is at dodging
+	acr : 10, // will be deduced from your opponent agi stat if he does the dodge function
+	int : 200, // determines who wins a trap function
+	mag : 2000, // used to determinate the damage of a magic attack, unaffected by defense
+	magCd : 20, // number of turn to wait before using magic again
+	dodgeCd : 2, // number of turn to wait before using dodge again
+	trapCd : 4, // number of turn to wait before using trap again
+	rgn : 100, // amount of hp the character regenerate at the end of each turn
 },
 {
 	tier : 'S',
@@ -42,7 +54,9 @@ const char = [{
 	acr : 8,
 	int: 179,
 	mag : 1500,
-	cd : 5,
+	magCd : 5,
+	dodgeCd : 2,
+	trapCd : 4,
 	rgn : 90,
 },
 {
@@ -219,18 +233,20 @@ client.on('message', msg => {
 		if (playerCount === 0) {
 			msg.reply('is registered as player 1! Waiting for another player...');
 			playerCount = 1;
-			player1 = msg.member.id;
-			console.log(player1);
+			player1.username = msg.member.username;
+			player1.id = msg.member.id;
+			console.log(player1.id);
 		}
 		else if (playerCount === 1) {
-			if (msg.member.id === player1) {
-				msg.reply(' is already registered.');
+			if (msg.member.id === player1.id) {
+				msg.reply('is already registered.');
 			}
 			else {
 				msg.reply('is registered as player 2! Type !start to start the game!');
 				playerCount = 2;
-				player2 = msg.member.id;
-				console.log(player2);
+				player2.username = msg.member.username;
+				player2.id = msg.member.id;
+				console.log(player2.id);
 			}
 		}
 		else{
@@ -238,11 +254,12 @@ client.on('message', msg => {
 			// failsafe in case someone tries to register when a game is in session
 		}
 	}
-	// template for admin command
+	// check if player1 chose a playable character
 	if (command === 'testchar1') {
 		if (msg.member.id === config.ownerID) {
-			for (; i < totalChar; i++) {
-				if (player1choseChar === true && player1Char.name === char[i].name) {
+			let u = 0;
+			for (; u < totalChar; u++) {
+				if (player1choseChar === true && player1Char.name === char[u].name) {
 					console.log('player1 chose a recognized character.');
 				}
 				else {
@@ -254,10 +271,12 @@ client.on('message', msg => {
 			msg.channel.send('You lack permissions to use this command.');
 		}
 	}
+	// check if player2 chose a playable character
 	if (command === 'testchar2') {
 		if (msg.member.id === config.ownerID) {
-			for (; i < totalChar; i++) {
-				if (player2choseChar === true && player2Char.name === char[i].name) {
+			let u = 0;
+			for (; u < totalChar; u++) {
+				if (player2choseChar === true && player2Char.name === char[u].name) {
 					console.log('player2 chose a recognized character.');
 				}
 				else {
@@ -269,10 +288,11 @@ client.on('message', msg => {
 			msg.channel.send('You lack permissions to use this command.');
 		}
 	}
+	// autostart a game with elynejs and elyne3
 	if (command === 'faststart') {
 		if (msg.member.id === config.ownerID) {
-			player1 = config.testID1;
-			player2 = config.testID2;
+			player1.id = config.testID1;
+			player2.id = config.testID2;
 			playerCount = 2;
 			gameStarting = true;
 			console.log('fast started the game with elynejs as player1 and elyne3 as player2.');
@@ -281,9 +301,29 @@ client.on('message', msg => {
 			msg.channel.send('You lack permissions to use this command.');
 		}
 	}
+	// return true if gameStarting is true
 	if (command === 'testgameStarting') {
 		if (msg.member.id === config.ownerID) {
-			console.log(gameStarting);
+			if(gameStarting === true) {
+				console.log('true');
+			}
+			else {
+				console.log('false');
+			}
+		}
+		else {
+			msg.channel.send('You lack permissions to use this command.');
+		}
+	}
+	// return true if turnPhase is true
+	if (command === 'testturnPhase') {
+		if (msg.member.id === config.ownerID) {
+			if (turnPhase === true) {
+				console.log('true');
+			}
+			else {
+				console.log('false');
+			}
 		}
 		else {
 			msg.channel.send('You lack permissions to use this command.');
@@ -301,13 +341,13 @@ client.on('message', msg => {
 	}
 	// list command
 	if (command === 'list') {
-		msg.reply('https://imgur.com/xndU0DE');
+		msg.reply('https://imgur.com/bpUnnMl');
 	}
 	// character selection
 	if (gameStarting === true) {
 		switch(command) {
 		case'seize':
-			if(msg.author.id == player1) {
+			if(msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[1];
 					player1choseChar = true;
@@ -317,7 +357,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if(msg.author.id == player2) {
+			else if(msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[1];
 					player2choseChar = true;
@@ -332,7 +372,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'fusoku':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[2];
 					player1choseChar = true;
@@ -342,7 +382,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[2];
 					player2choseChar = true;
@@ -357,7 +397,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'leoppscaay':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[3];
 					player1choseChar = true;
@@ -367,7 +407,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[3];
 					player2choseChar = true;
@@ -382,7 +422,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'gold':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[4];
 					player1choseChar = true;
@@ -392,7 +432,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[4];
 					player2choseChar = true;
@@ -407,7 +447,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'yellowstrike':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[5];
 					player1choseChar = true;
@@ -417,7 +457,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[5];
 					player2choseChar = true;
@@ -432,7 +472,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'pinky': // best char btw kappa
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[6];
 					player1choseChar = true;
@@ -443,7 +483,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[6];
 					player2choseChar = true;
@@ -459,7 +499,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'redqueen':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[7];
 					player1choseChar = true;
@@ -469,7 +509,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[7];
 					player2choseChar = true;
@@ -484,7 +524,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'kairo':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[8];
 					player1choseChar = true;
@@ -494,7 +534,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[8];
 					player2choseChar = true;
@@ -509,7 +549,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'lyzan':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[9];
 					player1choseChar = true;
@@ -519,7 +559,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[9];
 					player2choseChar = true;
@@ -534,7 +574,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'usabi':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[10];
 					player1choseChar = true;
@@ -544,7 +584,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[10];
 					player2choseChar = true;
@@ -559,7 +599,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'ellfayrh':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[11];
 					player1choseChar = true;
@@ -569,7 +609,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[11];
 					player2choseChar = true;
@@ -584,7 +624,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'may':
-			if (msg.author.id == player1) {
+			if (msg.author.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1Char = char[12];
 					player1choseChar = true;
@@ -595,7 +635,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2) {
+			else if (msg.author.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2Char = char[12];
 					player2choseChar = true;
@@ -612,9 +652,121 @@ client.on('message', msg => {
 			break;
 		}
 	}
+	// defining turnPhase value
+	if (player1choseChar === true && player2choseChar === true) {
+		gameStarting = false;
+		gamePhase = true;
+		turnPhase = true;
+		player1Char.magCd = 0;
+		player2Char.magCd = 0;
+		player1Char.dodgeCd = 0;
+		player1Char.trapCd = 0;
+		player2Char.dodgeCd = 0;
+		player2Char.trapCd = 0;
+	}
+	// functions for turn actions
+	function changechar(player, char1, char2) {
+		msg.channel.send(player.username + 'switched' + char1 + 'for' + char2);
+		console.log('WiP');
+	}
+	function attack(player, char1, char2) {
+		dmg = char1.atk - char2.def;
+		msg.channel.send(player.username + ' ordered ' + char1 + ' to attack ' + char2 + ' dealing ' + dmg + ' ammount of damage.');
+	}
+	function dodge(player, char1, char2) {
+		if (char1.dodgeCd === 0) {
+			let dodgeValue = 0;
+			dodgeValue = char1.agi - char2.acr;
+			let procChance = 0;
+			procChance = Math.floor(Math.random() * 6) + dodgeValue;
+			if (procChance >= 6) {
+				dmg = (char1.atk - char2.def) / 2;
+				char2.hp = char2.hp - dmg;
+			}
+			else {
+				msg.channel.send(player.username + 'failed the trap.');
+			}
+		}
+		else {
+			msg.channel.send(player.username + 'can\'t dodge because it is still under cooldown.');
+		}
+	}
+	function trap(player, char1, char2) {
+		if (char1.trapCd === 0) {
+			if (Math.floor(Math.random() * 2) <= 1) {
+				dmg = ((char1.int * 2) - char2.int) * 3;
+			}
+			else {
+				msg.channel.send(player.username + 'failed the trap.');
+			}
+		}
+		else {
+			msg.channel.send(player.username + 'can\'t use a trap because it is still under cooldown.');
+		}
+	}
+	function defense(player, char1, char2) {
+		// isdhfds
+	}
+	function magic(player, char1, char2) {
+		// waiting for trap & dodge to be finished to do this funcntion
+	}
+	// beginning turnPhase
+	if (gamePhase === true && gameEnd !== true) {
+		let i;
+		for (i = 1; gameEnd !== true; i++) {
+			if (player1.char.hp <= 0) {
+				const winner = player2;
+				gameEnd = true;
+				playerCount = 0;
+				gamePhase = false;
+				turnPhase = false;
+				msg.channel.send('Game is over ! Congratulation to ' + winner + ' !');
+			}
+			else if (player2.char.hp <= 0) {
+				const winner = player1;
+				gameEnd = true;
+				playerCount = 0;
+				gamePhase = false;
+				turnPhase = false;
+				msg.channel.send('Game is over ! Congratulation to ' + winner + ' !');
+			}
+			else {
+				msg.channel.send('turn' + ' ' + i + ' ' + 'has started. Chose your character\'s action.');
+				switch(command) {
+				case 'switch':
+					if (msg.member.id === player1.id) {
+						changechar(player1, player1Char, command.args[0]);
+					}
+					else if (msg.member.id === player2.id) {
+						changechar(player2, player2Char, command.args[0]);
+					}
+					else {
+						console.log(msg.member.username + 'tried to play while not being registered as a player.');
+					}
+					break;
+				case 'attack':
+					if (msg.member.id === player1.id) {
+						attack(player1, player1Char, player2Char);
+					}
+					else if (msg.member.id === player2.id) {
+						attack(player2, player2Char, player1Char);
+					}
+					else {
+						console.log(msg.member.username + 'tried to play while not being registered as a player.');
+					}
+					break;
+				case 'dodge':
+					if (msg.member.id === player1.id) {
+						dodge(player1, player1Char, player2Char);
+					}
+					else if (msg.member.id === player2.id) {
+						dodge(player2, player2Char, player1Char);
+					}
+					else {
+						console.log(msg.member.username + 'tried to play while not being registered as a player.');
+					}
+				}
+			}
+		}
+	}
 });
-
-if (player1choseChar === true && player2choseChar === true) {
-	gameStarting = false;
-	turnPhase = true;
-}
