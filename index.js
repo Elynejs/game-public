@@ -277,7 +277,7 @@ client.on('ready', () => {
 
 // function for status display (finally)
 function statusHP(char1) {
-	client.channels.get(config.testchannelID).send(':' + char1.name.toLowerCase() + ':' + '**STATUS**\n' + '\`\`\`ini\n[' + char1.name + ' has ' + char1.hpremaining + '/' + char1.hpmax + ' HP left!]\n[' + char1.name + ' CD : ' + char1.magcd + '/' + char1.magcdmax + ']\`\`\`');
+	client.channels.get(config.testchannelID).send(':' + char1.name.toLowerCase() + ':' + '**STATUS**\n' + '\`\`\`ini\n[' + char1.name + ' has ' + char1.hpremaining + '/' + char1.hpmax + ' HP left!]\n[' + char1.name + ' Mag CD : ' + char1.magcd + '/' + char1.magcdmax + ']\`\`\`');
 }
 // functions for turn actions
 function changechar(player, char1, char2) {
@@ -304,7 +304,7 @@ function dodge(player, char1, char2) {
 				client.channels.get(config.testchannelID).send(char1.name + ' dodged ' + char2.name + '\'s attack.');
 			}
 			else {
-				client.channels.get(config.testchannelID).send(char1.name + ' tried to dodge ' + char2.name + '\'s attack but failed.');
+				console.log(char1.name + ' tried to dodge ' + char2.name + '\'s attack but failed.');
 			}
 		}
 		else if (diceroll === 10) {
