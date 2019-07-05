@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-inline-comments */
 const Discord = require('discord.js');
@@ -15,7 +16,7 @@ let player2choseChar = false;
 let gameStarting = false;
 let playerCount = 0;
 const dodgecdMax = 2;
-const trapcdMax = 2;
+const trapcdMax = 4;
 const player1 = {
 	id : 0,
 	choseAction : false,
@@ -33,22 +34,22 @@ const player2 = {
 	action : '',
 };
 const char = [{
-	tier : 'S', // template with max stat for debugging purposes
-	name : 'maxvalue', // name of the character
-	hpmax : 5000, // vitality, when it falls to 0 the character is unusable
-	hpremaining : 5000, // hp stat for damage calculation
-	atk : 500, // maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
-	def : 100, // damage points reduced from the attack function of the opponent
-	spd : 10, // the character with the highest SPD will have his action executed first
-	agi : 10, // determine how good the character is at dodging
-	acr : 10, // will be deduced from your opponent agi stat if he does the dodge function
-	int : 200, // determines who wins a trap function
-	mag : 2000, // used to determinate the damage of a magic attack, unaffected by defense
-	magcd : 20, // number of turn to wait before using magic again
-	magcdmax : 20, // max cd stat for action calculation
+	tier : 'undefined', // template with max stat for debugging purposes
+	name : 'undefined', // name of the character
+	hpmax : 9999, // vitality, when it falls to 0 the character is unusable
+	hpremaining : 9999, // hp stat for damage calculation
+	atk : 9999, // maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
+	def : 9999, // damage points reduced from the attack function of the opponent
+	spd : 9999, // the character with the highest SPD will have his action executed first
+	agi : 9999, // determine how good the character is at dodging
+	acr : 9999, // will be deduced from your opponent agi stat if he does the dodge function
+	int : 9999, // determines who wins a trap function
+	mag : 9999, // used to determinate the damage of a magic attack, unaffected by defense
+	magcd : 9999, // number of turn to wait before using magic again
+	magcdmax : 9999, // max cd stat for action calculation
 	dodgecd : 2, // number of turn to wait before using dodge again
 	trapcd : 4, // number of turn to wait before using trap again
-	rgn : 100, // amount of hp the character regenerate at the end of each turn
+	rgn : 9999, // amount of hp the character regenerate at the end of each turn
 },
 {
 	tier : 'S',
@@ -274,34 +275,46 @@ client.on('ready', () => {
 	console.log('Ready!');
 });
 
+// function for status display (finally)
+function statusHP(char1) {
+	client.channels.get(config.testchannelID).send(':' + char1.name.toLowerCase() + ':' + '**STATUS**\n' + '\`\`\`ini\n[' + char1.name + ' has ' + char1.hpremaining + '/' + char1.hpmax + ' HP left!]\n[' + char1.name + ' CD : ' + char1.magcd + '/' + char1.magcdmax + ']\`\`\`');
+}
 // functions for turn actions
 function changechar(player, char1, char2) {
 	client.channels.get(config.testchannelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
 	console.log('WiP');
 }
 
-function attack(player, char1, char2) {
+function attack(player, playerdodge, char1, char2) {
 	player.dmg = char1.atk * (1 - (char2.def / 100));
-	char2.hpremaining = char2.hpremaining - player.dmg;
-	client.channels.get(config.testchannelID).send(player.username + ' ordered ' + char1.name + ' to attack ' + char2.name + ' dealing ' + Math.floor(player.dmg) + ' amount of damage.');
+	dodge(playerdodge, char2, char1);
+	char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
+	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 }
 
 function dodge(player, char1, char2) {
 	if (char1.dodgecd === 0) {
 		let dodgeValue = 0;
-		dodgeValue = char1.agi - char2.acr;
-		let procChance = 0;
-		procChance = Math.floor(Math.random() * 6) + dodgeValue;
-		if (procChance >= 6) {
-			player.dmg = (char1.atk - char2.def) / 2;
-			char2.hpremaining = char2.hpremaining - player.dmg;
+		dodgeValue = (char1.agi - char2.acr) + 1;
+		const diceroll = Math.floor(Math.random() * 10);
+		if (diceroll <= 9) {
+			if (dodgeValue >= diceroll) {
+				player.dmg = 0;
+				char1.dodgecd = dodgecdMax;
+				client.channels.get(config.testchannelID).send(char1.name + ' dodged ' + char2.name + '\'s attack.');
+			}
+			else {
+				client.channels.get(config.testchannelID).send(char1.name + ' tried to dodge ' + char2.name + '\'s attack but failed.');
+			}
 		}
-		else {
-			client.channels.get(config.testchannelID).send(char1.name + 'failed the dodge.');
+		else if (diceroll === 10) {
+			player.dmg = 0;
+			char1.dodgecd = dodgecdMax;
+			client.channels.get(config.testchannelID).send(char1.name + ' dodged ' + char2.name + '\'s attack.');
 		}
 	}
 	else {
-		client.channels.get(config.testchannelID).send(char1.name + 'can\'t dodge because it is still under cooldown.');
+		client.channels.get(config.testchannelID).send(char1.name + 'tried to dodge but couldn\'t because it is still under cooldown.');
 	}
 }
 
@@ -309,7 +322,7 @@ function trap(player, char1, char2) {
 	/* if (char1.trapcd === 0) { // disabled
 		if (Math.floor(Math.random() * 2) <= 1) {
 			player.dmg = ((char1.int * 2) - char2.int) * 3;
-			char2.hpremaining = char2.hpremaining - player.dmg;
+			char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
 		}
 		else {
 			client.channels.get(config.testchannelID).send(char1.name + 'failed the trap.');
@@ -329,8 +342,9 @@ function defense(player, char1, char2) {
 
 function magic(player, char1, char2) {
 	player.dmg = char1.mag;
-	char2.hpremaining = char2.hpremaining - player.dmg;
+	char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
 	player.char.magcd = player.char.magcdmax;
+	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 }
 
 // function for passing from one turn to another
@@ -375,40 +389,41 @@ function IsGameOver(player, char1) {
 }
 
 // function for action phase
-function actionphase(player, char1, char2) {
+function actionphase(firstplayer, secondplayer) {
 	if (actionAmount === 2) {
-		if (char1.spd > char2.spd) { // player1.char is faster than player2.char so it's attack is done before
-			if (player.action === 'changechar') {
+		if (firstplayer.char.spd > secondplayer.char.spd) { // player1.char is faster than player2.char so it's attack is done before
+			if (firstplayer.action === 'changechar') {
 				// WiP
 				changechar(player1, player1.char, client.content.shift().args[0]);
 			}
-			else if (player.action === 'attack') {
-				attack(player1, player1.char, player2.char);
+			if (firstplayer.action === 'attack') {
+				attack(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
-				attack(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
 			}
-			/* else if (player.action === 'trap') {
-				dodge(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-				dodge(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			} */
-			else if (player.action === 'dodge') {
+			/* if (player.action === 'trap') {
 				trap(player1, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
-				trap(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			}
-			else if (player.action === 'defense') {
+			} */
+			if (firstplayer.action === 'defense') {
 				defense(player2, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
+			}
+			if (firstplayer.action === 'magic') {
+				magic(player1, player1.char, player2.char);
+				IsGameOver(player1, player2.char);
+			}
+			if (secondplayer.action === 'changechar') {
+				changechar(player2, player2.char, client.content.shift().args[0]);
+			}
+			if (secondplayer.action === 'attack') {
+				attack(player2, player1, player2.char, player1.char);
+				IsGameOver(player2, player1.char);
+			}
+			if (secondplayer.action === 'defense') {
 				defense(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
-			else if (player.action === 'magic') {
-				magic(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+			if (secondplayer.action === 'magic') {
 				magic(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
@@ -422,38 +437,40 @@ function actionphase(player, char1, char2) {
 		}
 		else if (player1.char.spd < player2.char.spd) {
 			console.log('succesfully reached speed detection');
-			if (player.action === 'changechar') {
-				changechar(player1, player1.char, client.content.shift().args[0]);
+			if (secondplayer.action === 'changechar') {
+				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
-			else if (player.action === 'attack') {
-				attack(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-				attack(player2, player2.char, player1.char);
+			if (secondplayer.action === 'attack') {
+				attack(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
-			/* else if (player.action === 'trap') {
-				dodge(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-				dodge(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			} */
-			else if (player.action === 'dodge') {
-				trap(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-				trap(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			}
-			else if (player.action === 'defense') {
-				defense(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+			if (secondplayer.action === 'defense') {
 				defense(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
-			else if (player.action === 'magic') {
-				magic(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+			if (secondplayer.action === 'magic') {
 				magic(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
+			}
+			if (firstplayer.action === 'changechar') {
+				// WiP
+				changechar(player1, player1.char, client.content.shift().args[0]);
+			}
+			if (firstplayer.action === 'attack') {
+				attack(player1, player2, player1.char, player2.char);
+				IsGameOver(player1, player2.char);
+			}
+			/* if (player.action === 'trap') {
+				trap(player1, player1.char, player2.char);
+				IsGameOver(player1, player2.char);
+			} */
+			if (firstplayer.action === 'defense') {
+				defense(player2, player1.char, player2.char);
+				IsGameOver(player1, player2.char);
+			}
+			if (firstplayer.action === 'magic') {
+				magic(player1, player1.char, player2.char);
+				IsGameOver(player1, player2.char);
 			}
 			player1.choseAction = false;
 			player2.choseAction = false;
@@ -466,36 +483,38 @@ function actionphase(player, char1, char2) {
 		else if (player1.char.spd === player2.char.spd) {
 			if (Math.floor(Math.random() * 2) >= 1) {
 				console.log('succesfully reached speed detection');
-				if (player.action === 'changechar') {
+				if (firstplayer.action === 'changechar') {
+					// WiP
 					changechar(player1, player1.char, client.content.shift().args[0]);
 				}
-				else if (player.action === 'attack') {
-					attack(player1, player1.char, player2.char);
+				if (firstplayer.action === 'attack') {
+					attack(player1, player2, player1.char, player2.char);
 					IsGameOver(player1, player2.char);
-					attack(player2, player2.char, player1.char);
-					IsGameOver(player2, player1.char);
 				}
-				/* else if (player.action === 'trap') {
-					dodge(player1, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
-					dodge(player2, player2.char, player1.char);
-					IsGameOver(player2, player1.char);
-				} */
-				else if (player.action === 'dodge') {
+				/* if (player.action === 'trap') {
 					trap(player1, player1.char, player2.char);
 					IsGameOver(player1, player2.char);
-					trap(player2, player2.char, player1.char);
+				} */
+				if (firstplayer.action === 'defense') {
+					defense(player2, player1.char, player2.char);
+					IsGameOver(player1, player2.char);
+				}
+				if (firstplayer.action === 'magic') {
+					magic(player1, player1.char, player2.char);
+					IsGameOver(player1, player2.char);
+				}
+				if (secondplayer.action === 'changechar') {
+					changechar(player2, player2.char, client.content.shift().args[0]);
+				}
+				if (secondplayer.action === 'attack') {
+					attack(player2, player1, player2.char, player1.char);
 					IsGameOver(player2, player1.char);
 				}
-				else if (player.action === 'defense') {
-					defense(player1, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
+				if (secondplayer.action === 'defense') {
 					defense(player2, player2.char, player1.char);
 					IsGameOver(player2, player1.char);
 				}
-				else if (player.action === 'magic') {
-					magic(player1, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
+				if (secondplayer.action === 'magic') {
 					magic(player2, player2.char, player1.char);
 					IsGameOver(player2, player1.char);
 				}
@@ -519,17 +538,19 @@ function actionphase(player, char1, char2) {
 function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
+		statusHP(player1.char);
+		statusHP(player2.char);
 		client.channels.get(config.testchannelID).send('Turn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.');
 		if (player1.char.hpremaining < player1.char.hpmax) {
 			player1.char.hpremaining = player1.char.hpremaining + player1.char.rgn;
-			client.channels.get(config.testchannelID).send(player1.char.name + ' has regenerated ' + player1.char.rgn + ' HP.');
+			client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player1.char.name + ' has regenerated ' + player1.char.rgn + ' HP.\`\`\`');
 			if (player1.char.hpremaining > player1.char.hpmax) {
 				player1.char.hpremaining = player1.char.hpmax;
 			}
 		}
 		if (player2.char.hpremaining < player2.char.hpmax) {
 			player2.char.hpremaining = player2.char.hpremaining + player2.char.rgn;
-			client.channels.get(config.testchannelID).send(player2.char.name + ' has regenerated ' + player2.char.rgn + ' HP.');
+			client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player2.char.name + ' has regenerated ' + player2.char.rgn + ' HP.\`\`\`');
 			if (player2.char.hpremaining > player2.char.hpmax) {
 				player2.char.hpremaining = player2.char.hpmax;
 			}
@@ -597,6 +618,9 @@ client.on('message', msg => {
 		else if (msg.member.id === player2.id) {
 			gameEnd(player1.username, player2.char);
 		}
+		else {
+			msg.replpy(' you can\'t surrender since you are not a registered player');
+		}
 	}
 	// check if player1 chose a playable character
 	if (command === 'testchar1') {
@@ -647,7 +671,7 @@ client.on('message', msg => {
 						for (stat in args[1]) {
 							console.log('value found : ' + args[1]);
 							char[a].args[1] = args[2];
-							msg.channel.send('Admin changed the value of ' + char[a].name + '\' ' + args[1] + ' to ' + args[2]);
+							msg.channel.send('Admin changed the value of ' + char[a].name + '\'s ' + args[1] + ' to ' + args[2]);
 						}
 					}
 				}
@@ -1073,13 +1097,13 @@ client.on('message', msg => {
 				player1.choseAction = true;
 				player1.action = 'changechar';
 				actionAmount = actionAmount + 1;
-				actionphase(player1, player1.char, player2.char);
+				actionphase(player1, player2);
 			}
 			else if (msg.member.id === player2.id) {
 				player2.choseAction = true;
 				player2.action = 'changechar';
 				actionAmount = actionAmount + 1;
-				actionphase(player2, player1.char, player2.char);
+				actionphase(player1, player2);
 			}
 			else {
 				console.log(msg.author.username + 'tried to play while not being registered as a player.');
@@ -1090,40 +1114,13 @@ client.on('message', msg => {
 				player1.choseAction = true;
 				player1.action = 'attack';
 				actionAmount = actionAmount + 1;
-				actionphase(player1, player1.char, player2.char);
+				actionphase(player1, player2);
 			}
 			else if (msg.member.id === player2.id) {
 				player2.choseAction = true;
 				player2.action = 'attack';
 				actionAmount = actionAmount + 1;
-				actionphase(player2, player1.char, player2.char);
-			}
-			else {
-				console.log(msg.author.username + 'tried to play while not being registered as a player.');
-			}
-			break;
-		case 'dodge': // number in array = 2
-			if (msg.member.id === player1.id) {
-				if (player1.char.dodgecd === 0) {
-					player1.choseAction = true;
-					player1.action = 'dodge';
-					actionAmount = actionAmount + 1;
-					actionphase(player1, player1.char, player2.char);
-				}
-				else {
-					msg.channel.send(player1.username + ' can\'t dodge yet. Chose another option.');
-				}
-			}
-			else if (msg.member.id === player2.id) {
-				if (player2.char.dodgecd === 0) {
-					player2.choseAction = true;
-					player2.action = 'dodge';
-					actionAmount = actionAmount + 1;
-					actionphase(player2, player1.char, player2.char);
-				}
-				else {
-					msg.channel.send(player1.username + ' can\'t dodge yet. Chose another option.');
-				}
+				actionphase(player1, player2);
 			}
 			else {
 				console.log(msg.author.username + 'tried to play while not being registered as a player.');
@@ -1135,7 +1132,7 @@ client.on('message', msg => {
 					player1.choseAction = true;
 					player1.action = 'trap';
 					actionAmount = actionAmount + 1;
-					actionphase(player1, player1.char, player2.char);
+					actionphase(player1, player2);
 				}
 				else {
 					msg.channel.send(player1.username + ' can\'t use trap yet. Chose another option.');
@@ -1146,7 +1143,7 @@ client.on('message', msg => {
 					player2.choseAction = true;
 					player2.action = 'trap';
 					actionAmount = actionAmount + 1;
-					actionphase(player2, player1.char, player2.char);
+					actionphase(player1, player2);
 				}
 				else {
 					msg.channel.send(player1.username + ' can\'t use trap yet. Chose another option.');
@@ -1161,13 +1158,13 @@ client.on('message', msg => {
 				player1.choseAction = true;
 				player1.action = 'defense';
 				actionAmount = actionAmount + 1;
-				actionphase(player1, player1.char, player2.char);
+				actionphase(player1, player2);
 			}
 			else if (msg.member.id === player2.id) {
 				player2.choseAction = true;
 				player2.action = 'defense';
 				actionAmount = actionAmount + 1;
-				actionphase(player2, player1.char, player2.char);
+				actionphase(player1, player2);
 			}
 			else {
 				console.log(msg.author.username + 'tried to play while not being registered as a player.');
@@ -1175,22 +1172,28 @@ client.on('message', msg => {
 			break;
 		case 'magic': // number in array = 5
 			if (msg.member.id === player1.id) {
-				if (player1.char.magcd === 0) {
+				if (player1.char.mag === 0) {
+					msg.channel.send(player1.char.name + ' can\'t cast magic. Please chose another action.');
+				}
+				else if (player1.char.magcd === 0) {
 					player1.choseAction = true;
 					player1.action = 'magic';
 					actionAmount = actionAmount + 1;
-					actionphase(player1, player1.char, player2.char);
+					actionphase(player1, player2);
 				}
 				else {
 					msg.reply(' can\'t use magic because it is still under cooldown.');
 				}
 			}
 			else if (msg.member.id === player2.id) {
+				if (player2.char.mag === 0) {
+					msg.channel.send(player2.char.name + ' can\'t cast magic. Please chose another action.');
+				}
 				if (player2.char.magcd === 0) {
 					player2.choseAction = true;
 					player2.action = 'magic';
 					actionAmount = actionAmount + 1;
-					actionphase(player2, player1.char, player2.char);
+					actionphase(player1, player2);
 				}
 				else {
 					msg.reply(' can\'t use magic because it is still under cooldown.');
