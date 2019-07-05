@@ -592,10 +592,10 @@ client.on('message', msg => {
 	// surrender command
 	if (command === 'surrender') {
 		if (msg.member.id === player1.id) {
-			gameEnd(player2, player1.char);
+			gameEnd(player2.username, player1.char);
 		}
 		else if (msg.member.id === player2.id) {
-			gameEnd(player1, player2.char);
+			gameEnd(player1.username, player2.char);
 		}
 	}
 	// check if player1 chose a playable character
