@@ -52,25 +52,25 @@ const char = [{
 },
 {
 	tier : 'S',
-	name : 'seize',
+	name : 'Seize',
 	hpmax : 3000,
 	hpremaining : 3000,
-	atk : 360,
-	def : 35,
+	atk : 310,
+	def : 40,
 	spd : 9,
 	agi : 9,
 	acr : 8,
 	int: 179,
 	mag : 1500,
-	magcd : 5,
-	magcdmax : 5,
+	magcd : 4,
+	magcdmax : 4,
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 90,
 },
 {
 	tier : 'S',
-	name : 'fusoku',
+	name : 'Fusoku',
 	hpmax : 4000,
 	hpremaining : 4000,
 	atk : 470,
@@ -88,16 +88,16 @@ const char = [{
 },
 {
 	tier : 'S',
-	name : 'leoppscaay',
+	name : 'Leoppscaay',
 	hpmax : 2500,
 	hpremaining : 2500,
-	atk : 310,
+	atk : 260,
 	def : 40,
 	spd : 6,
 	agi : 5,
 	acr : 4,
 	int : 100,
-	mag : 500,
+	mag : 600,
 	magcd : 2,
 	magcdmax: 2,
 	dodgecd : 2,
@@ -106,29 +106,29 @@ const char = [{
 },
 {
 	tier : 'S',
-	name : 'gold',
+	name : 'Gold',
 	hpmax : 3500,
 	hpremaining : 3500,
-	atk : 350,
-	def : 55,
+	atk : 290,
+	def : 50,
 	spd : 6,
 	agi : 3,
 	acr : 5,
 	int : 120,
 	mag : 1900,
-	magcd : 10,
-	magcdmax: 10,
+	magcd : 8,
+	magcdmax: 8,
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 50,
 },
 {
 	tier : 'A',
-	name : 'yellow Strike',
+	name : 'Yellow Strike',
 	hpmax : 1500,
 	hpremaining : 1500,
-	atk : 320,
-	def : 30,
+	atk : 220,
+	def : 60,
 	spd : 10,
 	agi : 8,
 	acr : 6,
@@ -142,16 +142,16 @@ const char = [{
 },
 {
 	tier : 'A',
-	name : 'pinky',
+	name : 'Pinky',
 	hpmax : 1000,
 	hpremaining : 1000,
-	atk : 330,
+	atk : 280,
 	def : 20,
 	spd : 7,
 	agi : 3,
 	acr : 5,
 	int : 120,
-	mag : 600,
+	mag : 700,
 	magcd : 3,
 	magcdmax: 3,
 	dodgecd : 2,
@@ -160,11 +160,11 @@ const char = [{
 },
 {
 	tier : 'A',
-	name : 'red queen',
+	name : 'Red Queen',
 	hpmax : 2000,
 	hpremaining : 2000,
-	atk : 260,
-	def : 95,
+	atk : 160,
+	def : 70,
 	spd : 4,
 	agi : 2,
 	acr : 4,
@@ -178,11 +178,11 @@ const char = [{
 },
 {
 	tier : 'A',
-	name : 'kairo',
+	name : 'Kairo',
 	hpmax : 2000,
 	hpremaining : 2000,
-	atk : 400,
-	def : 55,
+	atk : 380,
+	def : 50,
 	spd : 5,
 	agi : 4,
 	acr : 3,
@@ -196,16 +196,16 @@ const char = [{
 },
 {
 	tier : 'A',
-	name : 'lyzan',
+	name : 'Lyzan',
 	hpmax : 1500,
 	hpremaining : 1500,
-	atk : 270,
-	def : 35,
+	atk : 80,
+	def : 30,
 	spd : 7,
 	agi : 7,
 	acr : 6,
 	int : 140,
-	mag : 1800,
+	mag : 2100,
 	magcd : 15,
 	magcdmax: 15,
 	dodgecd : 2,
@@ -214,16 +214,16 @@ const char = [{
 },
 {
 	tier : 'B',
-	name : 'usabi',
+	name : 'USaBi',
 	hpmax : 900,
 	hpremaining : 900,
-	atk : 260,
-	def : 35,
+	atk : 120,
+	def : 30,
 	spd : 6,
 	agi : 6,
 	acr : 5,
 	int : 90,
-	mag : 400,
+	mag : 500,
 	magcd : 5,
 	magcdmax: 5,
 	dodgecd : 2,
@@ -232,16 +232,16 @@ const char = [{
 },
 {
 	tier : 'B',
-	name : 'ell\'fayrh',
+	name : 'Ell\'Fayrh',
 	hpmax : 1000,
 	hpremaining : 1000,
-	atk : 250,
-	def : 100,
+	atk : 90,
+	def : 85,
 	spd : 3,
 	agi : 2,
 	acr : 9,
 	int : 190,
-	mag : 1400,
+	mag : 1500,
 	magcd : 10,
 	magcdmax: 10,
 	dodgecd : 2,
@@ -250,16 +250,16 @@ const char = [{
 },
 {
 	tier : 'B',
-	name : 'may',
+	name : 'May',
 	hpmax : 700,
 	hpremaining : 700,
-	atk : 260,
+	atk : 100,
 	def : 20,
 	spd : 7,
 	agi : 6,
 	acr : 6,
 	int : 120,
-	mag : 150,
+	mag : 250,
 	magcd : 3,
 	magcdmax: 3,
 	dodgecd : 2,
@@ -274,8 +274,73 @@ client.on('ready', () => {
 	console.log('Ready!');
 });
 
+// functions for turn actions
+function changechar(player, char1, char2) {
+	client.channels.get(config.testchannelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
+	console.log('WiP');
+}
+
+function attack(player, char1, char2) {
+	player.dmg = char1.atk * (1 - (char2.def / 100));
+	char2.hpremaining = char2.hpremaining - player.dmg;
+	client.channels.get(config.testchannelID).send(player.username + ' ordered ' + char1.name + ' to attack ' + char2.name + ' dealing ' + Math.floor(player.dmg) + ' amount of damage.');
+}
+
+function dodge(player, char1, char2) {
+	if (char1.dodgecd === 0) {
+		let dodgeValue = 0;
+		dodgeValue = char1.agi - char2.acr;
+		let procChance = 0;
+		procChance = Math.floor(Math.random() * 6) + dodgeValue;
+		if (procChance >= 6) {
+			player.dmg = (char1.atk - char2.def) / 2;
+			char2.hpremaining = char2.hpremaining - player.dmg;
+		}
+		else {
+			client.channels.get(config.testchannelID).send(char1.name + 'failed the dodge.');
+		}
+	}
+	else {
+		client.channels.get(config.testchannelID).send(char1.name + 'can\'t dodge because it is still under cooldown.');
+	}
+}
+
+function trap(player, char1, char2) {
+	/* if (char1.trapcd === 0) { // disabled
+		if (Math.floor(Math.random() * 2) <= 1) {
+			player.dmg = ((char1.int * 2) - char2.int) * 3;
+			char2.hpremaining = char2.hpremaining - player.dmg;
+		}
+		else {
+			client.channels.get(config.testchannelID).send(char1.name + 'failed the trap.');
+		}
+	}
+	else {
+		client.channels.get(config.testchannelID).send(char1.name + 'can\'t use a trap because it is still under cooldown.');
+	} */
+}
+
+function defense(player, char1, char2) {
+	console.log(player.dmg);
+	player.dmg = player.dmg / 2; // WiP don't even ask me about that shit
+	console.log(player.dmg);
+	client.channels.get(config.testchannelID).send(char1.name + ' succesfully blocked the attack of ' + char2.name + ' reducing incoming damage to ' + Math.floor(player.dmg));
+}
+
+function magic(player, char1, char2) {
+	player.dmg = char1.mag;
+	char2.hpremaining = char2.hpremaining - player.dmg;
+	player.char.magcd = player.char.magcdmax;
+}
+
+// function for passing from one turn to another
+function addTurn() {
+	turn = turn + 1;
+	NewTurnPhase();
+}
+
 function gameEnd(winner) {
-	client.channels.get(config.channelID).send('Game is over ! Congratulation to ' + winner + ' !');
+	client.channels.get(config.testchannelID).send('Game is over ! Congratulation to ' + winner + ' !');
 	gamePhase = false;
 	turnPhase = false;
 	playerCount = 0;
@@ -299,89 +364,23 @@ function gameEnd(winner) {
 	console.log(player2);
 }
 
-// functions for turn actions
-function changechar(player, char1, char2) {
-	client.channels.get(config.channelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
-	console.log('WiP');
-}
-
-function attack(player, char1, char2) {
-	player.dmg = char1.atk * (1 - (char2.def / 100));
-	char2.hpremaining = char2.hpremaining - player.dmg;
-	client.channels.get(config.channelID).send(player.username + ' ordered ' + char1.name + ' to attack ' + char2.name + ' dealing ' + player.dmg + ' ammount of damage.');
-}
-function dodge(player, char1, char2) {
-	if (char1.dodgecd === 0) {
-		let dodgeValue = 0;
-		dodgeValue = char1.agi - char2.acr;
-		let procChance = 0;
-		procChance = Math.floor(Math.random() * 6) + dodgeValue;
-		if (procChance >= 6) {
-			player.dmg = (char1.atk - char2.def) / 2;
-			char2.hpremaining = char2.hpremaining - player.dmg;
-		}
-		else {
-			client.channels.get(config.channelID).send(player.username + 'failed the dodge.');
-		}
-	}
-	else {
-		client.channels.get(config.channelID).send(player.username + 'can\'t dodge because it is still under cooldown.');
-	}
-}
-function trap(player, char1, char2) {
-	if (char1.trapcd === 0) {
-		if (Math.floor(Math.random() * 2) <= 1) {
-			player.dmg = ((char1.int * 2) - char2.int) * 3;
-			char2.hpremaining = char2.hpremaining - player.dmg;
-		}
-		else {
-			client.channels.get(config.channelID).send(player.username + 'failed the trap.');
-		}
-	}
-	else {
-		client.channels.get(config.channelID).send(player.username + 'can\'t use a trap because it is still under cooldown.');
-	}
-}
-function defense(player, char1, char2) {
-	player.dmg = player.dmg / 2; // WiP don't even ask me about that shit
-	client.channels.get(config.channelID).send(char1.name + ' succesfully blocked the attack of ' + char2.name);
-}
-function magic(player, char1, char2) {
-	if (char1.magcd === 0) {
-		player.dmg = char1.mag;
-		char2.hpremaining = char2.hpremaining - player.dmg;
-	}
-	else {
-		client.channels.get(config.channelID).send(player + ' can\'t use magic because it is still under cooldown.');
-	}
-}
-
-// function for passing from one turn to another
-function addTurn() {
-	turn = turn + 1;
-	NewTurnPhase();
-}
-
 // function for gameend
 function IsGameOver(player, char1) {
 	if (char1.hpremaining <= 0) {
 		gameEnd(player.username);
 	}
 	else {
-		console.log(char1 + ' is still alive.');
+		console.log(char1.name + ' is still alive.');
 	}
 }
 
 // function for action phase
 function actionphase(player, char1, char2) {
 	if (actionAmount === 2) {
-		console.log('succesfully reached action aknowledgement');
 		if (char1.spd > char2.spd) { // player1.char is faster than player2.char so it's attack is done before
-			console.log('succesfully reached speed detection');
 			if (player.action === 'changechar') {
 				// WiP
 				changechar(player1, player1.char, client.content.shift().args[0]);
-				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
 			else if (player.action === 'attack') {
 				attack(player1, player1.char, player2.char);
@@ -389,12 +388,12 @@ function actionphase(player, char1, char2) {
 				attack(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
-			else if (player.action === 'trap') {
+			/* else if (player.action === 'trap') {
 				dodge(player1, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
 				dodge(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
-			}
+			} */
 			else if (player.action === 'dodge') {
 				trap(player1, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
@@ -402,7 +401,7 @@ function actionphase(player, char1, char2) {
 				IsGameOver(player2, player1.char);
 			}
 			else if (player.action === 'defense') {
-				defense(player1, player1.char, player2.char);
+				defense(player2, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
 				defense(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
@@ -425,7 +424,6 @@ function actionphase(player, char1, char2) {
 			console.log('succesfully reached speed detection');
 			if (player.action === 'changechar') {
 				changechar(player1, player1.char, client.content.shift().args[0]);
-				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
 			else if (player.action === 'attack') {
 				attack(player1, player1.char, player2.char);
@@ -433,12 +431,12 @@ function actionphase(player, char1, char2) {
 				attack(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
 			}
-			else if (player.action === 'trap') {
+			/* else if (player.action === 'trap') {
 				dodge(player1, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
 				dodge(player2, player2.char, player1.char);
 				IsGameOver(player2, player1.char);
-			}
+			} */
 			else if (player.action === 'dodge') {
 				trap(player1, player1.char, player2.char);
 				IsGameOver(player1, player2.char);
@@ -470,7 +468,6 @@ function actionphase(player, char1, char2) {
 				console.log('succesfully reached speed detection');
 				if (player.action === 'changechar') {
 					changechar(player1, player1.char, client.content.shift().args[0]);
-					changechar(player2, player2.char, client.content.shift().args[0]);
 				}
 				else if (player.action === 'attack') {
 					attack(player1, player1.char, player2.char);
@@ -478,12 +475,12 @@ function actionphase(player, char1, char2) {
 					attack(player2, player2.char, player1.char);
 					IsGameOver(player2, player1.char);
 				}
-				else if (player.action === 'trap') {
+				/* else if (player.action === 'trap') {
 					dodge(player1, player1.char, player2.char);
 					IsGameOver(player1, player2.char);
 					dodge(player2, player2.char, player1.char);
 					IsGameOver(player2, player1.char);
-				}
+				} */
 				else if (player.action === 'dodge') {
 					trap(player1, player1.char, player2.char);
 					IsGameOver(player1, player2.char);
@@ -522,15 +519,17 @@ function actionphase(player, char1, char2) {
 function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
-		client.channels.get(config.channelID).send('Turn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.');
+		client.channels.get(config.testchannelID).send('Turn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.');
 		if (player1.char.hpremaining < player1.char.hpmax) {
 			player1.char.hpremaining = player1.char.hpremaining + player1.char.rgn;
+			client.channels.get(config.testchannelID).send(player1.char.name + ' has regenerated ' + player1.char.rgn + ' HP.');
 			if (player1.char.hpremaining > player1.char.hpmax) {
 				player1.char.hpremaining = player1.char.hpmax;
 			}
 		}
-		else if (player2.char.hpremaining < player2.char.hpmax) {
+		if (player2.char.hpremaining < player2.char.hpmax) {
 			player2.char.hpremaining = player2.char.hpremaining + player2.char.rgn;
+			client.channels.get(config.testchannelID).send(player2.char.name + ' has regenerated ' + player2.char.rgn + ' HP.');
 			if (player2.char.hpremaining > player2.char.hpmax) {
 				player2.char.hpremaining = player2.char.hpmax;
 			}
@@ -560,7 +559,7 @@ function NewTurnPhase() {
 // commands
 client.on('message', msg => {
 	if (msg.author.bot) return; // won't react to bots
-	if (msg.content.indexOf(config.prefix) !== 0) return; // won't react to "!" alone
+	if (msg.content.indexOf(config.prefix) !== 0) return; // array starts after the actual command
 	// destructuring
 	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
 	const command = args.shift().toLowerCase();
@@ -569,7 +568,7 @@ client.on('message', msg => {
 		if (playerCount === 0) {
 			msg.reply('is registered as player 1! Waiting for another player...');
 			playerCount = 1;
-			player1.username = msg.member.username;
+			player1.username = msg.author.username;
 			player1.id = msg.member.id;
 			console.log(player1.id);
 		}
@@ -580,7 +579,7 @@ client.on('message', msg => {
 			else {
 				msg.reply('is registered as player 2! Type !start to start the game!');
 				playerCount = 2;
-				player2.username = msg.member.username;
+				player2.username = msg.author.username;
 				player2.id = msg.member.id;
 				console.log(player2.id);
 			}
@@ -590,11 +589,20 @@ client.on('message', msg => {
 			// failsafe in case someone tries to register when a game is in session
 		}
 	}
+	// surrender command
+	if (command === 'surrender') {
+		if (msg.member.id === player1.id) {
+			gameEnd(player2, player1.char);
+		}
+		else if (msg.member.id === player2.id) {
+			gameEnd(player1, player2.char);
+		}
+	}
 	// check if player1 chose a playable character
 	if (command === 'testchar1') {
 		if (msg.member.id === config.ownerID) {
-			let u = 0;
-			for (; u < totalChar; u++) {
+			let u;
+			for (u in char) {
 				if (player1choseChar === true && player1.char.name === char[u].name) {
 					console.log('player1 chose a recognized character.');
 				}
@@ -611,7 +619,7 @@ client.on('message', msg => {
 	if (command === 'testchar2') {
 		if (msg.member.id === config.ownerID) {
 			let u;
-			for (u === 0 ; u < totalChar; u++) {
+			for (u in char) {
 				if (player2choseChar === true && player2.char.name === char[u].name) {
 					console.log('player2 chose a recognized character.');
 				}
@@ -717,7 +725,7 @@ client.on('message', msg => {
 	}
 	// list command
 	if (command === 'list') {
-		msg.reply('https://imgur.com/a98rwvW');
+		msg.reply('https://imgur.com/6s3XcHU');
 	}
 	// gameEnd function test command
 	if (command === 'gameend' && config.ownerID === msg.member.id) {
@@ -1074,7 +1082,7 @@ client.on('message', msg => {
 				actionphase(player2, player1.char, player2.char);
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
 			break;
 		case 'attack': // number in array = 1
@@ -1091,7 +1099,7 @@ client.on('message', msg => {
 				actionphase(player2, player1.char, player2.char);
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
 			break;
 		case 'dodge': // number in array = 2
@@ -1118,10 +1126,10 @@ client.on('message', msg => {
 				}
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
 			break;
-		case 'trap': // number in array = 3
+		/* case 'trap': // number in array = 3
 			if (msg.member.id === player1.id) {
 				if (player1.char.trapcd === 0) {
 					player1.choseAction = true;
@@ -1145,9 +1153,9 @@ client.on('message', msg => {
 				}
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
-			break;
+			break;*/
 		case 'defense': // number in array = 4
 			if (msg.member.id === player1.id) {
 				player1.choseAction = true;
@@ -1162,24 +1170,34 @@ client.on('message', msg => {
 				actionphase(player2, player1.char, player2.char);
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
 			break;
 		case 'magic': // number in array = 5
 			if (msg.member.id === player1.id) {
-				player1.choseAction = true;
-				player1.action = 'magic';
-				actionAmount = actionAmount + 1;
-				actionphase(player1, player1.char, player2.char);
+				if (player1.char.magcd === 0) {
+					player1.choseAction = true;
+					player1.action = 'magic';
+					actionAmount = actionAmount + 1;
+					actionphase(player1, player1.char, player2.char);
+				}
+				else {
+					msg.reply(' can\'t use magic because it is still under cooldown.');
+				}
 			}
 			else if (msg.member.id === player2.id) {
-				player2.choseAction = true;
-				player2.action = 'magic';
-				actionAmount = actionAmount + 1;
-				actionphase(player2, player1.char, player2.char);
+				if (player2.char.magcd === 0) {
+					player2.choseAction = true;
+					player2.action = 'magic';
+					actionAmount = actionAmount + 1;
+					actionphase(player2, player1.char, player2.char);
+				}
+				else {
+					msg.reply(' can\'t use magic because it is still under cooldown.');
+				}
 			}
 			else {
-				console.log(msg.member.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + 'tried to play while not being registered as a player.');
 			}
 			break;
 		}
