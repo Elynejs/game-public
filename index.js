@@ -354,7 +354,7 @@ function addTurn() {
 }
 
 function gameEnd(winner) {
-	client.channels.get(config.testchannelID).send('Game is over ! Congratulation to ' + winner + ' !');
+	client.channels.get(config.testchannelID).send('**\`\`\`fix\nCongratulation to ' + winner + ' !\nGAME IS OVER ! \`\`\`**');
 	gamePhase = false;
 	turnPhase = false;
 	playerCount = 0;
