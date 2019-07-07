@@ -79,6 +79,7 @@ const char = [{
 	react_KO2 : 'Aaaaaaah ! So fucking boring.',
 	react_victory1 : 'A rather expected outcome, duh.',
 	react_victory2 : 'YOU DON\'T SAY ?',
+	emoji : config.testseize,
 },
 {
 	tier : 'S',
@@ -103,6 +104,7 @@ const char = [{
 	react_KO2 : 'I can\'t...',
 	react_victory1 : 'You fought well.',
 	react_victory2 : 'You\'ll do better next time.',
+	emoji: config.testfusoku,
 },
 {
 	tier : 'S',
@@ -127,6 +129,7 @@ const char = [{
 	react_KO2 : 'It\'s over, leave me alone !',
 	react_victory1 : 'So can I leave now ?',
 	react_victory2 : 'So can I leave now ?',
+	emoji: config.testleoppsccay,
 },
 {
 	tier : 'S',
@@ -151,6 +154,7 @@ const char = [{
 	react_KO2 : '.....',
 	react_victory1 : '...Done.',
 	react_victory2 : '...',
+	emoji: config.testgold,
 },
 {
 	tier : 'A',
@@ -175,6 +179,7 @@ const char = [{
 	react_KO2 : '...Almost...',
 	react_victory1 : 'Haha ! Told you !',
 	react_victory2 : 'See ?! I\'m so fast right ?!',
+	emoji: config.testyellowstrike,
 },
 {
 	tier : 'A',
@@ -199,6 +204,7 @@ const char = [{
 	react_KO2 : '...Finally.',
 	react_victory1 : 'Pathetic',
 	react_victory2 : 'Pathetic',
+	emoji: config.testpinky,
 },
 {
 	tier : 'A',
@@ -223,6 +229,7 @@ const char = [{
 	react_KO2 : 'You\'re going to be punished... For that...',
 	react_victory1 : 'That\'s what you get for opposing the Queen.',
 	react_victory2 : 'That\'s what you get for opposing the Queen.',
+	emoji: config.testredqueen,
 },
 {
 	tier : 'A',
@@ -247,6 +254,7 @@ const char = [{
 	react_KO2 : 'Fuck you !',
 	react_victory1 : 'Easy !',
 	react_victory2 : 'Easy !',
+	emoji: config.testkairo,
 },
 {
 	tier : 'A',
@@ -271,6 +279,7 @@ const char = [{
 	react_KO2 : 'Ran out of energy too soon again...Fuck.',
 	react_victory1 : '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
 	react_victory2 : 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
+	emoji: config.testlyzan,
 },
 {
 	tier : 'B',
@@ -295,6 +304,7 @@ const char = [{
 	react_KO2 : 'I\'m out of... Battery............. Disconnecting.',
 	react_victory1 : 'That\'s over now !',
 	react_victory2 : 'That\'s over now !',
+	emoji: config.testusabi,
 },
 {
 	tier : 'B',
@@ -319,6 +329,7 @@ const char = [{
 	react_KO2 : '...Thoses data are rather interesting...',
 	react_victory1 : 'Considering your capacity I don\'t even know why you picked a fight to being with.',
 	react_victory2 : 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
+	emoji: config.testellfayrh,
 },
 {
 	tier : 'B',
@@ -343,6 +354,7 @@ const char = [{
 	react_KO2 : 'I knew it... I can\'t win...',
 	react_victory1 : 'What ?! I won ? Really ?',
 	react_victory2 : 'WHAT ?! REALLY ?',
+	emoji: config.testmay,
 }];
 const totalChar = char.length;
 
@@ -355,28 +367,28 @@ client.on('ready', () => {
 // functions for displaying characters gimmicks
 function react_selection(playerchar) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_selection1);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_selection1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_selection2);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_selection2);
 	}
 }
 
 function react_KO(playerchar) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_KO1);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_KO1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_KO2);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_KO2);
 	}
 }
 
 function react_victory(playerchar) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_victory1);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_victory1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_victory2);
+		client.channels.get(config.testchannelID).send(playerchar.char.emoji + ' ' + playerchar.char.react_victory2);
 	}
 }
 
@@ -397,8 +409,42 @@ function addTurn() {
 }
 
 // function for status display (finally)
-function statusHP(char1) {
-	client.channels.get(config.testchannelID).send(':' + char1.name.toLowerCase() + ':' + '**STATUS**\n' + '\`\`\`ini\n[' + char1.name + ' has ' + char1.hpremaining + '/' + char1.hpmax + ' HP left!]\n[' + char1.name + ' Mag CD : ' + char1.magcd + '/' + char1.magcdmax + ']\`\`\`');
+function status() {
+	client.channels.get(config.testchannelID).send({
+		embed: {
+			color: 16286691,
+			author: {
+				name: client.user.username,
+				icon_url: client.user.avatarURL,
+			},
+			fields: [{
+				name: player1.char.emoji + ':crossed_swords:' + ' **DAMAGE** ' + ':arrow_right:' + player2.char.emoji,
+				value: '\`\`\`diff\n- ' + player1.char.name + ' inflicts ' + Math.floor(player1.dmg) + ' damages to ' + player2.char.name + ' !\`\`\`',
+			},
+			{
+				name: player2.char.emoji + ':crossed_swords:' + ' **DAMAGE** ' + ':arrow_right:' + player1.char.emoji,
+				value: '\`\`\`diff\n- ' + player2.char.name + ' inflicts ' + Math.floor(player2.dmg) + ' damages to ' + player1.char.name + ' !\`\`\`',
+			},
+			{
+				name: '**REGENERATION**',
+				value: '\`\`\`Diff\n+ ' + player1.char.name + ' has regenerated ' + player1.char.rgn + ' HP.\n+ ' + player2.char.name + ' has regenerated ' + player2.char.rgn + ' HP.\`\`\`',
+			},
+			{
+				name: player1.char.emoji + ' **STATUS**',
+				value: '\`\`\`ini\n[' + player1.char.name + ' has ' + player1.char.hpremaining + '/' + player1.char.hpmax + ' HP left!]\n[' + player1.char.name + ' Mag CD : ' + player1.char.magcd + '/' + player1.char.magcdmax + ']\`\`\`',
+			},
+			{
+				name: player2.char.emoji + ' **STATUS**',
+				value: '\`\`\`ini\n[' + player2.char.name + ' has ' + player2.char.hpremaining + '/' + player2.char.hpmax + ' HP left!]\n[' + player2.char.name + ' Mag CD : ' + player2.char.magcd + '/' + player2.char.magcdmax + ']\`\`\`',
+			},
+			],
+			timestamp: new Date(),
+			footer: {
+				icon_url: client.user.avatarURL,
+				text: 'Beginning new turn...',
+			},
+		},
+	});
 }
 
 // functions for turn actions
@@ -410,40 +456,44 @@ function changechar(player, char1, char2) {
 function attack(player, otherplayer, char1, char2) {
 	if (otherplayer.action !== 'defense') {
 		player.dmg = char1.atk * (1 - (char2.def / 100));
-		dodge(otherplayer, char2, char1);
+		dodge(player, char2, char1);
+		if (player.dmg < 0) {
+			player.dmg = 0;
+		}
 		char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
-		client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 	}
 	else {
 		defense(player, char1, char2);
+		if (player.dmg < 0) {
+			player.dmg = 0;
+		}
 		char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
-		client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 	}
 }
 
-function dodge(player, char1, char2) {
-	if (char1.dodgecd === 0) {
+function dodge(player, char_1, char_2) {
+	if (char_1.dodgecd === 0) {
 		let dodgeValue = 0;
-		dodgeValue = (char1.agi - char2.acr) + 1;
+		dodgeValue = (char_1.agi - char_2.acr) + 1;
 		const diceroll = Math.floor(Math.random() * 10);
 		if (diceroll <= 9) {
 			if (dodgeValue >= diceroll) {
 				player.dmg = 0;
-				char1.dodgecd = dodgecdMax;
-				client.channels.get(config.testchannelID).send(char1.name + ' dodged ' + char2.name + '\'s attack.');
+				char_1.dodgecd = dodgecdMax;
+				client.channels.get(config.testchannelID).send(char_1.name + ' dodged ' + char_2.name + '\'s attack.');
 			}
 			else {
-				console.log(char1.name + ' tried to dodge ' + char2.name + '\'s attack but failed.');
+				console.log(char_1.name + ' tried to dodge ' + char_2.name + '\'s attack but failed.');
 			}
 		}
 		else if (diceroll === 10) {
 			player.dmg = 0;
-			char1.dodgecd = dodgecdMax;
-			client.channels.get(config.testchannelID).send(char1.name + ' dodged ' + char2.name + '\'s attack.');
+			char_1.dodgecd = dodgecdMax;
+			client.channels.get(config.testchannelID).send(char_1.name + ' dodged ' + char_2.name + '\'s attack.');
 		}
 	}
 	else {
-		client.channels.get(config.testchannelID).send(char1.name + 'tried to dodge but couldn\'t because it is still under cooldown.');
+		client.channels.get(config.testchannelID).send(char_1.name + 'tried to dodge but couldn\'t because it is still under cooldown.');
 	}
 }
 
@@ -454,7 +504,7 @@ function dodge(player, char1, char2) {
 			char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
 		}
 		else {
-			client.channels.get(config.testchannelID).send(char1.name + 'failed the trap.');
+			client.channels.get(config.testchannelID).send(char1.name + ' failed the trap.');
 		}
 	}
 	else {
@@ -472,7 +522,6 @@ function magic(player, char1, char2) {
 	player.dmg = char1.mag;
 	char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
 	player.char.magcd = player.char.magcdmax;
-	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 }
 
 function gameEnd(winner, looser) {
@@ -544,8 +593,6 @@ function actionphase(firstplayer, secondplayer) {
 			player1.choseAction = false;
 			player2.choseAction = false;
 			turnPhase = false;
-			player1.dmg = 0;
-			player2.dmg = 0;
 			actionAmount = 0;
 			addTurn();
 		}
@@ -577,8 +624,6 @@ function actionphase(firstplayer, secondplayer) {
 			player1.choseAction = false;
 			player2.choseAction = false;
 			turnPhase = false;
-			player1.dmg = 0;
-			player2.dmg = 0;
 			actionAmount = 0;
 			addTurn();
 		}
@@ -611,8 +656,6 @@ function actionphase(firstplayer, secondplayer) {
 				player1.choseAction = false;
 				player2.choseAction = false;
 				turnPhase = false;
-				player1.dmg = 0;
-				player2.dmg = 0;
 				actionAmount = 0;
 				addTurn();
 			}
@@ -628,7 +671,6 @@ function actionphase(firstplayer, secondplayer) {
 function regen(player) {
 	if (player.char.hpremaining < player.char.hpmax) {
 		player.char.hpremaining = player.char.hpremaining + player.char.rgn;
-		client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player.char.name + ' has regenerated ' + player.char.rgn + ' HP.\`\`\`');
 		if (player.char.hpremaining > player.char.hpmax) {
 			player.char.hpremaining = player.char.hpmax;
 		}
@@ -641,8 +683,9 @@ function NewTurnPhase() {
 	if (gamePhase === true && turnPhase === false) {
 		regen(player1);
 		regen(player2);
-		statusHP(player1.char);
-		statusHP(player2.char);
+		status();
+		player1.dmg = 0;
+		player2.dmg = 0;
 		IsDefenseStackReset();
 		if (player1.char.magcd > 0 && player1.char.magcdmax >= player1.char.magcd) {
 			player1.char.magcd = player1.char.magcd - 1;
@@ -703,10 +746,10 @@ client.on('message', msg => {
 	// surrender command
 	if (command === 'surrender') {
 		if (msg.member.id === player1.id) {
-			gameEnd(player2.username, player1.char);
+			gameEnd(player2, player1);
 		}
 		else if (msg.member.id === player2.id) {
-			gameEnd(player1.username, player2.char);
+			gameEnd(player1, player2);
 		}
 		else {
 			msg.replpy(' you can\'t surrender since you are not a registered player');
@@ -844,7 +887,7 @@ client.on('message', msg => {
 	}
 	// gameEnd function test command
 	if (command === 'gameend' && config.ownerID === msg.member.id) {
-		gameEnd(player1.username);
+		gameEnd(player1);
 		console.log(player1);
 		console.log(player2);
 	}
@@ -859,8 +902,8 @@ client.on('message', msg => {
 	// character selection
 	if (gameStarting === true) {
 		switch(command) {
-		case'seize':
-			if(msg.author.id == player1.id) {
+		case 'seize':
+			if(msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[1];
 					player1choseChar = true;
@@ -871,12 +914,12 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if(msg.author.id == player2.id) {
+			else if(msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[1];
 					player2choseChar = true;
 					msg.reply('chose Seize.');
-					react_selection(player1);
+					react_selection(player2);
 				}
 				else{
 					msg.reply('already chose a character.');
@@ -887,7 +930,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'fusoku':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[2];
 					player1choseChar = true;
@@ -898,7 +941,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[2];
 					player2choseChar = true;
@@ -914,7 +957,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'leoppscaay':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[3];
 					player1choseChar = true;
@@ -925,7 +968,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[3];
 					player2choseChar = true;
@@ -941,7 +984,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'gold':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[4];
 					player1choseChar = true;
@@ -952,7 +995,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[4];
 					player2choseChar = true;
@@ -968,7 +1011,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'yellowstrike':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[5];
 					player1choseChar = true;
@@ -979,7 +1022,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[5];
 					player2choseChar = true;
@@ -995,7 +1038,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'pinky': // best char btw kappa
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[6];
 					player1choseChar = true;
@@ -1006,7 +1049,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[6];
 					player2choseChar = true;
@@ -1022,7 +1065,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'redqueen':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[7];
 					player1choseChar = true;
@@ -1033,7 +1076,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[7];
 					player2choseChar = true;
@@ -1049,7 +1092,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'kairo':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[8];
 					player1choseChar = true;
@@ -1060,7 +1103,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[8];
 					player2choseChar = true;
@@ -1076,7 +1119,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'lyzan':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[9];
 					player1choseChar = true;
@@ -1087,7 +1130,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[9];
 					player2choseChar = true;
@@ -1103,7 +1146,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'usabi':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[10];
 					player1choseChar = true;
@@ -1114,7 +1157,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[10];
 					player2choseChar = true;
@@ -1130,7 +1173,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'ellfayrh':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[11];
 					player1choseChar = true;
@@ -1141,7 +1184,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[11];
 					player2choseChar = true;
@@ -1157,7 +1200,7 @@ client.on('message', msg => {
 			}
 			break;
 		case 'may':
-			if (msg.author.id == player1.id) {
+			if (msg.member.id == player1.id) {
 				if (player1choseChar !== true) {
 					player1.char = char[12];
 					player1choseChar = true;
@@ -1168,7 +1211,7 @@ client.on('message', msg => {
 					msg.reply('already chose a character.');
 				}
 			}
-			else if (msg.author.id == player2.id) {
+			else if (msg.member.id == player2.id) {
 				if (player2choseChar !== true) {
 					player2.char = char[12];
 					player2choseChar = true;
