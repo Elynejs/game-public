@@ -7,6 +7,8 @@ const config = require('./config.json');
 client.login(config.token);
 
 // Miscallaneous variables
+let defense_stack = 0;
+let defense_multiplier = 2;
 let actionAmount = 0;
 let turn = 1;
 let gamePhase = false;
@@ -50,6 +52,9 @@ const char = [{
 	dodgecd : 2, // number of turn to wait before using dodge again
 	trapcd : 4, // number of turn to wait before using trap again
 	rgn : 9999, // amount of hp the character regenerate at the end of each turn
+	react_selection : 'undefined', // sentence to display on selecting the character to show character's personality
+	react_KO : 'undefined', // sentence to display on character's KO
+	react_victory : 'undefined', // sentence to display on character's victory
 },
 {
 	tier : 'S',
@@ -68,6 +73,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 90,
+	react_selection1 : 'Ready to play with any of you <3',
+	react_selection2 : 'Please don\'t be too boring...',
+	react_KO1 : 'Okay that\'s just too boring, I\'m leaving.',
+	react_KO2 : 'Aaaaaaah ! So fucking boring.',
+	react_victory1 : 'A rather expected outcome, duh.',
+	react_victory2 : 'YOU DON\'T SAY ?',
 },
 {
 	tier : 'S',
@@ -86,6 +97,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 50,
+	react_selection1 : 'I will fight for you, with honor.',
+	react_selection2 : 'I will fight for you, with honor.',
+	react_KO1 : 'I\'m sorry... I can\'t continue...',
+	react_KO2 : 'I can\'t...',
+	react_victory1 : 'You fought well.',
+	react_victory2 : 'You\'ll do better next time.',
 },
 {
 	tier : 'S',
@@ -104,6 +121,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 70,
+	react_selection1 : 'Nhh... can I just go home ?',
+	react_selection2 : 'Nhh... can I just go home ?',
+	react_KO1 : 'I didn\'t even wanted to take part in that ti begin with...',
+	react_KO2 : 'It\'s over, leave me alone !',
+	react_victory1 : 'So can I leave now ?',
+	react_victory2 : 'So can I leave now ?',
 },
 {
 	tier : 'S',
@@ -122,6 +145,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 50,
+	react_selection1 : '...',
+	react_selection2 : '...',
+	react_KO1 : '...!? How ?',
+	react_KO2 : '.....',
+	react_victory1 : '...Done.',
+	react_victory2 : '...',
 },
 {
 	tier : 'A',
@@ -140,6 +169,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 10,
+	react_selection1 : 'I bet you\'re not even going to hit me ! You\'re all so slow !',
+	react_selection2 : 'Do you think you\'ll even be able to touch me ?!',
+	react_KO1 : 'I lost... my bet, damnit.',
+	react_KO2 : '...Almost...',
+	react_victory1 : 'Haha ! Told you !',
+	react_victory2 : 'See ?! I\'m so fast right ?!',
 },
 {
 	tier : 'A',
@@ -158,6 +193,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 0,
+	react_selection1 : 'Why did you choose me ... ?',
+	react_selection2 : 'Why did you choose me ... ?',
+	react_KO1 : '...Finally.',
+	react_KO2 : '...Finally.',
+	react_victory1 : 'Pathetic',
+	react_victory2 : 'Pathetic',
 },
 {
 	tier : 'A',
@@ -176,6 +217,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 10,
+	react_selection1 : 'Who is even daring to fight the Queen ?!',
+	react_selection2 : 'Who is even daring to fight the Queen ?!',
+	react_KO1 : 'You\'re going to be punished... For that...',
+	react_KO2 : 'You\'re going to be punished... For that...',
+	react_victory1 : 'That\'s what you get for opposing the Queen.',
+	react_victory2 : 'That\'s what you get for opposing the Queen.',
 },
 {
 	tier : 'A',
@@ -194,6 +241,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 20,
+	react_selection1 : 'So you need me for a fight right ? Let\'s do that.',
+	react_selection2 : 'Let\'s go.',
+	react_KO1 : 'Fuck you !',
+	react_KO2 : 'Fuck you !',
+	react_victory1 : 'Easy !',
+	react_victory2 : 'Easy !',
 },
 {
 	tier : 'A',
@@ -212,6 +265,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 100,
+	react_selection1 : 'I\'m sorry but if you thought I was defenceless, I\'m going to have to disappoint you, bring it on !',
+	react_selection2 : 'You know I don\'t like to fight right ?!',
+	react_KO1 : 'I really need to... Upgrade that strength boost...',
+	react_KO2 : 'Ran out of energy too soon again...Fuck.',
+	react_victory1 : '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
+	react_victory2 : 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
 },
 {
 	tier : 'B',
@@ -230,6 +289,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 0,
+	react_selection1 : 'This again ?!',
+	react_selection2 : 'You really piss me off !',
+	react_KO1 : 'I\'m out of... Battery............. Disconnecting.',
+	react_KO2 : 'I\'m out of... Battery............. Disconnecting.',
+	react_victory1 : 'That\'s over now !',
+	react_victory2 : 'That\'s over now !',
 },
 {
 	tier : 'B',
@@ -248,6 +313,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 0,
+	react_selection1 : 'Hhh... Another of those pointless fights, uh ?',
+	react_selection2 : 'Let\'s see if I can get some data from this fight at least...',
+	react_KO1 : 'Tsk... Of course this was going to end like this, I\'m not a fighter.',
+	react_KO2 : '...Thoses data are rather interesting...',
+	react_victory1 : 'Considering your capacity I don\'t even know why you picked a fight to being with.',
+	react_victory2 : 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
 },
 {
 	tier : 'B',
@@ -266,6 +337,12 @@ const char = [{
 	dodgecd : 2,
 	trapcd : 4,
 	rgn : 5,
+	react_selection1 : 'I\'m going to do the best I can !... Which is not much, but...',
+	react_selection2 : 'I\'m going to do the best I can !... Which is not much, but...',
+	react_KO1 : 'Nhh... I did the best I could, sorry.',
+	react_KO2 : 'I knew it... I can\'t win...',
+	react_victory1 : 'What ?! I won ? Really ?',
+	react_victory2 : 'WHAT ?! REALLY ?',
 }];
 const totalChar = char.length;
 
@@ -275,21 +352,73 @@ client.on('ready', () => {
 	console.log('Ready!');
 });
 
+// functions for displaying characters gimmicks
+function react_selection(playerchar) {
+	if (Math.floor(Math.random() * 2) >= 1) {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_selection1);
+	}
+	else {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_selection2);
+	}
+}
+
+function react_KO(playerchar) {
+	if (Math.floor(Math.random() * 2) >= 1) {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_KO1);
+	}
+	else {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_KO2);
+	}
+}
+
+function react_victory(playerchar) {
+	if (Math.floor(Math.random() * 2) >= 1) {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_victory1);
+	}
+	else {
+		client.channels.get(config.testchannelID).send(':' + playerchar.char.name.toLowerCase() + ':' + playerchar.char.react_victory2);
+	}
+}
+
+// function for defense_stack
+function IsDefenseStackReset() {
+	if (defense_stack >= 2) {
+		defense_multiplier = 2;
+	}
+	else {
+		defense_multiplier = defense_multiplier - (1 / 3);
+	}
+}
+// function for passing from one turn to another
+function addTurn() {
+	defense_stack = defense_stack + 1;
+	turn = turn + 1;
+	NewTurnPhase();
+}
+
 // function for status display (finally)
 function statusHP(char1) {
 	client.channels.get(config.testchannelID).send(':' + char1.name.toLowerCase() + ':' + '**STATUS**\n' + '\`\`\`ini\n[' + char1.name + ' has ' + char1.hpremaining + '/' + char1.hpmax + ' HP left!]\n[' + char1.name + ' Mag CD : ' + char1.magcd + '/' + char1.magcdmax + ']\`\`\`');
 }
+
 // functions for turn actions
 function changechar(player, char1, char2) {
 	client.channels.get(config.testchannelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
 	console.log('WiP');
 }
 
-function attack(player, playerdodge, char1, char2) {
-	player.dmg = char1.atk * (1 - (char2.def / 100));
-	dodge(playerdodge, char2, char1);
-	char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
-	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
+function attack(player, otherplayer, char1, char2) {
+	if (otherplayer.action !== 'defense') {
+		player.dmg = char1.atk * (1 - (char2.def / 100));
+		dodge(otherplayer, char2, char1);
+		char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
+		client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
+	}
+	else {
+		defense(player, char1, char2);
+		char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
+		client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
+	}
 }
 
 function dodge(player, char1, char2) {
@@ -318,8 +447,8 @@ function dodge(player, char1, char2) {
 	}
 }
 
-function trap(player, char1, char2) {
-	/* if (char1.trapcd === 0) { // disabled
+/* function trap(player, char1, char2) {
+	if (char1.trapcd === 0) { // disabled
 		if (Math.floor(Math.random() * 2) <= 1) {
 			player.dmg = ((char1.int * 2) - char2.int) * 3;
 			char2.hpremaining = char2.hpremaining - Math.floor(player.dmg);
@@ -330,14 +459,13 @@ function trap(player, char1, char2) {
 	}
 	else {
 		client.channels.get(config.testchannelID).send(char1.name + 'can\'t use a trap because it is still under cooldown.');
-	} */
-}
+	}
+} */
 
 function defense(player, char1, char2) {
-	console.log(player.dmg);
-	player.dmg = player.dmg / 2; // WiP don't even ask me about that shit
-	console.log(player.dmg);
-	client.channels.get(config.testchannelID).send(char1.name + ' succesfully blocked the attack of ' + char2.name + ' reducing incoming damage to ' + Math.floor(player.dmg));
+	player.dmg = char2.atk * (1 - ((char1.def * defense_multiplier) / 100));
+	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' multiplicated his defense for this turn by ' + defense_multiplier + '\`\`\`');
+	defense_stack = 0;
 }
 
 function magic(player, char1, char2) {
@@ -347,18 +475,16 @@ function magic(player, char1, char2) {
 	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 }
 
-// function for passing from one turn to another
-function addTurn() {
-	turn = turn + 1;
-	NewTurnPhase();
-}
-
-function gameEnd(winner) {
-	client.channels.get(config.testchannelID).send('**\`\`\`fix\nCongratulation to ' + winner + ' !\nGAME IS OVER ! \`\`\`**');
+function gameEnd(winner, looser) {
+	react_KO(looser);
+	react_victory(winner);
+	client.channels.get(config.testchannelID).send('**\`\`\`fix\nCongratulation to ' + winner.username + ' !\nGAME IS OVER ! \`\`\`**');
 	gamePhase = false;
 	turnPhase = false;
 	playerCount = 0;
 	actionAmount = 0;
+	player1choseChar = false;
+	player2choseChar = false;
 	player1.choseAction = false;
 	player2.choseAction = false;
 	player1.char.hpremaining = player1.char.hpmax;
@@ -379,9 +505,9 @@ function gameEnd(winner) {
 }
 
 // function for gameend
-function IsGameOver(player, char1) {
+function IsGameOver(player, otherplayer, char1) {
 	if (char1.hpremaining <= 0) {
-		gameEnd(player.username);
+		gameEnd(player, otherplayer);
 	}
 	else {
 		console.log(char1.name + ' is still alive.');
@@ -398,34 +524,22 @@ function actionphase(firstplayer, secondplayer) {
 			}
 			if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-			}
-			/* if (player.action === 'trap') {
-				trap(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-			} */
-			if (firstplayer.action === 'defense') {
-				defense(player2, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+				IsGameOver(player1, player2, player2.char);
 			}
 			if (firstplayer.action === 'magic') {
 				magic(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+				IsGameOver(player1, player2, player2.char);
 			}
 			if (secondplayer.action === 'changechar') {
 				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
 			if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			}
-			if (secondplayer.action === 'defense') {
-				defense(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
+				IsGameOver(player2, player1, player1.char);
 			}
 			if (secondplayer.action === 'magic') {
 				magic(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
+				IsGameOver(player2, player1, player1.char);
 			}
 			player1.choseAction = false;
 			player2.choseAction = false;
@@ -435,22 +549,18 @@ function actionphase(firstplayer, secondplayer) {
 			actionAmount = 0;
 			addTurn();
 		}
-		else if (player1.char.spd < player2.char.spd) {
+		else if (firstplayer.char.spd < secondplayer.char.spd) {
 			console.log('succesfully reached speed detection');
 			if (secondplayer.action === 'changechar') {
 				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
 			if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
-			}
-			if (secondplayer.action === 'defense') {
-				defense(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
+				IsGameOver(player2, player1, player1.char);
 			}
 			if (secondplayer.action === 'magic') {
 				magic(player2, player2.char, player1.char);
-				IsGameOver(player2, player1.char);
+				IsGameOver(player2, player1, player1.char);
 			}
 			if (firstplayer.action === 'changechar') {
 				// WiP
@@ -458,19 +568,11 @@ function actionphase(firstplayer, secondplayer) {
 			}
 			if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-			}
-			/* if (player.action === 'trap') {
-				trap(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
-			} */
-			if (firstplayer.action === 'defense') {
-				defense(player2, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+				IsGameOver(player1, player2, player2.char);
 			}
 			if (firstplayer.action === 'magic') {
 				magic(player1, player1.char, player2.char);
-				IsGameOver(player1, player2.char);
+				IsGameOver(player1, player2, player2.char);
 			}
 			player1.choseAction = false;
 			player2.choseAction = false;
@@ -480,7 +582,7 @@ function actionphase(firstplayer, secondplayer) {
 			actionAmount = 0;
 			addTurn();
 		}
-		else if (player1.char.spd === player2.char.spd) {
+		else if (firstplayer.char.spd === secondplayer.char.spd) {
 			if (Math.floor(Math.random() * 2) >= 1) {
 				console.log('succesfully reached speed detection');
 				if (firstplayer.action === 'changechar') {
@@ -489,34 +591,22 @@ function actionphase(firstplayer, secondplayer) {
 				}
 				if (firstplayer.action === 'attack') {
 					attack(player1, player2, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
-				}
-				/* if (player.action === 'trap') {
-					trap(player1, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
-				} */
-				if (firstplayer.action === 'defense') {
-					defense(player2, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
+					IsGameOver(player1, player2, player2.char);
 				}
 				if (firstplayer.action === 'magic') {
 					magic(player1, player1.char, player2.char);
-					IsGameOver(player1, player2.char);
+					IsGameOver(player1, player2, player2.char);
 				}
 				if (secondplayer.action === 'changechar') {
 					changechar(player2, player2.char, client.content.shift().args[0]);
 				}
 				if (secondplayer.action === 'attack') {
 					attack(player2, player1, player2.char, player1.char);
-					IsGameOver(player2, player1.char);
-				}
-				if (secondplayer.action === 'defense') {
-					defense(player2, player2.char, player1.char);
-					IsGameOver(player2, player1.char);
+					IsGameOver(player2, player1, player1.char);
 				}
 				if (secondplayer.action === 'magic') {
 					magic(player2, player2.char, player1.char);
-					IsGameOver(player2, player1.char);
+					IsGameOver(player2, player1, player1.char);
 				}
 				player1.choseAction = false;
 				player2.choseAction = false;
@@ -534,27 +624,26 @@ function actionphase(firstplayer, secondplayer) {
 	}
 }
 
+// function for regen
+function regen(player) {
+	if (player.char.hpremaining < player.char.hpmax) {
+		player.char.hpremaining = player.char.hpremaining + player.char.rgn;
+		client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player.char.name + ' has regenerated ' + player.char.rgn + ' HP.\`\`\`');
+		if (player.char.hpremaining > player.char.hpmax) {
+			player.char.hpremaining = player.char.hpmax;
+		}
+	}
+}
+
 // function for resetting turn phase
 function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
+		regen(player1);
+		regen(player2);
 		statusHP(player1.char);
 		statusHP(player2.char);
-		client.channels.get(config.testchannelID).send('Turn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.');
-		if (player1.char.hpremaining < player1.char.hpmax) {
-			player1.char.hpremaining = player1.char.hpremaining + player1.char.rgn;
-			client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player1.char.name + ' has regenerated ' + player1.char.rgn + ' HP.\`\`\`');
-			if (player1.char.hpremaining > player1.char.hpmax) {
-				player1.char.hpremaining = player1.char.hpmax;
-			}
-		}
-		if (player2.char.hpremaining < player2.char.hpmax) {
-			player2.char.hpremaining = player2.char.hpremaining + player2.char.rgn;
-			client.channels.get(config.testchannelID).send('\`\`\`Diff\n+ ' + player2.char.name + ' has regenerated ' + player2.char.rgn + ' HP.\`\`\`');
-			if (player2.char.hpremaining > player2.char.hpmax) {
-				player2.char.hpremaining = player2.char.hpmax;
-			}
-		}
+		IsDefenseStackReset();
 		if (player1.char.magcd > 0 && player1.char.magcdmax >= player1.char.magcd) {
 			player1.char.magcd = player1.char.magcd - 1;
 		}
@@ -573,6 +662,7 @@ function NewTurnPhase() {
 		if (player2.char.trapcd > 0 && trapcdMax >= player2.char.trapcd) {
 			player2.char.trapcd = player2.char.trapcd - 1;
 		}
+		client.channels.get(config.testchannelID).send('\`\`\`diff\nTurn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.\`\`\`');
 		turnPhase = true;
 	}
 }
@@ -660,18 +750,19 @@ client.on('message', msg => {
 	if (command === 'editchar') {
 		if (msg.member.id === config.ownerID) {
 			if (args[0] === 'help') {
-				msg.channel.send('Correct syntaxe is !editchar [name of the character] [stat you want to modify] [new value to stat] --- Please be aware that any change to any stat is definitive, use with caution');
+				msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value]');
 			}
 			else if (args.length === 3) {
 				let a;
 				for (a = 0; a < totalChar; a++) {
-					if (args[0] === char[a].name) {
+					if (args[0] === char[a].name.toLowerCase()) {
 						console.log('value found : ' + char[a].name);
 						let stat = Object.keys(char[a]);
 						for (stat in args[1]) {
 							console.log('value found : ' + args[1]);
-							char[a].args[1] = args[2];
+							char[a][args[1]] = args[2];
 							msg.channel.send('Admin changed the value of ' + char[a].name + '\'s ' + args[1] + ' to ' + args[2]);
+							break;
 						}
 					}
 				}
@@ -774,6 +865,7 @@ client.on('message', msg => {
 					player1.char = char[1];
 					player1choseChar = true;
 					msg.reply('chose Seize.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -784,6 +876,7 @@ client.on('message', msg => {
 					player2.char = char[1];
 					player2choseChar = true;
 					msg.reply('chose Seize.');
+					react_selection(player1);
 				}
 				else{
 					msg.reply('already chose a character.');
@@ -799,6 +892,7 @@ client.on('message', msg => {
 					player1.char = char[2];
 					player1choseChar = true;
 					msg.reply('chose Fusoku.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -809,6 +903,7 @@ client.on('message', msg => {
 					player2.char = char[2];
 					player2choseChar = true;
 					msg.reply('chose Fusoku.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -824,6 +919,7 @@ client.on('message', msg => {
 					player1.char = char[3];
 					player1choseChar = true;
 					msg.reply('chose Leoppscaay.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -834,6 +930,7 @@ client.on('message', msg => {
 					player2.char = char[3];
 					player2choseChar = true;
 					msg.reply('chose Leoppscaay.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -849,6 +946,7 @@ client.on('message', msg => {
 					player1.char = char[4];
 					player1choseChar = true;
 					msg.reply('chose Gold.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -859,6 +957,7 @@ client.on('message', msg => {
 					player2.char = char[4];
 					player2choseChar = true;
 					msg.reply('chose Gold.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -874,6 +973,7 @@ client.on('message', msg => {
 					player1.char = char[5];
 					player1choseChar = true;
 					msg.reply('chose Yellow Strike.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -884,6 +984,7 @@ client.on('message', msg => {
 					player2.char = char[5];
 					player2choseChar = true;
 					msg.reply('chose Yellow Strike.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -899,7 +1000,7 @@ client.on('message', msg => {
 					player1.char = char[6];
 					player1choseChar = true;
 					msg.reply('chose Pinky.');
-					console.log(player1);
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -910,7 +1011,7 @@ client.on('message', msg => {
 					player2.char = char[6];
 					player2choseChar = true;
 					msg.reply('chose Pinky.');
-					console.log(player2);
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -926,6 +1027,7 @@ client.on('message', msg => {
 					player1.char = char[7];
 					player1choseChar = true;
 					msg.reply('chose Red Queen.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -936,6 +1038,7 @@ client.on('message', msg => {
 					player2.char = char[7];
 					player2choseChar = true;
 					msg.reply('chose Red Queen.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -951,6 +1054,7 @@ client.on('message', msg => {
 					player1.char = char[8];
 					player1choseChar = true;
 					msg.reply('chose Kairo.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -961,6 +1065,7 @@ client.on('message', msg => {
 					player2.char = char[8];
 					player2choseChar = true;
 					msg.reply('chose Kairo.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -976,6 +1081,7 @@ client.on('message', msg => {
 					player1.char = char[9];
 					player1choseChar = true;
 					msg.reply('chose Lyzan.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -986,6 +1092,7 @@ client.on('message', msg => {
 					player2.char = char[9];
 					player2choseChar = true;
 					msg.reply('chose Lyzan.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1001,6 +1108,7 @@ client.on('message', msg => {
 					player1.char = char[10];
 					player1choseChar = true;
 					msg.reply('chose USaBi.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1011,6 +1119,7 @@ client.on('message', msg => {
 					player2.char = char[10];
 					player2choseChar = true;
 					msg.reply('chose USaBi.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1026,6 +1135,7 @@ client.on('message', msg => {
 					player1.char = char[11];
 					player1choseChar = true;
 					msg.reply('chose Ell\'Fayrh.');
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1036,6 +1146,7 @@ client.on('message', msg => {
 					player2.char = char[11];
 					player2choseChar = true;
 					msg.reply('chose Ell\'Fayrh.');
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1051,7 +1162,7 @@ client.on('message', msg => {
 					player1.char = char[12];
 					player1choseChar = true;
 					msg.reply('chose May.');
-					console.log(player1);
+					react_selection(player1);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1062,7 +1173,7 @@ client.on('message', msg => {
 					player2.char = char[12];
 					player2choseChar = true;
 					msg.reply('chose May.');
-					console.log(player2);
+					react_selection(player2);
 				}
 				else {
 					msg.reply('already chose a character.');
@@ -1093,13 +1204,13 @@ client.on('message', msg => {
 	if (gamePhase === true && turnPhase === true) {
 		switch(command) {
 		case 'switch': // number in actions array = 0
-			if (msg.member.id === player1.id) {
+			if (msg.member.id === player1.id && player1.choseAction === false) {
 				player1.choseAction = true;
 				player1.action = 'changechar';
 				actionAmount = actionAmount + 1;
 				actionphase(player1, player2);
 			}
-			else if (msg.member.id === player2.id) {
+			else if (msg.member.id === player2.id && player2.choseAction === false) {
 				player2.choseAction = true;
 				player2.action = 'changechar';
 				actionAmount = actionAmount + 1;
@@ -1110,13 +1221,13 @@ client.on('message', msg => {
 			}
 			break;
 		case 'attack': // number in array = 1
-			if (msg.member.id === player1.id) {
+			if (msg.member.id === player1.id && player1.choseAction === false) {
 				player1.choseAction = true;
 				player1.action = 'attack';
 				actionAmount = actionAmount + 1;
 				actionphase(player1, player2);
 			}
-			else if (msg.member.id === player2.id) {
+			else if (msg.member.id === player2.id && player2.choseAction === false) {
 				player2.choseAction = true;
 				player2.action = 'attack';
 				actionAmount = actionAmount + 1;
@@ -1127,7 +1238,7 @@ client.on('message', msg => {
 			}
 			break;
 		/* case 'trap': // number in array = 3
-			if (msg.member.id === player1.id) {
+			if (msg.member.id === player1.id && player1.choseAction === false) {
 				if (player1.char.trapcd === 0) {
 					player1.choseAction = true;
 					player1.action = 'trap';
@@ -1138,7 +1249,7 @@ client.on('message', msg => {
 					msg.channel.send(player1.username + ' can\'t use trap yet. Chose another option.');
 				}
 			}
-			else if (msg.member.id === player2.id) {
+			else if (msg.member.id === player2.id && player2.choseAction === false) {
 				if (player2.char.trapcd === 0) {
 					player2.choseAction = true;
 					player2.action = 'trap';
@@ -1154,24 +1265,34 @@ client.on('message', msg => {
 			}
 			break;*/
 		case 'defense': // number in array = 4
-			if (msg.member.id === player1.id) {
-				player1.choseAction = true;
-				player1.action = 'defense';
-				actionAmount = actionAmount + 1;
-				actionphase(player1, player2);
+			if (msg.member.id === player1.id && player1.choseAction === false && player2.choseAction === true) {
+				if (player2.action === 'attack') {
+					player1.choseAction = true;
+					player1.action = 'defense';
+					actionAmount = actionAmount + 1;
+					actionphase(player1, player2);
+				}
+				else {
+					msg.channel.send(player2.username + ' did not choose a defendable action. Choose another action to take this turn.');
+				}
 			}
-			else if (msg.member.id === player2.id) {
-				player2.choseAction = true;
-				player2.action = 'defense';
-				actionAmount = actionAmount + 1;
-				actionphase(player1, player2);
+			else if (msg.member.id === player2.id && player2.choseAction === false && player1.choseAction === true) {
+				if (player1.action === 'attack') {
+					player2.choseAction = true;
+					player2.action = 'defense';
+					actionAmount = actionAmount + 1;
+					actionphase(player1, player2);
+				}
+				else {
+					msg.channel.send(player1.username + ' did not choose a defendable action. Choose another action to take this turn.');
+				}
 			}
 			else {
-				console.log(msg.author.username + 'tried to play while not being registered as a player.');
+				msg.channel.send('You can\'t choose to defend if your opponent has not chosent an action yet.');
 			}
 			break;
 		case 'magic': // number in array = 5
-			if (msg.member.id === player1.id) {
+			if (msg.member.id === player1.id && player1.choseAction === false) {
 				if (player1.char.mag === 0) {
 					msg.channel.send(player1.char.name + ' can\'t cast magic. Please chose another action.');
 				}
@@ -1185,7 +1306,7 @@ client.on('message', msg => {
 					msg.reply(' can\'t use magic because it is still under cooldown.');
 				}
 			}
-			else if (msg.member.id === player2.id) {
+			else if (msg.member.id === player2.id && player2.choseAction === false) {
 				if (player2.char.mag === 0) {
 					msg.channel.send(player2.char.name + ' can\'t cast magic. Please chose another action.');
 				}
@@ -1200,7 +1321,7 @@ client.on('message', msg => {
 				}
 			}
 			else {
-				console.log(msg.author.username + 'tried to play while not being registered as a player.');
+				console.log(msg.author.username + ' tried to play while not being registered as a player.');
 			}
 			break;
 		}
