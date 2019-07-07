@@ -463,8 +463,8 @@ function dodge(player, char1, char2) {
 } */
 
 function defense(player, char1, char2) {
-	player.dmg = char2.atk * (1 - ((char1.def * defense_multiplier) / 100));
-	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char1.name + ' multiplicated his defense for this turn by ' + defense_multiplier + '\`\`\`');
+	player.dmg = char1.atk * (1 - ((char2.def * defense_multiplier) / 100));
+	client.channels.get(config.testchannelID).send('\`\`\`diff\n- ' + char2.name + ' multiplicated their defense for this turn by ' + defense_multiplier + '\`\`\`');
 	defense_stack = 0;
 }
 
