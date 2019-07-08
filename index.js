@@ -601,10 +601,12 @@ function attack(player, otherplayer, char1, char2) {
 	if (otherplayer.action !== 'defense') {
 		if (char1.crit_chance > Math.floor(Math.random() * 100)) {
 			player.dmg = (char1.atk * (1 - (char2.def / 100))) * char1.crit_multi;
+			console.log(player.dmg);
 			player.message_damage = ('\`\`\`diff\n- ' + 'Critical Damage !' + ' ' + player.char.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + otherplayer.char.name + ' !\`\`\`');
 		}
 		else {
 			player.dmg = char1.atk * (1 - (char2.def / 100));
+			console.log(player.dmg);
 			player.message_damage = ('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 		}
 		dodge(player, otherplayer, char2, char1);
@@ -614,8 +616,8 @@ function attack(player, otherplayer, char1, char2) {
 		char2.hp = char2.hp - Math.floor(player.dmg);
 	}
 	else {
-		defense(player, char1, char2);
-		otherplayer.message_block = ('\`\`\`diff\n- ' + char2.name + ' multiplicated their defense for this turn by ' + Math.floor(defense_multiplier) + '\`\`\`');
+		defense(player, otherplayer, char1, char2);
+		player.message_block = (char2.name + ' multiplicated their defense for this turn by ' + Math.floor(defense_multiplier));
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
@@ -651,12 +653,16 @@ function dodge(player, otherplayer, char_1, char_2) {
 	}
 }
 
-function defense(player, char1, char2) {
+function defense(player, otherplayer, char1, char2) {
 	if (char1.crit_chance > Math.floor(Math.random() * 100)) {
-		player.dmg = (char1.atk / (1 - ((char2.def * defense_multiplier) / 100)) * char1.crit_multi);
+		player.dmg = (char1.atk / (1 - ((char2.def * defense_multiplier) / 100))) * char1.crit_multi;
+		console.log(player.dmg);
+		player.message_damage = ('\`\`\`diff\n- ' + 'Critical Damage !' + ' ' + player.char.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + otherplayer.char.name + ' !\`\`\`');
 	}
 	else {
 		player.dmg = char1.atk * (1 - ((char2.def * defense_multiplier) / 100));
+		console.log(player.dmg);
+		player.message_damage = ('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 	}
 	defense_stack = 0;
 }
@@ -666,12 +672,14 @@ function magic(player, char1, char2) {
 		player.dmg = char1.mag * 5;
 		player.message_damage = ('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 		char2.hp = char2.hp - Math.floor(player.dmg);
+		console.log(player.dmg);
 		player.char.magcd = player.char.magcdmax;
 	}
 	else {
 		player.dmg = char1.mag;
 		player.message_damage = ('\`\`\`diff\n- ' + char1.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + char2.name + ' !\`\`\`');
 		char2.hp = char2.hp - Math.floor(player.dmg);
+		console.log(player.dmg);
 		player.char.magcd = player.char.magcdmax;
 	}
 }
