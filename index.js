@@ -66,7 +66,7 @@ const char = [{
 	react_KO2 : 'undefined',
 	react_victory1 : 'undefined', // sentence to display on character's victory
 	react_victory2 : 'undefined',
-	emoji : config.test_emote_undefined,
+	emoji : config.emote_undefined,
 },
 {
 	tier : 'S',
@@ -93,7 +93,7 @@ const char = [{
 	react_KO2 : 'Aaaaaaah ! So fucking boring.',
 	react_victory1 : 'A rather expected outcome, duh.',
 	react_victory2 : 'YOU DON\'T SAY ?',
-	emoji : config.test_emote_seize,
+	emoji : config.emote_seize,
 },
 {
 	tier : 'S',
@@ -120,7 +120,7 @@ const char = [{
 	react_KO2 : 'I can\'t...',
 	react_victory1 : 'You fought well.',
 	react_victory2 : 'You\'ll do better next time.',
-	emoji: config.test_emote_fusoku,
+	emoji: config.emote_fusoku,
 },
 {
 	tier : 'S',
@@ -147,7 +147,7 @@ const char = [{
 	react_KO2 : 'It\'s over, leave me alone !',
 	react_victory1 : 'So can I leave now ?',
 	react_victory2 : 'So can I leave now ?',
-	emoji: config.test_emote_leoppsccay,
+	emoji: config.emote_leoppsccay,
 },
 {
 	tier : 'S',
@@ -174,7 +174,7 @@ const char = [{
 	react_KO2 : '.....',
 	react_victory1 : '...Done.',
 	react_victory2 : '...',
-	emoji: config.test_emote_gold,
+	emoji: config.emote_gold,
 },
 {
 	tier: 'S',
@@ -201,7 +201,7 @@ const char = [{
 	react_KO2: 'Seriously...?',
 	react_victory1: 'Told ya~',
 	react_victory2: 'It\'s not like you could do anything against it.',
-	emoji : config.test_emote_ayddan,
+	emoji : config.emote_ayddan,
 },
 {
 	tier : 'A',
@@ -228,7 +228,7 @@ const char = [{
 	react_KO2 : 'I can\'t make it, I must retreat.',
 	react_victory1 : 'Target neutralised.',
 	react_victory2 : 'Objective accomplished.',
-	emoji : config.test_emote_snipefox,
+	emoji : config.emote_snipefox,
 },
 {
 	tier : 'A',
@@ -255,7 +255,7 @@ const char = [{
 	react_KO2 : '...Almost...',
 	react_victory1 : 'Haha ! Told you !',
 	react_victory2 : 'See ?! I\'m so fast right ?!',
-	emoji: config.test_emote_yellowstrike,
+	emoji: config.emote_yellowstrike,
 },
 {
 	tier : 'A',
@@ -282,7 +282,7 @@ const char = [{
 	react_KO2 : '...Finally.',
 	react_victory1 : 'Pathetic',
 	react_victory2 : 'Pathetic',
-	emoji: config.test_emote_pinky,
+	emoji: config.emote_pinky,
 },
 {
 	tier : 'A',
@@ -309,7 +309,7 @@ const char = [{
 	react_KO2 : 'You\'re going to be punished... For that...',
 	react_victory1 : 'That\'s what you get for opposing the Queen.',
 	react_victory2 : 'That\'s what you get for opposing the Queen.',
-	emoji: config.test_emote_redqueen,
+	emoji: config.emote_redqueen,
 },
 {
 	tier : 'A',
@@ -336,7 +336,7 @@ const char = [{
 	react_KO2 : 'Fuck you !',
 	react_victory1 : 'Easy !',
 	react_victory2 : 'Easy !',
-	emoji: config.test_emote_kairo,
+	emoji: config.emote_kairo,
 },
 {
 	tier : 'A',
@@ -363,7 +363,7 @@ const char = [{
 	react_KO2 : 'Ran out of energy too soon again...Fuck.',
 	react_victory1 : '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
 	react_victory2 : 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
-	emoji: config.test_emote_lyzan,
+	emoji: config.emote_lyzan,
 },
 {
 	tier : 'B',
@@ -390,7 +390,7 @@ const char = [{
 	react_KO2 : 'I\'m out of... Battery............. Disconnecting.',
 	react_victory1 : 'That\'s over now !',
 	react_victory2 : 'That\'s over now !',
-	emoji: config.test_emote_usabi,
+	emoji: config.emote_usabi,
 },
 {
 	tier : 'B',
@@ -417,7 +417,7 @@ const char = [{
 	react_KO2 : '...Thoses data are rather interesting...',
 	react_victory1 : 'Considering your capacity I don\'t even know why you picked a fight to being with.',
 	react_victory2 : 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
-	emoji: config.test_emote_ellfayrh,
+	emoji: config.emote_ellfayrh,
 },
 {
 	tier : 'C',
@@ -444,7 +444,7 @@ const char = [{
 	react_KO2 : 'I knew it... I can\'t win...',
 	react_victory1 : 'What ?! I won ? Really ?',
 	react_victory2 : 'WHAT ?! REALLY ?',
-	emoji: config.test_emote_may,
+	emoji: config.emote_may,
 },
 {
 	tier: 'H',
@@ -471,7 +471,7 @@ const char = [{
 	react_KO2 : 'This wasn\'t supposed... To be that violent !',
 	react_victory1 : 'Surrender yourself, there is no need for anyone to get hurt anymore, it\'s over.',
 	react_victory2 : 'Just surrend, there is no need for anyone to get hurt anymore, it\'s over.',
-	emoji : config.test_emote_dyakkoo,
+	emoji : config.emote_dyakkoo,
 },
 {
 	tier: 'H',
@@ -498,7 +498,7 @@ const char = [{
 	react_KO2: 'Please... Help...',
 	react_victory1: 'I\'m happy I got to win !',
 	react_victory2: 'That was a nice game, let\'s play again !',
-	emoji: config.test_emote_kairen,
+	emoji: config.emote_kairen,
 }];
 const totalChar = char.length;
 
@@ -511,28 +511,28 @@ client.on('ready', () => {
 // functions for displaying characters gimmicks
 function react_selection(player) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_selection1);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_selection1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_selection2);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_selection2);
 	}
 }
 
 function react_KO(player) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_KO1);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_KO1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_KO2);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_KO2);
 	}
 }
 
 function react_victory(player) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_victory1);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_victory1);
 	}
 	else {
-		client.channels.get(config.testchannelID).send(player.char.emoji + ' ' + player.char.react_victory2);
+		client.channels.get(config.channelID).send(player.char.emoji + ' ' + player.char.react_victory2);
 	}
 }
 
@@ -554,7 +554,7 @@ function addTurn() {
 
 // function for status display (finally)
 function status() {
-	client.channels.get(config.testchannelID).send({
+	client.channels.get(config.channelID).send({
 		embed: {
 			color: 16286691,
 			author: {
@@ -593,7 +593,7 @@ function status() {
 
 // functions for turn actions
 function changechar(player, char1, char2) {
-	client.channels.get(config.testchannelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
+	client.channels.get(config.channelID).send(player.username + ' switched ' + char1.name + ' for ' + char2.name);
 	console.log('WiP');
 }
 
@@ -679,7 +679,7 @@ function magic(player, char1, char2) {
 function gameEnd(winner, looser) {
 	react_KO(looser);
 	react_victory(winner);
-	client.channels.get(config.testchannelID).send('**\`\`\`fix\nCongratulation to ' + winner.username + ' !\nGAME IS OVER ! \`\`\`**');
+	client.channels.get(config.channelID).send('**\`\`\`fix\nCongratulation to ' + winner.username + ' !\nGAME IS OVER ! \`\`\`**');
 	gamePhase = false;
 	turnPhase = false;
 	playerCount = 0;
@@ -869,7 +869,7 @@ function NewTurnPhase() {
 		if (player2.char.trapcd > 0 && trapcdMax >= player2.char.trapcd) {
 			player2.char.trapcd = player2.char.trapcd - 1;
 		}
-		client.channels.get(config.testchannelID).send('\`\`\`diff\nTurn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.\`\`\`');
+		client.channels.get(config.channelID).send('\`\`\`diff\nTurn' + ' ' + turn + ' ' + 'has started. Chose your character\'s action.\`\`\`');
 		turnPhase = true;
 	}
 }
