@@ -120,7 +120,7 @@ const char = [{
 	react_KO2 : 'I can\'t...',
 	react_victory1 : 'You fought well.',
 	react_victory2 : 'You\'ll do better next time.',
-	emoji: config.emote_fusoku,
+	emoji : config.emote_fusoku,
 },
 {
 	tier : 'S',
@@ -147,7 +147,7 @@ const char = [{
 	react_KO2 : 'It\'s over, leave me alone !',
 	react_victory1 : 'So can I leave now ?',
 	react_victory2 : 'So can I leave now ?',
-	emoji: config.emote_leoppsccay,
+	emoji : config.emote_leoppsccay,
 },
 {
 	tier : 'S',
@@ -174,7 +174,7 @@ const char = [{
 	react_KO2 : '.....',
 	react_victory1 : '...Done.',
 	react_victory2 : '...',
-	emoji: config.emote_gold,
+	emoji : config.emote_gold,
 },
 {
 	tier: 'S',
@@ -255,7 +255,7 @@ const char = [{
 	react_KO2 : '...Almost...',
 	react_victory1 : 'Haha ! Told you !',
 	react_victory2 : 'See ?! I\'m so fast right ?!',
-	emoji: config.emote_yellowstrike,
+	emoji : config.emote_yellowstrike,
 },
 {
 	tier : 'A',
@@ -282,7 +282,7 @@ const char = [{
 	react_KO2 : '...Finally.',
 	react_victory1 : 'Pathetic',
 	react_victory2 : 'Pathetic',
-	emoji: config.emote_pinky,
+	emoji : config.emote_pinky,
 },
 {
 	tier : 'A',
@@ -309,7 +309,7 @@ const char = [{
 	react_KO2 : 'You\'re going to be punished... For that...',
 	react_victory1 : 'That\'s what you get for opposing the Queen.',
 	react_victory2 : 'That\'s what you get for opposing the Queen.',
-	emoji: config.emote_redqueen,
+	emoji : config.emote_redqueen,
 },
 {
 	tier : 'A',
@@ -336,7 +336,7 @@ const char = [{
 	react_KO2 : 'Fuck you !',
 	react_victory1 : 'Easy !',
 	react_victory2 : 'Easy !',
-	emoji: config.emote_kairo,
+	emoji : config.emote_kairo,
 },
 {
 	tier : 'A',
@@ -363,7 +363,7 @@ const char = [{
 	react_KO2 : 'Ran out of energy too soon again...Fuck.',
 	react_victory1 : '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
 	react_victory2 : 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
-	emoji: config.emote_lyzan,
+	emoji : config.emote_lyzan,
 },
 {
 	tier : 'B',
@@ -390,7 +390,7 @@ const char = [{
 	react_KO2 : 'I\'m out of... Battery............. Disconnecting.',
 	react_victory1 : 'That\'s over now !',
 	react_victory2 : 'That\'s over now !',
-	emoji: config.emote_usabi,
+	emoji : config.emote_usabi,
 },
 {
 	tier : 'B',
@@ -417,7 +417,7 @@ const char = [{
 	react_KO2 : '...Thoses data are rather interesting...',
 	react_victory1 : 'Considering your capacity I don\'t even know why you picked a fight to being with.',
 	react_victory2 : 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
-	emoji: config.emote_ellfayrh,
+	emoji : config.emote_ellfayrh,
 },
 {
 	tier : 'C',
@@ -444,7 +444,7 @@ const char = [{
 	react_KO2 : 'I knew it... I can\'t win...',
 	react_victory1 : 'What ?! I won ? Really ?',
 	react_victory2 : 'WHAT ?! REALLY ?',
-	emoji: config.emote_may,
+	emoji : config.emote_may,
 },
 {
 	tier: 'H',
@@ -498,7 +498,7 @@ const char = [{
 	react_KO2: 'Please... Help...',
 	react_victory1: 'I\'m happy I got to win !',
 	react_victory2: 'That was a nice game, let\'s play again !',
-	emoji: config.emote_kairen,
+	emoji : config.emote_kairen,
 }];
 const totalChar = char.length;
 
@@ -655,7 +655,7 @@ function dodge(player, otherplayer, char_1, char_2) {
 
 function defense(player, otherplayer, char1, char2) {
 	if (char1.crit_chance > Math.floor(Math.random() * 100)) {
-		player.dmg = (char1.atk / (1 - ((char2.def * defense_multiplier) / 100))) * char1.crit_multi;
+		player.dmg = (char1.atk * (1 - ((char2.def * defense_multiplier) / 100))) * char1.crit_multi;
 		console.log(player.dmg);
 		player.message_damage = ('\`\`\`diff\n- ' + 'Critical Damage !' + ' ' + player.char.name + ' inflicts ' + Math.floor(player.dmg) + ' damages to ' + otherplayer.char.name + ' !\`\`\`');
 	}
@@ -924,7 +924,7 @@ client.on('message', msg => {
 			gameEnd(player1, player2);
 		}
 		else {
-			msg.replpy(' you can\'t surrender since you are not a registered player');
+			msg.reply(' you can\'t surrender since you are not a registered player');
 		}
 	}
 	// check if player1 chose a playable character
@@ -1059,7 +1059,7 @@ client.on('message', msg => {
 	}
 	// gameEnd function test command
 	if (command === 'gameend' && config.ownerID === msg.member.id) {
-		gameEnd(player1);
+		gameEnd(player1, player2);
 		console.log(player1);
 		console.log(player2);
 	}
@@ -1075,7 +1075,7 @@ client.on('message', msg => {
 	if (gameStarting === true) {
 		let i;
 		for (i = 0; i < totalChar; i++) {
-			if (command === char[i].name.toLowerCase()) {
+			if (command === char[i].name.toLowerCase().trim()) {
 				if (msg.member.id == player1.id) {
 					if (player1choseChar !== true) {
 						player1.char = char[i];
