@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-inline-comments */
+/* eslint-disable no-unused-vars */
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
@@ -15,8 +16,8 @@ let player1choseChar = false;
 let player2choseChar = false;
 let gameStarting = false;
 let playerCount = 0;
+const totalChar = char.length;
 const dodgecdMax = 2;
-const trapcdMax = 4;
 const player1 = {
 	id: 0,
 	choseAction: false,
@@ -26,9 +27,9 @@ const player1 = {
 	action: '',
 	defense_stack: 0,
 	defense_multiplier: 2,
-	message_damage: '',
-	message_dodge: '',
-	message_block: '',
+	message_damage: ' ',
+	message_dodge: ' ',
+	message_block: ' ',
 };
 const player2 = {
 	id: 0,
@@ -39,9 +40,9 @@ const player2 = {
 	action: '',
 	defense_stack: 0,
 	defense_multiplier: 2,
-	message_damage: '',
-	message_dodge: '',
-	message_block: '',
+	message_damage: ' ',
+	message_dodge: ' ',
+	message_block: ' ',
 };
 const char = [{
 	tier: 'undefined', // template with max stat for debugging purposes
@@ -58,9 +59,12 @@ const char = [{
 	int: 9999, // determines who wins a trap function
 	mag: 1000, // used to determinate the damage of a magic attack, unaffected by defense
 	magcd: 1, // number of turn to wait before using magic again
+	magdef: 50, // defense stat for mag used by certain passive abilities
+	mag_crit_chance: 100, // crit chance for mag used by certain passive abilities
+	mag_crit_multi: 1.5, // crit multi for mag used by certain passive abilities
+	mag_dodgevalue: 50, // chance to dodge mag used by certain passive abilities
 	magcdmax: 1, // max cd stat for action calculation
 	dodgecd: 2, // number of turn to wait before using dodge again
-	trapcd: 4, // number of turn to wait before using trap again
 	rgn: 9999, // amount of hp the character regenerate at the end of each turn
 	react_selection1: 'undefined', // sentence to display on selecting the character to show character's personality
 	react_selection2: 'undefined',
@@ -69,6 +73,11 @@ const char = [{
 	react_victory1: 'undefined', // sentence to display on character's victory
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'undefined', // template with max stat for debugging purposes
@@ -85,9 +94,12 @@ const char = [{
 	int: 9999, // determines who wins a trap function
 	mag: 1000, // used to determinate the damage of a magic attack, unaffected by defense
 	magcd: 1, // number of turn to wait before using magic again
+	magdef: 0, // defense stat for mag used by certain passive abilities
+	mag_crit_chance: 0, // crit chance for mag used by certain passive abilities
+	mag_crit_multi: 1, // crit multi for mag used by certain passive abilities
+	mag_dodgevalue: 0, // chance to dodge mag used by certain passive abilities
 	magcdmax: 1, // max cd stat for action calculation
 	dodgecd: 2, // number of turn to wait before using dodge again
-	trapcd: 4, // number of turn to wait before using trap again
 	rgn: 9999, // amount of hp the character regenerate at the end of each turn
 	react_selection1: 'undefined', // sentence to display on selecting the character to show character's personality
 	react_selection2: 'undefined',
@@ -96,6 +108,11 @@ const char = [{
 	react_victory1: 'undefined', // sentence to display on character's victory
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'S',
@@ -112,9 +129,12 @@ const char = [{
 	int: 179,
 	mag: 1600,
 	magcd: 4,
+	magdef: 0,
+	mag_crit_chance: 10,
+	mag_crit_multi: 1.9,
+	mag_dodgevalue: 30,
 	magcdmax: 4,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 110,
 	react_selection1: 'Ready to play with any of you <3',
 	react_selection2: 'Please don\'t be too boring...',
@@ -123,6 +143,11 @@ const char = [{
 	react_victory1: 'A rather expected outcome, duh.',
 	react_victory2: 'YOU DON\'T SAY ?',
 	emoji: config.emote_seize,
+	has_active_skill: false,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'S',
@@ -139,9 +164,12 @@ const char = [{
 	int: 85,
 	mag: 0,
 	magcd: 0,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 0,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 30,
 	react_selection1: 'I will fight for you, with honor.',
 	react_selection2: 'I will fight for you, with honor.',
@@ -150,6 +178,11 @@ const char = [{
 	react_victory1: 'You fought well.',
 	react_victory2: 'You\'ll do better next time.',
 	emoji: config.emote_fusoku,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'S',
@@ -166,9 +199,12 @@ const char = [{
 	int: 100,
 	mag: 600,
 	magcd: 2,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 2,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 80,
 	react_selection1: 'Nhh... can I just go home ?',
 	react_selection2: 'Nhh... can I just go home ?',
@@ -177,6 +213,11 @@ const char = [{
 	react_victory1: 'So can I leave now ?',
 	react_victory2: 'So can I leave now ?',
 	emoji: config.emote_leoppsccay,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'S',
@@ -193,9 +234,12 @@ const char = [{
 	int: 120,
 	mag: 1900,
 	magcd: 8,
+	magdef: 30,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 8,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 35,
 	react_selection1: '...',
 	react_selection2: '...',
@@ -204,6 +248,11 @@ const char = [{
 	react_victory1: '...Done.',
 	react_victory2: '...',
 	emoji: config.emote_gold,
+	has_active_skill: false,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'S',
@@ -220,9 +269,12 @@ const char = [{
 	int: 110,
 	mag: 0,
 	magcd: 0,
+	magdef: 20,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 0,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 20,
 	react_selection1: 'Guess you want to be in the winning team, uh ?',
 	react_selection2: 'Ready to win that one as well~',
@@ -231,6 +283,11 @@ const char = [{
 	react_victory1: 'Told ya~',
 	react_victory2: 'It\'s not like you could do anything against it.',
 	emoji: config.emote_ayddan,
+	has_active_skill: false,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -247,9 +304,12 @@ const char = [{
 	int: 130,
 	mag: 1400,
 	magcd: 5,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 5,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 10,
 	react_selection1: 'Who\'s the target ?',
 	react_selection2: 'Who\'s the target ?',
@@ -258,6 +318,11 @@ const char = [{
 	react_victory1: 'Target neutralised.',
 	react_victory2: 'Objective accomplished.',
 	emoji: config.emote_snipefox,
+	has_active_skill: true,
+	has_passive_skill: false,
+	skill_cd: 5,
+	skill_cd_max: 5,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -274,9 +339,12 @@ const char = [{
 	int: 130,
 	mag: 900,
 	magcd: 4,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 4,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 10,
 	react_selection1: 'I bet you\'re not even going to hit me ! You\'re all so slow !',
 	react_selection2: 'Do you think you\'ll even be able to touch me ?!',
@@ -285,6 +353,11 @@ const char = [{
 	react_victory1: 'Haha ! Told you !',
 	react_victory2: 'See ?! I\'m so fast right ?!',
 	emoji: config.emote_yellowstrike,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -301,9 +374,12 @@ const char = [{
 	int: 120,
 	mag: 700,
 	magcd: 3,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 3,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 0,
 	react_selection1: 'Why did you choose me ... ?',
 	react_selection2: 'Why did you choose me ... ?',
@@ -312,6 +388,11 @@ const char = [{
 	react_victory1: 'Pathetic',
 	react_victory2: 'Pathetic',
 	emoji: config.emote_pinky,
+	has_active_skill: true,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -328,9 +409,12 @@ const char = [{
 	int: 120,
 	mag: 300,
 	magcd: 3,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 3,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 10,
 	react_selection1: 'Who is even daring to fight the Queen ?!',
 	react_selection2: 'Who is even daring to fight the Queen ?!',
@@ -339,6 +423,11 @@ const char = [{
 	react_victory1: 'That\'s what you get for opposing the Queen.',
 	react_victory2: 'That\'s what you get for opposing the Queen.',
 	emoji: config.emote_redqueen,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -355,9 +444,12 @@ const char = [{
 	int: 75,
 	mag: 0,
 	magcd: 0,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 0,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 20,
 	react_selection1: 'So you need me for a fight right ? Let\'s do that.',
 	react_selection2: 'Let\'s go.',
@@ -366,6 +458,11 @@ const char = [{
 	react_victory1: 'Easy !',
 	react_victory2: 'Easy !',
 	emoji: config.emote_kairo,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'A',
@@ -382,9 +479,12 @@ const char = [{
 	int: 140,
 	mag: 2100,
 	magcd: 15,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 15,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 100,
 	react_selection1: 'I\'m sorry but if you thought I was defenceless, I\'m going to have to disappoint you, bring it on !',
 	react_selection2: 'You know I don\'t like to fight right ?!',
@@ -393,6 +493,11 @@ const char = [{
 	react_victory1: '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
 	react_victory2: 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
 	emoji: config.emote_lyzan,
+	has_active_skill: true,
+	has_passive_skill: false,
+	skill_cd: 10,
+	skill_cd_max: 10,
+	skill_timer: 2,
 },
 {
 	tier: 'B',
@@ -409,9 +514,12 @@ const char = [{
 	int: 90,
 	mag: 500,
 	magcd: 5,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 5,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 0,
 	react_selection1: 'This again ?!',
 	react_selection2: 'You really piss me off !',
@@ -420,6 +528,11 @@ const char = [{
 	react_victory1: 'That\'s over now !',
 	react_victory2: 'That\'s over now !',
 	emoji: config.emote_usabi,
+	has_active_skill: false,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'B',
@@ -436,9 +549,12 @@ const char = [{
 	int: 190,
 	mag: 1500,
 	magcd: 10,
+	magdef: 60,
+	mag_crit_chance: 30,
+	mag_crit_multi: 1.5,
+	mag_dodgevalue: 0,
 	magcdmax: 10,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 0,
 	react_selection1: 'Hhh... Another of those pointless fights, uh ?',
 	react_selection2: 'Let\'s see if I can get some data from this fight at least...',
@@ -447,6 +563,11 @@ const char = [{
 	react_victory1: 'Considering your capacity I don\'t even know why you picked a fight to being with.',
 	react_victory2: 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
 	emoji: config.emote_ellfayrh,
+	has_active_skill: false,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'C',
@@ -463,9 +584,12 @@ const char = [{
 	int: 120,
 	mag: 250,
 	magcd: 3,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 3,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 5,
 	react_selection1: 'I\'m going to do the best I can !... Which is not much, but...',
 	react_selection2: 'I\'m going to do the best I can !... Which is not much, but...',
@@ -474,6 +598,11 @@ const char = [{
 	react_victory1: 'What ?! I won ? Really ?',
 	react_victory2: 'WHAT ?! REALLY ?',
 	emoji: config.emote_may,
+	has_active_skill: true,
+	has_passive_skill: false,
+	skill_cd: 6,
+	skill_cd_max: 6,
+	skill_timer: 3,
 },
 {
 	tier: 'H',
@@ -490,9 +619,12 @@ const char = [{
 	int: 115,
 	mag: 0,
 	magcd: 0,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 0,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 20,
 	react_selection1: 'It\'s just a friendly fight so everyone calm down please... No need for anyone to get hurt.',
 	react_selection2: 'It\'s just a friendly fight so everyone calm down please... No need for anyone to get hurt. ',
@@ -501,6 +633,11 @@ const char = [{
 	react_victory1: 'Surrender yourself, there is no need for anyone to get hurt anymore, it\'s over.',
 	react_victory2: 'Just surrend, there is no need for anyone to get hurt anymore, it\'s over.',
 	emoji: config.emote_dyakkoo,
+	has_active_skill: false,
+	has_passive_skill: true,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 {
 	tier: 'H',
@@ -517,9 +654,12 @@ const char = [{
 	int: 100,
 	mag: 0,
 	magcd: 0,
+	magdef: 0,
+	mag_crit_chance: 0,
+	mag_crit_multi: 1,
+	mag_dodgevalue: 0,
 	magcdmax: 0,
 	dodgecd: 2,
-	trapcd: 4,
 	rgn: 0,
 	react_selection1: 'I\'ll do my best, so please be kind.',
 	react_selection2: 'I hope I\'ll be usefull...',
@@ -528,9 +668,13 @@ const char = [{
 	react_victory1: 'I\'m happy I got to win !',
 	react_victory2: 'That was a nice game, let\'s play again !',
 	emoji: config.emote_kairen,
+	has_active_skill: true,
+	has_passive_skill: false,
+	skill_cd: 0,
+	skill_cd_max: 0,
+	skill_timer: 0,
 },
 ];
-const totalChar = char.length;
 
 // Defining bot activity
 client.on('ready', () => {
@@ -575,7 +719,7 @@ function IsDefenseStackReset(player) {
 		player.defense_multiplier = 1;
 	}
 	else {
-		player.defense_multiplier = player.defense_multiplier - (1 / 3);
+		player.defense_multiplier -= (1 / 3);
 	}
 }
 
@@ -583,6 +727,113 @@ function IsDefenseStackReset(player) {
 function addTurn() {
 	turn += 1;
 	NewTurnPhase();
+}
+
+// function for special abilities
+function passive(player_1, player_2) {
+	// mother function
+	if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+		all_or_nothing(player_1.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
+		crushing_strength(player_2.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
+		black_poison(player_2.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
+		care_taker();
+	}
+	else {
+		console.log('No passive ability detected.');
+	}
+}
+
+function active(player_1, player_2) {
+	if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
+		snipe(player_1.char, player_2.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+		rage(player_1.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+		explosion(player_1.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+		pill(player_1.char);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'kairen') {
+		ressurection(player_1.char, player_2.char);
+	}
+}
+
+function remove_active_effect(player_1) {
+	if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+		player_1.char.atk /= 5;
+		player_1.char.def /= 2;
+		player_1.char.rgn /= 3;
+		client.channel.get(channelID).send(`${player_1.name} lost the effects of rage.`);
+	}
+	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+		player_1.char.atk /= 3;
+		client.channel.get(channelID).send(`${player_1.name} lost the effects of pill.`);
+	}
+}
+// passives for gold
+function black_poison(target) {
+	// black poison => -50% to enemy RGN
+	target.rgn -= (target.rgn * (50 / 100));
+}
+// passive for ayddan
+function crushing_strength(target) {
+	// crushing_strength => -25% to enemy DEF
+	target.def -= (target.def * (25 / 100));
+}
+// active for snipefox
+function snipe(player_1, target) {
+	// snipe => activate the CD of the opponent MAG (CD:5)
+	target.madcd = target.magcdmax;
+	player_1.skill_cd = player_1.skill_cd_max;
+}
+// active for lyzan
+function rage(player_1) {
+	// rage => ATK*5, DEF*2, RGN*3 for 2 turn (CD:10)
+	player_1.atk *= 5;
+	player_1.def *= 2;
+	player_1.rgn *= 3;
+	player_1.skill_cd = player_1.skill_cd_max;
+	player_1.skill_timer = 2;
+}
+// active for pinky
+function explosion(player_1) {
+	// explosion => MAG*2; cost 300HP
+	player_1.hp -= 300;
+	player_1.mag *= 2;
+}
+// passive for pinky
+function all_or_nothing(char1) {
+	// all or nothing => Atk*3 if hp < 30%
+	if (char1.hp < (char1.hpmax * (30 / 100))) {
+		char1.atk *= 5;
+	}
+}
+// active for may
+function pill(player_1) {
+	// pill => ATK*3 for 3 turn (CD:6)
+	player_1.atk *= 3;
+	player_1.skill_cd = player_1.skill_cd_max;
+	player_1.skill_timer = 3;
+}
+// passive for dyakko
+function care_taker() {
+	// care taker => heal 10% of HP to every character in his team every turn while the character is alive and fighting
+	// to do with a for loop when team play is implemented
+}
+// active for kairen
+function ressurection(player_1, target) {
+	// ressurection => heal a character to 100% HP (even if he is ko'ed) (CD:15)
+	target.hp = target.hpmax;
+	player_1.char.skill_cd = player_1.char.skill_cd_max;
 }
 
 // function for status display
@@ -624,6 +875,41 @@ function status() {
 	});
 }
 
+// function for status display when a character dies
+function statusEnd() {
+	client.channels.get(channelID).send({
+		embed: {
+			color: 16286691,
+			author: {
+				name: client.user.username,
+				icon_url: client.user.avatarURL,
+			},
+			fields: [{
+				name: `${player1.char.emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player2.char.emoji}`,
+				value: `${player2.message_block} ${player1.message_damage} ${player2.message_dodge}`,
+			},
+			{
+				name: `${player2.char.emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player1.char.emoji}`,
+				value: `${player1.message_block} ${player2.message_damage} ${player1.message_dodge}`,
+			},
+			{
+				name: `${player1.char.emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player1.char.name} has ${player1.char.hp}/${player1.char.hpmax} HP left!]\`\`\``,
+			},
+			{
+				name: `${player2.char.emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player2.char.name} has ${player2.char.hp}/${player2.char.hpmax} HP left!]\`\`\``,
+			},
+			],
+			timestamp: new Date(),
+			footer: {
+				icon_url: client.user.avatarURL,
+				text: 'Beginning new turn...',
+			},
+		},
+	});
+}
+
 // functions for turn actions
 function changechar(player, char1, char2) {
 	client.channels.get(channelID).send(`${player.username} switched ${char1.name} for ${char2.name}`);
@@ -643,7 +929,7 @@ function attack(player, otherplayer, char1, char2) {
 				player.dmg = 0;
 			}
 			console.log(player.dmg);
-			player.message_damage = (`\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\``);
+			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\`**`);
 		}
 		else {
 			player.dmg = char1.atk * (1 - (char2.def / 100));
@@ -654,10 +940,7 @@ function attack(player, otherplayer, char1, char2) {
 			player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
 		}
 		dodge(player, otherplayer, char2, char1);
-		if (player.dmg < 0) {
-			player.dmg = 0;
-		}
-		char2.hp = char2.hp - Math.floor(player.dmg);
+		char2.hp -= Math.floor(player.dmg);
 	}
 	else {
 		defense(player, otherplayer, char1, char2);
@@ -665,35 +948,47 @@ function attack(player, otherplayer, char1, char2) {
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
-		char2.hp = char2.hp - Math.floor(player.dmg);
+		char2.hp -= Math.floor(player.dmg);
 	}
 }
 
 function dodge(player, otherplayer, char_1, char_2) {
-	if (char_1.dodgecd === 0) {
-		let dodgeValue = 0;
-		dodgeValue = (char_1.agi - char_2.acr) + 1;
-		const diceroll = Math.floor(Math.random() * 10);
-		if (diceroll <= 9) {
-			if (dodgeValue >= diceroll) {
+	if (player.action === 'attack') {
+		if (char_1.dodgecd === 0) {
+			let dodgeValue = 0;
+			dodgeValue = (char_1.agi - char_2.acr) + 1;
+			const diceroll = Math.floor(Math.random() * 10);
+			if (diceroll <= 9) {
+				if (dodgeValue >= diceroll) {
+					player.dmg = 0;
+					char_1.dodgecd = dodgecdMax;
+					player.message_damage = ' ';
+					otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
+				}
+				else {
+					console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
+				}
+			}
+			else if (diceroll === 10) {
 				player.dmg = 0;
 				char_1.dodgecd = dodgecdMax;
 				player.message_damage = ' ';
 				otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
 			}
-			else {
-				console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
-			}
 		}
-		else if (diceroll === 10) {
-			player.dmg = 0;
-			char_1.dodgecd = dodgecdMax;
-			player.message_damage = ' ';
-			otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
+		else {
+			console.log(`${char_1.name} tried to dodge but couldn't because it is still under cooldown.`);
 		}
 	}
-	else {
-		console.log(`${char_1.name} tried to dodge but couldn't because it is still under cooldown.`);
+	else if (player.action === 'magic') {
+		if (char_1.mag_dodgevalue > Math.floor(Math.random() * 100)) {
+			player.dmg = 0;
+			player.message_damage = ' ';
+			otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s magic.`);
+		}
+		else {
+			console.log(`${char_1.name} tried to dodge ${char_2.name}'s magic but failed.`);
+		}
 	}
 }
 
@@ -704,7 +999,7 @@ function defense(player, otherplayer, char1, char2) {
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
-		player.message_damage = (`\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\``);
+		player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\`**`);
 	}
 	else {
 		player.dmg = char1.atk * (1 - ((char2.def * player.defense_multiplier) / 100));
@@ -717,20 +1012,42 @@ function defense(player, otherplayer, char1, char2) {
 	player.defense_stack = 0;
 }
 
-function magic(player, char1, char2) {
+function magic(player, otherplayer, char1, char2) {
 	if (char2.tier === 'H') {
-		player.dmg = char1.mag * 5;
-		player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-		char2.hp = char2.hp - Math.floor(player.dmg);
-		console.log(player.dmg);
-		player.char.magcd = player.char.magcdmax;
+		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
+			player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
+			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\`**`);
+			dodge(player, otherplayer, char2, char1);
+			char2.hp -= Math.floor(player.dmg);
+			console.log(player.dmg);
+			player.char.magcd = player.char.magcdmax;
+		}
+		else {
+			player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
+			player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+			dodge(player, otherplayer, char2, char1);
+			char2.hp -= Math.floor(player.dmg);
+			console.log(player.dmg);
+			player.char.magcd = player.char.magcdmax;
+		}
 	}
-	else {
-		player.dmg = char1.mag;
-		player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-		char2.hp = char2.hp - Math.floor(player.dmg);
-		console.log(player.dmg);
-		player.char.magcd = player.char.magcdmax;
+	else if (char2.tier !== 'H') {
+		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
+			player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
+			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char.name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char.name} !\`\`\`**`);
+			dodge(player, otherplayer, char2, char1);
+			char2.hp -= Math.floor(player.dmg);
+			console.log(player.dmg);
+			player.char.magcd = player.char.magcdmax;
+		}
+		else {
+			player.dmg = char1.mag * (1 - (char2.magdef / 100));
+			player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+			dodge(player, otherplayer, char2, char1);
+			char2.hp -= Math.floor(player.dmg);
+			console.log(player.dmg);
+			player.char.magcd = player.char.magcdmax;
+		}
 	}
 }
 
@@ -773,7 +1090,7 @@ function gameEnd(winner, looser) {
 function IsGameOver(player, otherplayer, char1) {
 	if (char1.hp <= 0) {
 		char1.hp = 0;
-		status();
+		statusEnd();
 		gameEnd(player, otherplayer);
 	}
 	else {
@@ -786,27 +1103,32 @@ function actionphase(firstplayer, secondplayer) {
 	if (actionAmount === 2) {
 		if (firstplayer.char.spd > secondplayer.char.spd) { // player1.char is faster than player2.char so it's attack is done before
 			if (firstplayer.action === 'changechar') {
-				// WiP
 				changechar(player1, player1.char, client.content.shift().args[0]);
 			}
-			if (firstplayer.action === 'attack') {
+			else if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			if (firstplayer.action === 'magic') {
-				magic(player1, player1.char, player2.char);
+			else if (firstplayer.action === 'magic') {
+				magic(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
+			}
+			else if (firstplayer.action === 'skill') {
+				active(player1, player2);
 			}
 			if (secondplayer.action === 'changechar') {
 				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
-			if (secondplayer.action === 'attack') {
+			else if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			if (secondplayer.action === 'magic') {
-				magic(player2, player2.char, player1.char);
+			else if (secondplayer.action === 'magic') {
+				magic(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
+			}
+			else if (secondplayer.action === 'skill') {
+				active(player2, player1);
 			}
 			player1.choseAction = false;
 			player2.choseAction = false;
@@ -815,29 +1137,34 @@ function actionphase(firstplayer, secondplayer) {
 			addTurn();
 		}
 		else if (firstplayer.char.spd < secondplayer.char.spd) {
-			console.log('succesfully reached speed detection');
 			if (secondplayer.action === 'changechar') {
 				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
-			if (secondplayer.action === 'attack') {
+			else if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			if (secondplayer.action === 'magic') {
-				magic(player2, player2.char, player1.char);
+			else if (secondplayer.action === 'magic') {
+				magic(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
+			}
+			else if (secondplayer.action === 'skill') {
+				active(player2, player1);
 			}
 			if (firstplayer.action === 'changechar') {
 				// WiP
 				changechar(player1, player1.char, client.content.shift().args[0]);
 			}
-			if (firstplayer.action === 'attack') {
+			else if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			if (firstplayer.action === 'magic') {
-				magic(player1, player1.char, player2.char);
+			else if (firstplayer.action === 'magic') {
+				magic(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
+			}
+			else if (firstplayer.action === 'skill') {
+				active(player1, player2);
 			}
 			player1.choseAction = false;
 			player2.choseAction = false;
@@ -852,24 +1179,30 @@ function actionphase(firstplayer, secondplayer) {
 					// WiP
 					changechar(player1, player1.char, client.content.shift().args[0]);
 				}
-				if (firstplayer.action === 'attack') {
+				else if (firstplayer.action === 'attack') {
 					attack(player1, player2, player1.char, player2.char);
 					IsGameOver(player1, player2, player2.char);
 				}
-				if (firstplayer.action === 'magic') {
-					magic(player1, player1.char, player2.char);
+				else if (firstplayer.action === 'magic') {
+					magic(player1, player2, player1.char, player2.char);
 					IsGameOver(player1, player2, player2.char);
+				}
+				else if (firstplayer.action === 'skill') {
+					active(player1, player2);
 				}
 				if (secondplayer.action === 'changechar') {
 					changechar(player2, player2.char, client.content.shift().args[0]);
 				}
-				if (secondplayer.action === 'attack') {
+				else if (secondplayer.action === 'attack') {
 					attack(player2, player1, player2.char, player1.char);
 					IsGameOver(player2, player1, player1.char);
 				}
-				if (secondplayer.action === 'magic') {
-					magic(player2, player2.char, player1.char);
+				else if (secondplayer.action === 'magic') {
+					magic(player2, player1, player2.char, player1.char);
 					IsGameOver(player2, player1, player1.char);
+				}
+				else if (secondplayer.action === 'skill') {
+					active(player2, player1);
 				}
 				player1.choseAction = false;
 				player2.choseAction = false;
@@ -915,22 +1248,34 @@ function NewTurnPhase() {
 		IsDefenseStackReset(player1);
 		IsDefenseStackReset(player2);
 		if (player1.char.magcd > 0 && player1.char.magcdmax >= player1.char.magcd) {
-			player1.char.magcd = player1.char.magcd - 1;
+			player1.char.magcd -= 1;
 		}
 		if (player2.char.magcd > 0 && player2.char.magcdmax >= player2.char.magcd) {
-			player2.char.magcd = player2.char.magcd - 1;
+			player2.char.magcd -= 1;
 		}
 		if (player1.char.dodgecd > 0 && dodgecdMax >= player1.char.dodgecd) {
-			player1.char.dodgecd = player1.char.dodgecd - 1;
+			player1.char.dodgecd -= 1;
 		}
 		if (player2.char.dodgecd > 0 && dodgecdMax >= player2.char.dodgecd) {
-			player2.char.dodgecd = player2.char.dodgecd - 1;
+			player2.char.dodgecd -= 1;
 		}
-		if (player1.char.trapcd > 0 && trapcdMax >= player1.char.trapcd) {
-			player1.char.trapcd = player1.char.trapcd - 1;
+		if (player1.char.skill_cd > 0 && player1.char.skill_cd_max >= player1.char.skill_cd) {
+			player1.char.skill_cd -= 1;
 		}
-		if (player2.char.trapcd > 0 && trapcdMax >= player2.char.trapcd) {
-			player2.char.trapcd = player2.char.trapcd - 1;
+		if (player2.char.skill_cd > 0 && player2.char.skill_cd_max >= player2.char.skill_cd) {
+			player2.char.skill_cd -= 1;
+		}
+		if (player1.char.skill_timer > 0) {
+			player1.char.skill_timer -= 1;
+		}
+		if (player2.char.skill_timer > 0) {
+			player2.char.skill_timer -= 1;
+		}
+		if (player1.char.skill_timer === 0) {
+			remove_active_effect(player1);
+		}
+		if (player2.char.skill_timer === 0) {
+			remove_active_effect(player2);
 		}
 		client.channels.get(channelID).send(`\`\`\`diff\nTurn ${turn} has started. Chose your character's action.\`\`\``);
 		turnPhase = true;
@@ -940,7 +1285,7 @@ function NewTurnPhase() {
 // commands
 client.on('message', msg => {
 	if (msg.author.bot) return; // won't react to bots
-	if (msg.content.indexOf(config.prefix) !== 0) return; // array starts after the actual command
+	if (msg.content.indexOf(config.prefix) !== 0) return; // return if '!' is not the first letter
 	// destructuring
 	const args = msg.content.slice(config.prefix.length).trim().split(/ +/g);
 	const command = args.shift().toLowerCase();
@@ -973,7 +1318,7 @@ client.on('message', msg => {
 				else if (args.length > 2) {
 					let a;
 					for (a = 0; a < totalChar; a++) {
-						if (args[1] === char[a].name.toLowerCase().trim()) {
+						if (args[1] === char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
 							console.log(`value found : ${char[a].name}`);
 							let stat = Object.keys(char[a]);
 							for (stat in args[2]) {
@@ -1102,7 +1447,8 @@ client.on('message', msg => {
 	if (gameStarting === true) {
 		let i;
 		for (i = 0; i < totalChar; i++) {
-			if (command === char[i].name.toLowerCase().trim()) {
+			const name = char[i].name.toLowerCase();
+			if (command === name.replace(/\s+/g, '')) {
 				if (msg.member.id == player1.id) {
 					if (player1choseChar !== true) {
 						player1.char = char[i];
@@ -1142,16 +1488,16 @@ client.on('message', msg => {
 		player1.char.magcd = 0;
 		player2.char.magcd = 0;
 		player1.char.dodgecd = 0;
-		player1.char.trapcd = 0;
 		player2.char.dodgecd = 0;
-		player2.char.trapcd = 0;
+		passive(player1, player2);
+		passive(player2, player1);
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
 	}
 
 	// turn phase of the combat phase
 	if (gamePhase === true && turnPhase === true) {
 		switch (command) {
-		case 'switch': // number in actions array = 0
+		case 'switch': // WiP
 			if (msg.member.id === player1.id && player1.choseAction === false) {
 				player1.choseAction = true;
 				player1.action = 'changechar';
@@ -1168,7 +1514,7 @@ client.on('message', msg => {
 				console.log(`${msg.author.username} tried to play while not being registered as a player.`);
 			}
 			break;
-		case 'attack': // number in array = 1
+		case 'attack':
 			if (msg.member.id === player1.id && player1.choseAction === false) {
 				player1.choseAction = true;
 				player1.action = 'attack';
@@ -1185,7 +1531,7 @@ client.on('message', msg => {
 				console.log(`${msg.author.username} tried to play while not being registered as a player.`);
 			}
 			break;
-		case 'defense': // number in array = 4
+		case 'defense':
 			if (msg.member.id === player1.id && player1.choseAction === false && player2.choseAction === true) {
 				if (player2.action === 'attack') {
 					player1.choseAction = true;
@@ -1212,7 +1558,7 @@ client.on('message', msg => {
 				msg.channel.send('You can\'t choose to defend if your opponent has not chosent an action yet.');
 			}
 			break;
-		case 'magic': // number in array = 5
+		case 'magic':
 			if (msg.member.id === player1.id && player1.choseAction === false) {
 				if (player1.char.mag === 0) {
 					msg.channel.send(`${player1.char.name} can't cast magic. Please chose another action.`);
@@ -1232,7 +1578,7 @@ client.on('message', msg => {
 				if (player2.char.mag === 0) {
 					msg.channel.send(`${player2.char.name} can't cast magic. Please chose another action.`);
 				}
-				if (player2.char.magcd === 0) {
+				else if (player2.char.magcd === 0) {
 					player2.choseAction = true;
 					player2.action = 'magic';
 					actionAmount += 1;
@@ -1240,6 +1586,33 @@ client.on('message', msg => {
 				}
 				else {
 					msg.reply(' can\'t use magic because it is still under cooldown.');
+				}
+			}
+			else {
+				console.log(`${msg.author.username} tried to play while not being registered as a player.`);
+			}
+			break;
+		case 'skill':
+			if (msg.member.id === player1.id && player1.choseAction === false) {
+				if (player1.char.has_active_skill === true) {
+					player1.choseAction = true;
+					player1.action = 'skill';
+					actionAmount += 1;
+					actionphase(player1, player2);
+				}
+				else {
+					msg.channel.send(' your character doesn\'t have a special skill. Choose another action.');
+				}
+			}
+			else if (msg.member.id === player2.id && player2.choseAction === false) {
+				if (player2.char.has_active_skill === true) {
+					player2.choseAction = true;
+					player2.action = 'skill';
+					actionAmount += 1;
+					actionphase(player1, player2);
+				}
+				else {
+					msg.channel.send(' your character doesn\'t have a special skill. Choose another action.');
 				}
 			}
 			else {
