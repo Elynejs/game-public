@@ -16,7 +16,6 @@ let player1choseChar = false;
 let player2choseChar = false;
 let gameStarting = false;
 let playerCount = 0;
-const totalChar = char.length;
 const dodgecdMax = 2;
 const player1 = {
 	id: 0,
@@ -751,19 +750,22 @@ function passive(player_1, player_2) {
 
 function active(player_1, player_2) {
 	if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
-		snipe(player_1.char, player_2.char);
+		snipe(player_1.char, player_2.char, player_1);
 	}
 	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
-		rage(player_1.char);
+		rage(player_1.char, player_1);
 	}
 	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-		explosion(player_1.char);
+		explosion(player_1.char, player_1);
 	}
 	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
-		pill(player_1.char);
+		pill(player_1.char, player_1);
 	}
 	else if (player_1.char.name.toLowerCase().trim().replace(/\s+/g, '') === 'kairen') {
-		ressurection(player_1.char, player_2.char);
+		ressurection(player_1.char, player_2.char, player_1);
+	}
+	else {
+		console.log('A character without active skill managed to activate the function for active selection');
 	}
 }
 
@@ -783,32 +785,40 @@ function remove_active_effect(player_1) {
 function black_poison(target) {
 	// black poison => -50% to enemy RGN
 	target.rgn -= (target.rgn * (50 / 100));
+	console.log('Black poison is in action.');
 }
 // passive for ayddan
 function crushing_strength(target) {
 	// crushing_strength => -25% to enemy DEF
 	target.def -= (target.def * (25 / 100));
+	console.log('Crushing strength is in action.');
 }
 // active for snipefox
-function snipe(player_1, target) {
+function snipe(player_1, target, player) {
 	// snipe => activate the CD of the opponent MAG (CD:5)
+	console.log('snipe working');
 	target.madcd = target.magcdmax;
 	player_1.skill_cd = player_1.skill_cd_max;
+	player.message_damage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
 }
 // active for lyzan
-function rage(player_1) {
+function rage(player_1, player) {
 	// rage => ATK*5, DEF*2, RGN*3 for 2 turn (CD:10)
+	console.log('rage working');
 	player_1.atk *= 5;
 	player_1.def *= 2;
 	player_1.rgn *= 3;
 	player_1.skill_cd = player_1.skill_cd_max;
-	player_1.skill_timer = 2;
+	player_1.skill_timer = 3;
+	player.message_damage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
 }
 // active for pinky
-function explosion(player_1) {
+function explosion(player_1, player) {
 	// explosion => MAG*2; cost 300HP
+	console.log('explosion working');
 	player_1.hp -= 300;
 	player_1.mag *= 2;
+	player.message_damage = `\`\`\`diff\n+ ${player_1.name} doubled his magic power at the cost of 300 HP !\`\`\``;
 }
 // passive for pinky
 function all_or_nothing(char1) {
@@ -818,11 +828,13 @@ function all_or_nothing(char1) {
 	}
 }
 // active for may
-function pill(player_1) {
+function pill(player_1, player) {
+	console.log('pill working');
 	// pill => ATK*3 for 3 turn (CD:6)
 	player_1.atk *= 3;
 	player_1.skill_cd = player_1.skill_cd_max;
-	player_1.skill_timer = 3;
+	player_1.skill_timer = 4;
+	player.message_damage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
 }
 // passive for dyakko
 function care_taker() {
@@ -830,10 +842,12 @@ function care_taker() {
 	// to do with a for loop when team play is implemented
 }
 // active for kairen
-function ressurection(player_1, target) {
+function ressurection(player_1, target, player) {
 	// ressurection => heal a character to 100% HP (even if he is ko'ed) (CD:15)
+	console.log('ressurection working');
 	target.hp = target.hpmax;
-	player_1.char.skill_cd = player_1.char.skill_cd_max;
+	player_1.skill_cd = player_1.skill_cd_max;
+	player.message_damage = `\`\`\`diff\n+ ${player.char.name} ressurected ${target.name} !\`\`\``;
 }
 
 // function for status display
@@ -1059,12 +1073,12 @@ function gameEnd(winner, looser) {
 	turnPhase = false;
 	playerCount = 0;
 	actionAmount = 0;
-	player1.message_block = '';
-	player2.message_block = '';
-	player1.message_damage = '';
-	player2.message_damage = '';
-	player1.message_dodge = '';
-	player2.message_dodge = '';
+	player1.message_block = ' ';
+	player2.message_block = ' ';
+	player1.message_damage = ' ';
+	player2.message_damage = ' ';
+	player1.message_dodge = ' ';
+	player2.message_dodge = ' ';
 	player1choseChar = false;
 	player2choseChar = false;
 	player1.choseAction = false;
@@ -1103,31 +1117,31 @@ function actionphase(firstplayer, secondplayer) {
 	if (actionAmount === 2) {
 		if (firstplayer.char.spd > secondplayer.char.spd) { // player1.char is faster than player2.char so it's attack is done before
 			if (firstplayer.action === 'changechar') {
-				changechar(player1, player1.char, client.content.shift().args[0]);
+				changechar(player1, player1.char, player1.char);
 			}
-			else if (firstplayer.action === 'attack') {
+			if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			else if (firstplayer.action === 'magic') {
+			if (firstplayer.action === 'magic') {
 				magic(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			else if (firstplayer.action === 'skill') {
+			if (firstplayer.action === 'skill') {
 				active(player1, player2);
 			}
 			if (secondplayer.action === 'changechar') {
 				changechar(player2, player2.char, client.content.shift().args[0]);
 			}
-			else if (secondplayer.action === 'attack') {
+			if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			else if (secondplayer.action === 'magic') {
+			if (secondplayer.action === 'magic') {
 				magic(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			else if (secondplayer.action === 'skill') {
+			if (secondplayer.action === 'skill') {
 				active(player2, player1);
 			}
 			player1.choseAction = false;
@@ -1138,32 +1152,32 @@ function actionphase(firstplayer, secondplayer) {
 		}
 		else if (firstplayer.char.spd < secondplayer.char.spd) {
 			if (secondplayer.action === 'changechar') {
-				changechar(player2, player2.char, client.content.shift().args[0]);
+				changechar(player2, player2.char, player1.char);
 			}
-			else if (secondplayer.action === 'attack') {
+			if (secondplayer.action === 'attack') {
 				attack(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			else if (secondplayer.action === 'magic') {
+			if (secondplayer.action === 'magic') {
 				magic(player2, player1, player2.char, player1.char);
 				IsGameOver(player2, player1, player1.char);
 			}
-			else if (secondplayer.action === 'skill') {
+			if (secondplayer.action === 'skill') {
 				active(player2, player1);
 			}
 			if (firstplayer.action === 'changechar') {
 				// WiP
-				changechar(player1, player1.char, client.content.shift().args[0]);
+				changechar(player1, player1.char, player1.char);
 			}
-			else if (firstplayer.action === 'attack') {
+			if (firstplayer.action === 'attack') {
 				attack(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			else if (firstplayer.action === 'magic') {
+			if (firstplayer.action === 'magic') {
 				magic(player1, player2, player1.char, player2.char);
 				IsGameOver(player1, player2, player2.char);
 			}
-			else if (firstplayer.action === 'skill') {
+			if (firstplayer.action === 'skill') {
 				active(player1, player2);
 			}
 			player1.choseAction = false;
@@ -1177,32 +1191,68 @@ function actionphase(firstplayer, secondplayer) {
 				console.log('succesfully reached speed detection');
 				if (firstplayer.action === 'changechar') {
 					// WiP
-					changechar(player1, player1.char, client.content.shift().args[0]);
+					changechar(player1, player1.char, player1.char);
 				}
-				else if (firstplayer.action === 'attack') {
+				if (firstplayer.action === 'attack') {
 					attack(player1, player2, player1.char, player2.char);
 					IsGameOver(player1, player2, player2.char);
 				}
-				else if (firstplayer.action === 'magic') {
+				if (firstplayer.action === 'magic') {
 					magic(player1, player2, player1.char, player2.char);
 					IsGameOver(player1, player2, player2.char);
 				}
-				else if (firstplayer.action === 'skill') {
+				if (firstplayer.action === 'skill') {
 					active(player1, player2);
 				}
 				if (secondplayer.action === 'changechar') {
-					changechar(player2, player2.char, client.content.shift().args[0]);
+					changechar(player2, player2.char, player1.char);
 				}
-				else if (secondplayer.action === 'attack') {
+				if (secondplayer.action === 'attack') {
 					attack(player2, player1, player2.char, player1.char);
 					IsGameOver(player2, player1, player1.char);
 				}
-				else if (secondplayer.action === 'magic') {
+				if (secondplayer.action === 'magic') {
 					magic(player2, player1, player2.char, player1.char);
 					IsGameOver(player2, player1, player1.char);
 				}
-				else if (secondplayer.action === 'skill') {
+				if (secondplayer.action === 'skill') {
 					active(player2, player1);
+				}
+				player1.choseAction = false;
+				player2.choseAction = false;
+				turnPhase = false;
+				actionAmount = 0;
+				addTurn();
+			}
+			else {
+				if (secondplayer.action === 'changechar') {
+					changechar(player2, player2.char, player1.char);
+				}
+				if (secondplayer.action === 'attack') {
+					attack(player2, player1, player2.char, player1.char);
+					IsGameOver(player2, player1, player1.char);
+				}
+				if (secondplayer.action === 'magic') {
+					magic(player2, player1, player2.char, player1.char);
+					IsGameOver(player2, player1, player1.char);
+				}
+				if (secondplayer.action === 'skill') {
+					active(player2, player1);
+				}
+				if (firstplayer.action === 'changechar') {
+					// WiP
+					changechar(player1, player1.char, player1.char);
+				}
+				if (firstplayer.action === 'attack') {
+					attack(player1, player2, player1.char, player2.char);
+					IsGameOver(player1, player2, player2.char);
+				}
+				if (firstplayer.action === 'magic') {
+					magic(player1, player2, player1.char, player2.char);
+					IsGameOver(player1, player2, player2.char);
+				}
+				if (firstplayer.action === 'skill') {
+					active(player1, player2);
 				}
 				player1.choseAction = false;
 				player2.choseAction = false;
@@ -1221,7 +1271,7 @@ function actionphase(firstplayer, secondplayer) {
 // function for regen
 function regen(player) {
 	if (player.char.hp < player.char.hpmax) {
-		player.char.hp = player.char.hp + player.char.rgn;
+		player.char.hp += player.char.rgn;
 		if (player.char.hp > player.char.hpmax) {
 			player.char.hp = player.char.hpmax;
 		}
@@ -1271,10 +1321,10 @@ function NewTurnPhase() {
 		if (player2.char.skill_timer > 0) {
 			player2.char.skill_timer -= 1;
 		}
-		if (player1.char.skill_timer === 0) {
+		if (player1.char.skill_timer === 0 && player1.char.has_active_skill === true) {
 			remove_active_effect(player1);
 		}
-		if (player2.char.skill_timer === 0) {
+		if (player2.char.skill_timer === 0 && player2.char.has_active_skill === true) {
 			remove_active_effect(player2);
 		}
 		client.channels.get(channelID).send(`\`\`\`diff\nTurn ${turn} has started. Chose your character's action.\`\`\``);
@@ -1317,13 +1367,14 @@ client.on('message', msg => {
 				}
 				else if (args.length > 2) {
 					let a;
-					for (a = 0; a < totalChar; a++) {
+					for (a = 0; a < char.length; a++) {
 						if (args[1] === char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
 							console.log(`value found : ${char[a].name}`);
 							let stat = Object.keys(char[a]);
 							for (stat in args[2]) {
 								console.log(`value found : ${args[2]}`);
-								char[a][stat] = args[3];
+								const char_value = parseInt(args[3], 10);
+								char[a][args[2]] = char_value;
 								msg.channel.send(`Admin changed the value of ${char[a].name}'s ${args[2]} to ${args[3]}`);
 								break;
 							}
@@ -1446,7 +1497,7 @@ client.on('message', msg => {
 	// character selection
 	if (gameStarting === true) {
 		let i;
-		for (i = 0; i < totalChar; i++) {
+		for (i = 0; i < char.length; i++) {
 			const name = char[i].name.toLowerCase();
 			if (command === name.replace(/\s+/g, '')) {
 				if (msg.member.id == player1.id) {
@@ -1601,7 +1652,7 @@ client.on('message', msg => {
 					actionphase(player1, player2);
 				}
 				else {
-					msg.channel.send(' your character doesn\'t have a special skill. Choose another action.');
+					msg.channel.send('Your character doesn\'t have a special skill. Choose another action.');
 				}
 			}
 			else if (msg.member.id === player2.id && player2.choseAction === false) {
@@ -1612,7 +1663,7 @@ client.on('message', msg => {
 					actionphase(player1, player2);
 				}
 				else {
-					msg.channel.send(' your character doesn\'t have a special skill. Choose another action.');
+					msg.channel.send('Your character doesn\'t have a special skill. Choose another action.');
 				}
 			}
 			else {
