@@ -1,1 +1,1 @@
-![Alt text](https://imgur.com/2xutarm)
+![Alt text](./2xutarm.png?raw=true)
