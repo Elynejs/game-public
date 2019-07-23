@@ -15,7 +15,6 @@ let gameStarting = false;
 let playerCount = 0;
 let char_amount = 1;
 let alive;
-// array number for selected character
 let arp1 = 0;
 // number of char in the array of player1
 let arp2 = 0;
@@ -776,6 +775,16 @@ function IsDefenseStackReset(player) {
 	}
 	else {
 		player.defense_multiplier -= (1 / 3);
+	}
+}
+
+// function for alive array char
+function whoIsAlive(pl) {
+	let i;
+	for (i = 0; i < pl.char.length; i++) {
+		if (pl.char[i].isAlive === true) {
+			alive = i;
+		}
 	}
 }
 
