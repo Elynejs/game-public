@@ -1,0 +1,11 @@
+# ignore config.json
+config.json
+
+# ignore all API dir
+.vscode/
+External ressources/
+node_modules/
+Icones/
+
+# ignore all images
+*.png
