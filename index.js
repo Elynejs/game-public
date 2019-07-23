@@ -785,6 +785,9 @@ function whoIsAlive(pl) {
 		if (pl.char[i].isAlive === true) {
 			alive = i;
 		}
+		else {
+			console.log(`${pl.char[i].name} is not fighting.`);
+		}
 	}
 }
 
