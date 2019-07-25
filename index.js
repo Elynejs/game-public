@@ -813,7 +813,7 @@ function whoIsAlive(pl) {
 			break;
 		}
 		else {
-			console.log(`${pl.char[i].name} is not fighting.`);
+			console.log(`${pl.char[i].name.toLowerCase()} is not fighting.`);
 		}
 	}
 }
@@ -889,11 +889,11 @@ function remove_active_effect(player_1) {
 		player_1.char[player_1.alive].atk /= 5;
 		player_1.char[player_1.alive].def /= 2;
 		player_1.char[player_1.alive].rgn /= 3;
-		client.channel.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of rage.`);
+		client.channels.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of rage.`);
 	}
 	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
 		player_1.char[player_1.alive].atk /= 3;
-		client.channel.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of pill.`);
+		client.channels.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of pill.`);
 	}
 }
 // passives for gold
@@ -1047,7 +1047,7 @@ function changechar(player, char2) {
 
 // function for when a characters dies during a turn
 function omgHeDead(player) {
-	client.channel.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
+	client.channels.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
 	player.alive = player.futurChar;
 }
 // function to round numbers to 2 decimals
@@ -1224,6 +1224,7 @@ function IsGameOver(player, otherplayer, char1) {
 	if (testmod === false) {
 		if (char1.hp <= 0) {
 			char1.hp = 0;
+			char1.isAlive = false;
 			if (player.id === player1.id) {
 				p1CharDied = true;
 			}
@@ -1236,7 +1237,7 @@ function IsGameOver(player, otherplayer, char1) {
 			let i;
 			for (i = 0; i <= player.charAmount; i++) {
 				if (player.char[i].isAlive === true) {
-					console.log(`${player.char[i].name} is alive, that's great, we don't care.`);
+					console.log(`${player.char[i].name.toLowerCase()} is alive, that's great, we don't care.`);
 					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
 					player.futurChar = i;
 					break;
@@ -1249,7 +1250,7 @@ function IsGameOver(player, otherplayer, char1) {
 						break;
 					}
 					else {
-						console.log(`${player.char[i].name} is K.O. but hey, at least the loop is not over amiright?`);
+						console.log(`${player.char[i].name.toLowerCase()} is K.O. but hey, at least the loop is not over amiright?`);
 					}
 				}
 			}
@@ -1790,6 +1791,8 @@ client.on('message', msg => {
 		reset_cd(player2);
 		passive(player1, player2);
 		passive(player2, player1);
+		player1.char[0].isAlive = true;
+		player2.char[0].isAlive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
 	}
 
@@ -1809,7 +1812,7 @@ client.on('message', msg => {
 				else {
 					let i;
 					for (i = 0; i < player1.charAmount; i++) {
-						if (player1.char[i].name === c) {
+						if (player1.char[i].name.toLowerCase() === c) {
 							if (player1.char[i].hp <= 0) {
 								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
 								break;
@@ -1833,7 +1836,7 @@ client.on('message', msg => {
 							}
 						}
 						else {
-							console.log(`${player1.char[i].name} was not character specified by ${player1.username} the correct character is ${args[0]} continuing the search...`);
+							console.log(`${player1.char[i].name.toLowerCase()} was not character specified by ${player1.username} the correct character is ${args[0]} continuing the search...`);
 						}
 					}
 				}
@@ -1849,7 +1852,7 @@ client.on('message', msg => {
 				else {
 					let i;
 					for (i = 0; i < player2.charAmount; i++) {
-						if (player2.char[i].name === c) {
+						if (player2.char[i].name.toLowerCase() === c) {
 							if (player2.char[i].hp <= 0) {
 								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
 								break;
@@ -1873,7 +1876,7 @@ client.on('message', msg => {
 							}
 						}
 						else {
-							console.log(`${player2.char[i].name} was not character specified by ${player2.username} the correct character is ${args[0]} continuing the search...`);
+							console.log(`${player2.char[i].name.toLowerCase()} was not the character specified by ${player2.username} the correct character is ${args[0]} continuing the search...`);
 						}
 					}
 				}
