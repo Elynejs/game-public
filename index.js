@@ -70,9 +70,9 @@ const char = [{
 	atk: 200,
 	// maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
 	crit_multi: 2,
-	// multiplier of damage in case of critical damage
+	// multiplier of damage in case of Critical Hit
 	crit_chance: 100,
-	// chance for a physical attack to infllict critical damage
+	// chance for a physical attack to infllict Critical Hit
 	def: 90,
 	// damage points reduced from the attack function of the opponent
 	spd: 6,
@@ -131,9 +131,9 @@ const char = [{
 	atk: 200,
 	// maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
 	crit_multi: 1,
-	// multiplier of damage in case of critical damage
+	// multiplier of damage in case of Critical Hit
 	crit_chance: 0,
-	// chance for a physical attack to infllict critical damage
+	// chance for a physical attack to infllict Critical Hit
 	def: 90,
 	// damage points reduced from the attack function of the opponent
 	spd: 5,
@@ -573,7 +573,7 @@ const char = [{
 	has_passive_skill: false,
 	skill_cd: 10,
 	skill_cd_max: 10,
-	skill_timer: 2,
+	skill_timer: 0,
 	isAlive: false,
 },
 {
@@ -681,7 +681,7 @@ const char = [{
 	has_passive_skill: false,
 	skill_cd: 6,
 	skill_cd_max: 6,
-	skill_timer: 3,
+	skill_timer: 0,
 	isAlive: false,
 },
 {
@@ -1063,7 +1063,7 @@ function attack(player, otherplayer, char1, char2) {
 				player.dmg = 0;
 			}
 			console.log(player.dmg);
-			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
 		}
 		else {
 			player.dmg = char1.atk * (1 - (char2.def / 100));
@@ -1133,7 +1133,7 @@ function defense(player, otherplayer, char1, char2) {
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
-		player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+		player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
 	}
 	else {
 		player.dmg = char1.atk * (1 - ((char2.def * player.defense_multiplier) / 100));
@@ -1150,7 +1150,7 @@ function magic(player, otherplayer, char1, char2) {
 	if (char2.tier === 'H') {
 		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
 			player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
-			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
 			dodge(player, otherplayer, char2, char1);
 			char2.hp -= Math.floor(player.dmg);
 			console.log(player.dmg);
@@ -1168,7 +1168,7 @@ function magic(player, otherplayer, char1, char2) {
 	else if (char2.tier !== 'H') {
 		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
 			player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
-			player.message_damage = (`**\`\`\`diff\n- Critical Damage ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
 			dodge(player, otherplayer, char2, char1);
 			char2.hp -= Math.floor(player.dmg);
 			console.log(player.dmg);
@@ -1471,9 +1471,9 @@ function regen(pl) {
 function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
+		status();
 		regen(player1);
 		regen(player2);
-		status();
 		player1.dmg = 0;
 		player2.dmg = 0;
 		player1.message_block = ' ';
