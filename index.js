@@ -23,6 +23,7 @@ const dodgecdMax = 2;
 const player1 = {
 	id: 0,
 	alive: 0,
+	lastAliveChar: 0,
 	charAmount: char_amount,
 	choseChar: false,
 	choseAction: false,
@@ -39,6 +40,7 @@ const player1 = {
 const player2 = {
 	id: 0,
 	alive: 0,
+	lastAliveChar: 0,
 	charAmount: char_amount,
 	choseChar: false,
 	choseAction: false,
@@ -1025,9 +1027,9 @@ function statusEnd() {
 }
 
 // functions for turn actions
-function changechar(player, char1, char2) {
-	client.channels.get(channelID).send(`${player.username} switched ${char1.name} for ${char2.name}`);
-	console.log('WiP');
+function changechar(player, char2) {
+	const char1 = player.char[player.lastAliveChar]
+	console.log(`${player.username} switch ${char1.name} with ${char2.name}`);
 }
 
 // function to round numbers to 2 decimals
@@ -1752,31 +1754,87 @@ client.on('message', msg => {
 		case 'switch':
 			// WiP
 			if (msg.member.id === player1.id && player1.choseAction === false) {
-				player1.choseAction = true;
-				player1.action = 'changechar';
-				actionAmount += 1;
-				if (actionAmount == 2) {
-					actionphase(player1, player2);
+				const c = args[0];
+				if (args.length < 1) {
+					msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
+				}
+				else if (player1.char[player1.alive].name === c) {
+					msg.channel.send('You can\'t switch to this character since it is already in play');
 				}
 				else {
-					console.log(`actionAmount : ${actionAmount}`);
-					console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
+					let i;
+					for (i = 0; i < player1.charAmount; i++) {
+						if (player1.char[i].name === c) {
+							if (player1.char[i].hp <= 0) {
+								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
+								break;
+							}
+							else {
+								player1.char[player1.alive].isAlive = false;
+								lastPlayer1 = player1.alive;
+								player1.char[i].isAlive = true;
+								player1.alive = i;
+								player1.choseAction = true;
+								player1.action = 'changechar';
+								actionAmount += 1;
+								if (actionAmount == 2) {
+									actionphase(player1, player2);
+								}
+								else {
+									console.log(`actionAmount : ${actionAmount}`);
+									console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
+								}
+								break;
+							}
+						}
+						else {
+							console.log(`${player1.char[i].name} was not character specified by ${player1.username} the correct character is ${args[0]} continuing the search...`);
+						}
+					}
 				}
 			}
 			else if (msg.member.id === player2.id && player2.choseAction === false) {
-				player2.choseAction = true;
-				player2.action = 'changechar';
-				actionAmount += 1;
-				if (actionAmount == 2) {
-					actionphase(player1, player2);
+				const c = args[0];
+				if (args.length < 1) {
+					msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
+				}
+				else if (player2.char[player2.alive].name === c) {
+					msg.channel.send('You can\'t switch to this character since it is already in play');
 				}
 				else {
-					console.log(`actionAmount : ${actionAmount}`);
-					console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
+					let i;
+					for (i = 0; i < player2.charAmount; i++) {
+						if (player2.char[i].name === c) {
+							if (player2.char[i].hp <= 0) {
+								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
+								break;
+							}
+							else {
+								player2.char[player2.alive].isAlive = false;
+								lastPlayer2 = player2.alive;
+								player2.char[i].isAlive = true;
+								player2.alive = i;
+								player2.choseAction = true;
+								player2.action = 'changechar';
+								actionAmount += 1;
+								if (actionAmount == 2) {
+									actionphase(player2, player2);
+								}
+								else {
+									console.log(`actionAmount : ${actionAmount}`);
+									console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
+								}
+								break;
+							}
+						}
+						else {
+							console.log(`${player2.char[i].name} was not character specified by ${player2.username} the correct character is ${args[0]} continuing the search...`);
+						}
+					}
 				}
 			}
 			else {
-				console.log(`${msg.author.username} tried to play while not being registered as a player.`);
+				msg.reply(' you have already choosen an action or are an unregistered player.');
 			}
 			break;
 		case 'attack':
