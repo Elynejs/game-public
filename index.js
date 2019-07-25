@@ -2,8 +2,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-import token from './token.json';
-client.login(token);
+const token = require('./token.json');
+client.login(token.token);
 
 // Global variables
 let testmod = false;
@@ -813,7 +813,7 @@ function whoIsAlive(pl) {
 			break;
 		}
 		else {
-			console.log(`${pl.char[i].name.toLowerCase()} is not fighting.`);
+			console.log(`${pl.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is not fighting.`);
 		}
 	}
 }
@@ -1227,8 +1227,8 @@ function IsGameOver(player, otherplayer, char1) {
 			}
 			let i;
 			for (i = 0; i <= otherplayer.charAmount; i++) {
-				if (otherplayer.char[i].isAlive === true) {
-					console.log(`${otherplayer.char[i].name.toLowerCase()} is alive, that's great, we don't care.`);
+				if (otherplayer.char[i].isAlive == true) {
+					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, that's great, we don't care.`);
 					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
 					otherplayer.futurChar = i;
 					break;
@@ -1241,7 +1241,7 @@ function IsGameOver(player, otherplayer, char1) {
 						break;
 					}
 					else {
-						console.log(`${otherplayer.char[i].name.toLowerCase()} is K.O. but hey, at least the loop is not over amiright?`);
+						console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
 					}
 				}
 			}
@@ -1812,7 +1812,7 @@ client.on('message', msg => {
 				else {
 					let i;
 					for (i = 0; i < player1.charAmount; i++) {
-						if (player1.char[i].name.toLowerCase() === c) {
+						if (player1.char[i].name.toLowerCase().trim().replace(/\s+/g, '') === c) {
 							if (player1.char[i].hp <= 0) {
 								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
 								break;
@@ -1836,7 +1836,7 @@ client.on('message', msg => {
 							}
 						}
 						else {
-							console.log(`${player1.char[i].name.toLowerCase()} was not character specified by ${player1.username} the correct character is ${args[0]} continuing the search...`);
+							console.log(`${player1.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} was not character specified by ${player1.username} the correct character is ${args[0]} continuing the search...`);
 						}
 					}
 				}
@@ -1852,7 +1852,7 @@ client.on('message', msg => {
 				else {
 					let i;
 					for (i = 0; i < player2.charAmount; i++) {
-						if (player2.char[i].name.toLowerCase() === c) {
+						if (player2.char[i].name.toLowerCase().trim().replace(/\s+/g, '') === c) {
 							if (player2.char[i].hp <= 0) {
 								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
 								break;
@@ -1876,7 +1876,7 @@ client.on('message', msg => {
 							}
 						}
 						else {
-							console.log(`${player2.char[i].name.toLowerCase()} was not the character specified by ${player2.username} the correct character is ${args[0]} continuing the search...`);
+							console.log(`${player2.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} was not the character specified by ${player2.username} the correct character is ${args[0]} continuing the search...`);
 						}
 					}
 				}
