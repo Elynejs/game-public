@@ -117,7 +117,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'undefined',
@@ -178,7 +179,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'S',
@@ -214,7 +216,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'S',
@@ -250,7 +253,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'S',
@@ -286,7 +290,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'S',
@@ -322,7 +327,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'S',
@@ -358,7 +364,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -394,7 +401,8 @@ const char = [{
 	skill_cd: 5,
 	skill_cd_max: 5,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -430,7 +438,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -466,7 +475,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -502,7 +512,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -538,7 +549,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'A',
@@ -574,7 +586,8 @@ const char = [{
 	skill_cd: 10,
 	skill_cd_max: 10,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'B',
@@ -610,7 +623,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'B',
@@ -646,7 +660,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'C',
@@ -682,7 +697,8 @@ const char = [{
 	skill_cd: 6,
 	skill_cd_max: 6,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'H',
@@ -718,7 +734,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 },
 {
 	tier: 'H',
@@ -754,7 +771,8 @@ const char = [{
 	skill_cd: 0,
 	skill_cd_max: 0,
 	skill_timer: 0,
-	isAlive: false,
+	isActive: false,
+	isAlive: true,
 }];
 
 // Defining bot activity
@@ -805,10 +823,10 @@ function IsDefenseStackReset(player) {
 }
 
 // function for alive array char
-function whoIsAlive(pl) {
+function whoIsActive(pl) {
 	let i;
 	for (i = 0; i < pl.char.length; i++) {
-		if (pl.char[i].isAlive === true) {
+		if (pl.char[i].isActive === true) {
 			pl.alive = i;
 			break;
 		}
@@ -952,6 +970,7 @@ function ressurection(player_1, target, player) {
 	// ressurection => heal a character to 100% HP (even if he is ko'ed) (CD:15)
 	console.log('ressurection working');
 	target.hp = target.hpmax;
+	target.isAlive = true;
 	player_1.skill_cd = player_1.skill_cd_max;
 	player.message_damage = `\`\`\`diff\n+ ${player.char[player.alive].name} ressurected ${target.name} !\`\`\``;
 }
@@ -1227,13 +1246,16 @@ function IsGameOver(player, otherplayer, char1) {
 			}
 			let i;
 			for (i = 0; i <= otherplayer.charAmount; i++) {
-				if (otherplayer.char[i].isAlive == true) {
-					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, that's great, we don't care.`);
+				if (i == otherplayer.alive) {
+					console.log('Loop is checking current char, skipping iteration.');
+				}
+				else if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
+					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
 					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
 					otherplayer.futurChar = i;
 					break;
 				}
-				else if (otherplayer.char[i].isAlive == false) {
+				else if (otherplayer.char[i].hp <= 0) {
 					if (i === otherplayer.charAmount) {
 						console.log('No characters are alive anymore so we end the game.');
 						statusEnd();
@@ -1251,7 +1273,7 @@ function IsGameOver(player, otherplayer, char1) {
 		}
 	}
 	else {
-		client.channels.get(channelID).send(`${char1.name} should have died but testmod is ON.`);
+		client.channels.get(channelID).send('Test mode is ON. Characters can\'t die.');
 	}
 }
 
@@ -1290,8 +1312,8 @@ function cd_iteration(pl) {
 // function for action phase
 function actionphase(firstplayer, secondplayer) {
 	if (actionAmount === 2) {
-		whoIsAlive(player1);
-		whoIsAlive(player2);
+		whoIsActive(player1);
+		whoIsActive(player2);
 		if (firstplayer.char[firstplayer.alive].spd > secondplayer.char[secondplayer.alive].spd) {
 			// player1.char is faster than player2.char so it's attack is done before
 			if (firstplayer.action === 'changechar') {
@@ -1344,7 +1366,6 @@ function actionphase(firstplayer, secondplayer) {
 				active(player2, player1);
 			}
 			if (firstplayer.action === 'changechar') {
-				// WiP
 				changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
 			}
 			if (firstplayer.action === 'attack') {
@@ -1368,7 +1389,6 @@ function actionphase(firstplayer, secondplayer) {
 			if (Math.floor(Math.random() * 2) >= 1) {
 				console.log('succesfully reached speed detection');
 				if (firstplayer.action === 'changechar') {
-					// WiP
 					changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
 				}
 				if (firstplayer.action === 'attack') {
@@ -1418,7 +1438,6 @@ function actionphase(firstplayer, secondplayer) {
 					active(player2, player1);
 				}
 				if (firstplayer.action === 'changechar') {
-					// WiP
 					changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
 				}
 				if (firstplayer.action === 'attack') {
@@ -1465,9 +1484,11 @@ function NewTurnPhase() {
 		status();
 		if (p1CharDied) {
 			omgHeDead(player1);
+			p1CharDied = false;
 		}
 		else if (p2CharDied) {
 			omgHeDead(player2);
+			p2CharDied = false;
 		}
 		else {
 			console.log('No characters died this turn.');
