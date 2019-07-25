@@ -831,15 +831,6 @@ const clean = text => {
 // function for passing from one turn to another
 function addTurn() {
 	turn += 1;
-	if (p1CharDied) {
-		omgHeDead(player1);
-	}
-	else if (p2CharDied) {
-		omgHeDead(player2);
-	}
-	else {
-		console.log('No characters died this turn.');
-	}
 	NewTurnPhase();
 }
 
@@ -1225,32 +1216,32 @@ function IsGameOver(player, otherplayer, char1) {
 		if (char1.hp <= 0) {
 			char1.hp = 0;
 			char1.isAlive = false;
-			if (player.id === player1.id) {
+			if (otherplayer.id === player1.id) {
 				p1CharDied = true;
 			}
-			else if (player.id === player2.id) {
+			else if (otherplayer.id === player2.id) {
 				p2CharDied = true;
 			}
 			else {
 				console.log('An unregistered character had one of his characters dying, good luck with fixing that shit');
 			}
 			let i;
-			for (i = 0; i <= player.charAmount; i++) {
-				if (player.char[i].isAlive === true) {
-					console.log(`${player.char[i].name.toLowerCase()} is alive, that's great, we don't care.`);
+			for (i = 0; i <= otherplayer.charAmount; i++) {
+				if (otherplayer.char[i].isAlive === true) {
+					console.log(`${otherplayer.char[i].name.toLowerCase()} is alive, that's great, we don't care.`);
 					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
-					player.futurChar = i;
+					otherplayer.futurChar = i;
 					break;
 				}
-				else if (player.char[i].isAlive == false) {
-					if (i === player.charAmount) {
+				else if (otherplayer.char[i].isAlive == false) {
+					if (i === otherplayer.charAmount) {
 						console.log('No characters are alive anymore so we end the game.');
 						statusEnd();
 						gameEnd(player, otherplayer);
 						break;
 					}
 					else {
-						console.log(`${player.char[i].name.toLowerCase()} is K.O. but hey, at least the loop is not over amiright?`);
+						console.log(`${otherplayer.char[i].name.toLowerCase()} is K.O. but hey, at least the loop is not over amiright?`);
 					}
 				}
 			}
@@ -1472,6 +1463,15 @@ function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
 		status();
+		if (p1CharDied) {
+			omgHeDead(player1);
+		}
+		else if (p2CharDied) {
+			omgHeDead(player2);
+		}
+		else {
+			console.log('No characters died this turn.');
+		}
 		regen(player1);
 		regen(player2);
 		player1.dmg = 0;
