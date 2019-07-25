@@ -1028,7 +1028,7 @@ function statusEnd() {
 
 // functions for turn actions
 function changechar(player, char2) {
-	const char1 = player.char[player.lastAliveChar]
+	const char1 = player.char[player.lastAliveChar];
 	console.log(`${player.username} switch ${char1.name} with ${char2.name}`);
 }
 
