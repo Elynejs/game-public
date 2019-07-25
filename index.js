@@ -1771,7 +1771,7 @@ client.on('message', msg => {
 							}
 							else {
 								player1.char[player1.alive].isAlive = false;
-								lastPlayer1 = player1.alive;
+								player1.lastAliveChar = player1.alive;
 								player1.char[i].isAlive = true;
 								player1.alive = i;
 								player1.choseAction = true;
@@ -1811,7 +1811,7 @@ client.on('message', msg => {
 							}
 							else {
 								player2.char[player2.alive].isAlive = false;
-								lastPlayer2 = player2.alive;
+								player2.lastAliveChar = player2.alive;
 								player2.char[i].isAlive = true;
 								player2.alive = i;
 								player2.choseAction = true;
