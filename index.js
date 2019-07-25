@@ -2,7 +2,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-client.login(config.token);
+import token from './token.json';
+client.login(token);
 
 // Global variables
 let testmod = false;
