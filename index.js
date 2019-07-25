@@ -19,10 +19,13 @@ let arp1 = 0;
 // number of char in the array of player1
 let arp2 = 0;
 // same for player2
+let p1CharDied = false;
+let p2CharDied = false;
 const dodgecdMax = 2;
 const player1 = {
 	id: 0,
 	alive: 0,
+	futurChar: 0,
 	lastAliveChar: 0,
 	charAmount: char_amount,
 	choseChar: false,
@@ -40,6 +43,7 @@ const player1 = {
 const player2 = {
 	id: 0,
 	alive: 0,
+	futurChar: 0,
 	lastAliveChar: 0,
 	charAmount: char_amount,
 	choseChar: false,
@@ -827,6 +831,15 @@ const clean = text => {
 // function for passing from one turn to another
 function addTurn() {
 	turn += 1;
+	if (p1CharDied) {
+		omgHeDead(player1);
+	}
+	else if (p2CharDied) {
+		omgHeDead(player2);
+	}
+	else {
+		console.log('No characters died this turn.');
+	}
 	NewTurnPhase();
 }
 
@@ -1029,9 +1042,14 @@ function statusEnd() {
 // functions for turn actions
 function changechar(player, char2) {
 	const char1 = player.char[player.lastAliveChar];
-	console.log(`${player.username} switch ${char1.name} with ${char2.name}`);
+	console.log(`${player.username} switched ${char1.name} with ${char2.name}`);
 }
 
+// function for when a characters dies during a turn
+function omgHeDead(player) {
+	client.channel.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
+	player.alive = player.futurChar;
+}
 // function to round numbers to 2 decimals
 function round(value) {
 	return Number(Math.round(value + 'e2') + 'e-2');
@@ -1206,8 +1224,35 @@ function IsGameOver(player, otherplayer, char1) {
 	if (testmod === false) {
 		if (char1.hp <= 0) {
 			char1.hp = 0;
-			statusEnd();
-			gameEnd(player, otherplayer);
+			if (player.id === player1.id) {
+				p1CharDied = true;
+			}
+			else if (player.id === player2.id) {
+				p2CharDied = true;
+			}
+			else {
+				console.log('An unregistered character had one of his characters dying, good luck with fixing that shit');
+			}
+			let i;
+			for (i = 0; i <= player.charAmount; i++) {
+				if (player.char[i].isAlive === true) {
+					console.log(`${player.char[i].name} is alive, that's great, we don't care.`);
+					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
+					player.futurChar = i;
+					break;
+				}
+				else if (player.char[i].isAlive == false) {
+					if (i === player.charAmount) {
+						console.log('No characters are alive anymore so we end the game.');
+						statusEnd();
+						gameEnd(player, otherplayer);
+						break;
+					}
+					else {
+						console.log(`${player.char[i].name} is K.O. but hey, at least the loop is not over amiright?`);
+					}
+				}
+			}
 		}
 		else {
 			console.log(`${char1.name} is still alive.`);
