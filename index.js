@@ -183,7 +183,7 @@ const char = [{
 	isActive: false,
 	isAlive: true,
 	receivedPassiveFromGold: false,
-		receivedPassiveFromAyddan: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -418,6 +418,7 @@ const char = [{
 	isAlive: true,
 	receivedPassiveFromGold: false,
 	receivedPassiveFromAyddan: false,
+},
 {
 	tier: 'A',
 	name: 'Yellow Strike',
