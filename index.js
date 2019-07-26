@@ -1158,41 +1158,46 @@ function defense(player, otherplayer, char1, char2) {
 }
 
 function magic(player, otherplayer, char1, char2) {
-	if (char2.tier === 'H') {
-		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
-			player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
-			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
-			dodge(player, otherplayer, char2, char1);
-			char2.hp -= Math.floor(player.dmg);
-			console.log(player.dmg);
-			player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+	if (char1.magcd === 0) {
+		if (char2.tier === 'H') {
+			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
+				player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
+				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+				dodge(player, otherplayer, char2, char1);
+				char2.hp -= Math.floor(player.dmg);
+				console.log(player.dmg);
+				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+			}
+			else {
+				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
+				player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+				dodge(player, otherplayer, char2, char1);
+				char2.hp -= Math.floor(player.dmg);
+				console.log(player.dmg);
+				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+			}
 		}
-		else {
-			player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
-			player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-			dodge(player, otherplayer, char2, char1);
-			char2.hp -= Math.floor(player.dmg);
-			console.log(player.dmg);
-			player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+		else if (char2.tier !== 'H') {
+			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
+				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
+				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+				dodge(player, otherplayer, char2, char1);
+				char2.hp -= Math.floor(player.dmg);
+				console.log(player.dmg);
+				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+			}
+			else {
+				player.dmg = char1.mag * (1 - (char2.magdef / 100));
+				player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+				dodge(player, otherplayer, char2, char1);
+				char2.hp -= Math.floor(player.dmg);
+				console.log(player.dmg);
+				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+			}
 		}
 	}
-	else if (char2.tier !== 'H') {
-		if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
-			player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
-			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
-			dodge(player, otherplayer, char2, char1);
-			char2.hp -= Math.floor(player.dmg);
-			console.log(player.dmg);
-			player.char[player.alive].magcd = player.char[player.alive].magcdmax;
-		}
-		else {
-			player.dmg = char1.mag * (1 - (char2.magdef / 100));
-			player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-			dodge(player, otherplayer, char2, char1);
-			char2.hp -= Math.floor(player.dmg);
-			console.log(player.dmg);
-			player.char[player.alive].magcd = player.char[player.alive].magcdmax;
-		}
+	else {
+		client.channels.get(channelID).send(`${char1.name} got his cd activated and can't use magic.`);
 	}
 }
 
