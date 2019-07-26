@@ -2,7 +2,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
-client.login(config.token);
+const token = require('./token.json');
+client.login(token.token);
 
 // Global variables
 let testmod = false;
@@ -1276,6 +1277,10 @@ function gameEnd(winner, looser) {
 	playerCount = 0;
 	char_amount = 1;
 	actionAmount = 0;
+	p1CharDied = false;
+	p2CharDied = false;
+	arp1 = 0;
+	arp2 = 0;
 	player1.charAmount = 1;
 	player2.charAmount = 1;
 	player1.message_block = ' ';
@@ -1891,7 +1896,6 @@ client.on('message', msg => {
 	if (gamePhase === true && turnPhase === true) {
 		switch (command) {
 		case 'switch':
-			// WiP
 			if (msg.member.id === player1.id && player1.choseAction === false) {
 				const c = args[0];
 				if (args.length < 1) {
@@ -1904,14 +1908,14 @@ client.on('message', msg => {
 					let i;
 					for (i = 0; i < player1.charAmount; i++) {
 						if (player1.char[i].name.toLowerCase().trim().replace(/\s+/g, '') === c) {
-							if (player1.char[i].hp <= 0) {
+							if (player1.char[i].isAlive === true) {
 								msg.channel.send('The character you tried to switch to is K.O, please try another one of your characters or choose another action.');
 								break;
 							}
 							else {
-								player1.char[player1.alive].isAlive = false;
+								player1.char[player1.alive].isActive = false;
 								player1.lastAliveChar = player1.alive;
-								player1.char[i].isAlive = true;
+								player1.char[i].isActive = true;
 								player1.alive = i;
 								player1.choseAction = true;
 								player1.action = 'changechar';
@@ -1949,9 +1953,9 @@ client.on('message', msg => {
 								break;
 							}
 							else {
-								player2.char[player2.alive].isAlive = false;
+								player2.char[player2.alive].isActive = false;
 								player2.lastAliveChar = player2.alive;
-								player2.char[i].isAlive = true;
+								player2.char[i].isActive = true;
 								player2.alive = i;
 								player2.choseAction = true;
 								player2.action = 'changechar';
