@@ -880,7 +880,7 @@ function active(player_1, player_2) {
 		rage(player_1.char[player_1.alive], player_1);
 	}
 	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-		explosion(player_1.char[player_1.alive], player_1);
+		explosion(player_1.char[player_1.alive], player_2, player_1);
 	}
 	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
 		pill(player_1.char[player_1.alive], player_1);
@@ -937,12 +937,13 @@ function rage(player_1, player) {
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
 }
 // active for pinky
-function explosion(player_1, player) {
+function explosion(player_1, target, player) {
 	// explosion => MAG*2; cost 300HP
 	console.log('explosion working');
 	player_1.hp -= 300;
-	player_1.mag *= 2;
-	player.message_damage = `\`\`\`diff\n+ ${player_1.name} doubled his magic power at the cost of 300 HP !\`\`\``;
+	player.dmg = player_1.mag * 2;
+	target.hp -= player.dmg;
+	player.message_damage = `\`\`\`diff\n+ ${player_1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
 }
 // passive for pinky
 function all_or_nothing(char1) {
