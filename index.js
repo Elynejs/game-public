@@ -1827,10 +1827,14 @@ client.on('message', msg => {
 	}
 
 	// stat command
-	if (command === 'stat') {
+	if (command === 'stats') {
 		msg.reply('https://i.imgur.com/lY5H53N.jpg');
 	}
 
+	// action command
+	if (command === 'actions') {
+		msg.reply('https://i.imgur.com/nuZbg4x.jpg');
+	}
 	// character selection
 	if (gameStarting === true) {
 		let i;
