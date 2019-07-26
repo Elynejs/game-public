@@ -1057,6 +1057,7 @@ function changechar(player, char2) {
 
 // function for when a characters dies during a turn
 function omgHeDead(player) {
+	react_KO(player);
 	client.channels.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
 	player.alive = player.futurChar;
 }
@@ -1246,17 +1247,15 @@ function IsGameOver(player, otherplayer, char1) {
 			}
 			let i;
 			for (i = 0; i <= otherplayer.charAmount; i++) {
-				if (i == otherplayer.alive) {
-					console.log('Loop is checking current char, skipping iteration.');
-				}
-				else if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
+				if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
 					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
 					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
+					otherplayer.lastAliveChar = otherplayer.char.indexOf(char1);
 					otherplayer.futurChar = i;
 					break;
 				}
 				else if (otherplayer.char[i].hp <= 0) {
-					if (i === otherplayer.charAmount) {
+					if (i === (otherplayer.charAmount - 1)) {
 						console.log('No characters are alive anymore so we end the game.');
 						statusEnd();
 						gameEnd(player, otherplayer);
@@ -1554,7 +1553,7 @@ client.on('message', msg => {
 		}
 	}
 	if (command === 'ad') {
-		if (msg.member.id === config.ownerID) {
+		if (msg.member.id === config.ownerID || config.adminID) {
 		// leave a specific guild
 			if (args[0] === 'gleave') {
 				if (msg.guild.id == args[1]) {
