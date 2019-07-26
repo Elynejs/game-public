@@ -680,7 +680,7 @@ const char = [{
 	react_selection2: 'Let\'s see if I can get some data from this fight at least...',
 	react_KO1: 'Tsk... Of course this was going to end like this, I\'m not a fighter.',
 	react_KO2: '...Thoses data are rather interesting...',
-	react_victory1: 'Considering your capacity I don\'t even know why you picked a fight to being with.',
+	react_victory1: 'Considering your capacity I don\'t even know why you picked a fight to begin with.',
 	react_victory2: 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
 	emoji: config.emote_ellfayrh,
 	has_active_skill: false,
