@@ -118,6 +118,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'undefined',
@@ -180,6 +182,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+		receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -217,6 +221,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -254,6 +260,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -291,6 +299,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -328,6 +338,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'S',
@@ -365,6 +377,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'A',
@@ -402,7 +416,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
-},
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 {
 	tier: 'A',
 	name: 'Yellow Strike',
@@ -439,6 +454,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'A',
@@ -476,6 +493,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'A',
@@ -513,6 +532,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'A',
@@ -550,6 +571,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'A',
@@ -587,6 +610,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'B',
@@ -624,6 +649,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'B',
@@ -661,6 +688,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'C',
@@ -698,6 +727,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'H',
@@ -735,6 +766,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 },
 {
 	tier: 'H',
@@ -772,6 +805,8 @@ const char = [{
 	skill_timer: 0,
 	isActive: false,
 	isAlive: true,
+	receivedPassiveFromGold: false,
+	receivedPassiveFromAyddan: false,
 }];
 
 // Defining bot activity
@@ -864,7 +899,7 @@ function passive(player_1, player_2) {
 		black_poison(player_2.char[player_2.alive]);
 	}
 	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-		care_taker();
+		care_taker(player_1);
 	}
 	else {
 		console.log('No passive ability detected.');
@@ -907,14 +942,34 @@ function remove_active_effect(player_1) {
 // passives for gold
 function black_poison(target) {
 	// black poison => -50% to enemy RGN
-	target.rgn -= (target.rgn * (50 / 100));
-	console.log('Black poison is in action.');
+	if (target.receivedPassiveFromGold === false) {
+		if (target.receivedPassiveFromAyddan === true) {
+			target.def += (target.def * (25 / 100));
+			target.receivedPassiveFromAyddan = false;
+		}
+		target.rgn -= (target.rgn * (50 / 100));
+		console.log('Black poison is in action.');
+		target.receivedPassiveFromGold === true;
+	}
+	else {
+		console.log('Cant activate passive since it has already proced.');
+	}
 }
 // passive for ayddan
 function crushing_strength(target) {
 	// crushing_strength => -25% to enemy DEF
-	target.def -= (target.def * (25 / 100));
-	console.log('Crushing strength is in action.');
+	if (target.receivedPassiveFromAyddan == false) {
+		if (target.receivedPassiveFromGold === true) {
+			target.rgn += (target.rgn * (50 / 100));
+			target.receivedPassiveFromGold = false;
+		}
+		target.def -= (target.def * (25 / 100));
+		console.log('Crushing strength is in action.');
+		target.receivedPassiveFromAyddan === true;
+	}
+	else {
+		console.log('Cant activate passive since it has already proced.');
+	}
 }
 // active for snipefox
 function snipe(player_1, target, player) {
@@ -947,8 +1002,13 @@ function explosion(player_1, target, player) {
 // passive for pinky
 function all_or_nothing(char1) {
 	// all or nothing => Atk*3 if hp < 30%
-	if (char1.hp < (char1.hpmax * (30 / 100))) {
-		char1.atk *= 5;
+	if (char1.receivedPassive === false) {
+		if (char1.hp < (char1.hpmax * (30 / 100))) {
+			char1.atk *= 3;
+		}
+	}
+	else {
+		console.log('Cant activate passive since it has already proced.');
 	}
 }
 // active for may
@@ -961,9 +1021,14 @@ function pill(player_1, player) {
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
 }
 // passive for dyakko
-function care_taker() {
+function care_taker(player) {
 	// care taker => heal 10% of HP to every character in his team every turn while the character is alive and fighting
-	// to do with a for loop when team play is implemented
+	let i;
+	for (i = 0; i < player.char.length; i++) {
+		player.char[i].hp *= (1 + (10 / 100));
+		console.log(`Dyakko regenerated 10% of the maximum HP of ${player.char[i].name}`);
+	}
+	client.channels.get(channelID).send('Dyakko regenerated 10% of the maximum HP of all their team.');
 }
 // active for kairen
 function ressurection(player_1, target, player) {
