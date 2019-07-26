@@ -1828,7 +1828,7 @@ client.on('message', msg => {
 
 	// stat command
 	if (command === 'stat') {
-		msg.reply('https://imgur.com/uDeC3Fl');
+		msg.reply('https://i.imgur.com/lY5H53N.jpg');
 	}
 
 	// character selection
