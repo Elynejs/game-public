@@ -34,7 +34,7 @@ const player1 = {
 	dmg: 0,
 	char: [],
 	action: '',
-	defense_stack: 0,
+	defense_stack: 2,
 	defense_multiplier: 2,
 	message_damage: ' ',
 	message_dodge: ' ',
@@ -52,7 +52,7 @@ const player2 = {
 	dmg: 0,
 	char: [],
 	action: '',
-	defense_stack: 0,
+	defense_stack: 2,
 	defense_multiplier: 2,
 	message_damage: ' ',
 	message_dodge: ' ',
@@ -111,6 +111,7 @@ const char = [{
 	// sentence to display on character's victory
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
+	emoji_ko: config.emote_undefined_ko,
 	// emoji for the various characters reaction (discord emoji code found in config.json)
 	has_active_skill: false,
 	has_passive_skill: false,
@@ -175,6 +176,7 @@ const char = [{
 	// sentence to display on character's victory
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
+	emoji_ko: config.emote_undefined_ko,
 	// emoji for the various characters reaction (discord emoji code found in config.json)
 	has_active_skill: false,
 	has_passive_skill: false,
@@ -215,6 +217,7 @@ const char = [{
 	react_victory1: 'A rather expected outcome, duh.',
 	react_victory2: 'YOU DON\'T SAY ?',
 	emoji: config.emote_seize,
+	emoji_ko: config.emote_seize_ko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -254,6 +257,7 @@ const char = [{
 	react_victory1: 'You fought well.',
 	react_victory2: 'You\'ll do better next time.',
 	emoji: config.emote_fusoku,
+	emoji_ko: config.emote_fusoku_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -293,6 +297,7 @@ const char = [{
 	react_victory1: 'So can I leave now ?',
 	react_victory2: 'So can I leave now ?',
 	emoji: config.emote_leoppsccay,
+	emoji_ko: config.emote_leoppsccay_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -332,6 +337,7 @@ const char = [{
 	react_victory1: '...Done.',
 	react_victory2: '...',
 	emoji: config.emote_gold,
+	emoji_ko: config.emote_gold_ko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -371,6 +377,7 @@ const char = [{
 	react_victory1: 'Told ya~',
 	react_victory2: 'It\'s not like you could do anything against it.',
 	emoji: config.emote_ayddan,
+	emoji_ko: config.emote_ayddan_ko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -410,6 +417,7 @@ const char = [{
 	react_victory1: 'Target neutralised.',
 	react_victory2: 'Objective accomplished.',
 	emoji: config.emote_snipefox,
+	emoji_ko: config.emote_snipepfox_ko,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 5,
@@ -449,6 +457,7 @@ const char = [{
 	react_victory1: 'Haha ! Told you !',
 	react_victory2: 'See ?! I\'m so fast right ?!',
 	emoji: config.emote_yellowstrike,
+	emoji_ko: config.emote_yellowstrike_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -488,6 +497,7 @@ const char = [{
 	react_victory1: 'Pathetic',
 	react_victory2: 'Pathetic',
 	emoji: config.emote_pinky,
+	emoji_ko: config.emote_pinky_ko,
 	has_active_skill: true,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -527,6 +537,7 @@ const char = [{
 	react_victory1: 'That\'s what you get for opposing the Queen.',
 	react_victory2: 'That\'s what you get for opposing the Queen.',
 	emoji: config.emote_redqueen,
+	emoji_ko: config.emote_redqueen_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -566,6 +577,7 @@ const char = [{
 	react_victory1: 'Easy !',
 	react_victory2: 'Easy !',
 	emoji: config.emote_kairo,
+	emoji_ko: config.emote_kairo_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -605,6 +617,7 @@ const char = [{
 	react_victory1: '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
 	react_victory2: 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
 	emoji: config.emote_lyzan,
+	emoji_ko: config.emote_lyzan_ko,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 10,
@@ -644,6 +657,7 @@ const char = [{
 	react_victory1: 'That\'s over now !',
 	react_victory2: 'That\'s over now !',
 	emoji: config.emote_usabi,
+	emoji_ko: config.emote_usabi_ko,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -683,6 +697,7 @@ const char = [{
 	react_victory1: 'Considering your capacity I don\'t even know why you picked a fight to begin with.',
 	react_victory2: 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
 	emoji: config.emote_ellfayrh,
+	emoji_ko: config.emote_ellfayrh_ko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -722,6 +737,7 @@ const char = [{
 	react_victory1: 'What ?! I won ? Really ?',
 	react_victory2: 'WHAT ?! REALLY ?',
 	emoji: config.emote_may,
+	emoji_ko: config.emote_may_ko,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 6,
@@ -761,6 +777,7 @@ const char = [{
 	react_victory1: 'Surrender yourself, there is no need for anyone to get hurt anymore, it\'s over.',
 	react_victory2: 'Just surrend, there is no need for anyone to get hurt anymore, it\'s over.',
 	emoji: config.emote_dyakkoo,
+	emoji_ko: config.emote_dyakkoo_ko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -800,6 +817,7 @@ const char = [{
 	react_victory1: 'I\'m happy I got to win !',
 	react_victory2: 'That was a nice game, let\'s play again !',
 	emoji: config.emote_kairen,
+	emoji_ko: config.emote_kairen_ko,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -827,22 +845,56 @@ function react_selection(selected_char) {
 	}
 }
 
-function react_KO(selected_char) {
+function react_KO(p) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(channelID).send(`${selected_char.char[selected_char.alive].emoji} ${selected_char.char[selected_char.alive].react_KO1}`);
+		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_KO1}`);
 	}
 	else {
-		client.channels.get(channelID).send(`${selected_char.char[selected_char.alive].emoji} ${selected_char.char[selected_char.alive].react_KO2}`);
+		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_KO2}`);
 	}
 }
 
-function react_victory(selected_char) {
+function react_victory(p) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(channelID).send(`${selected_char.char[selected_char.alive].emoji} ${selected_char.char[selected_char.alive].react_victory1}`);
+		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_victory1}`);
 	}
 	else {
-		client.channels.get(channelID).send(`${selected_char.char[selected_char.alive].emoji} ${selected_char.char[selected_char.alive].react_victory1}`);
+		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_victory1}`);
 	}
+}
+
+// function for status display of how many characters each players still has
+function eachPlayerCharList(p1, p2) {
+	let i;
+	const p1emote = [' ', ' ', ' ', ' ', ' '];
+	for (i = 0; i < p1.char.length; i++) {
+		p1emote[i] = p1.char[i].isAlive ? p1.char[i].emoji : p1.char[i].emoji_ko;
+	}
+	const p2emote = [' ', ' ', ' ', ' ', ' '];
+	for (i = 0; i < p2.char.length; i++) {
+		p2emote[i] = p2.char[i].isAlive ? p2.char[i].emoji : p2.char[i].emoji_ko;
+	}
+	client.channels.get(channelID).send({
+		embed: {
+			color: 16286691,
+			author: {
+				name: client.author.username,
+				icon_url: client.user.avatarURL,
+			},
+			fields: [{
+				name: `__**${p1.username}'s list of characters :**__`,
+				value: p1emote[0] + p1emote[1] + p1emote[2] + p1emote[3] + p1emote[4],
+				inline: true,
+			},
+			{
+				name: `__**${p2.username}'s list of characters :**__`,
+				value: p2emote[0] + p2emote[1] + p2emote[2] + p2emote[3] + p2emote[4],
+				inline: true,
+			},
+			],
+			timestamp: new Date(),
+		},
+	});
 }
 
 // function for player.defense_stack
@@ -890,7 +942,6 @@ function addTurn() {
 
 // function for special abilities
 function passive(player_1, player_2) {
-	// mother function
 	if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
 		all_or_nothing(player_1.char[player_1.alive]);
 	}
@@ -1120,6 +1171,7 @@ function statusEnd() {
 function changechar(player, char2) {
 	const char1 = player.char[player.lastAliveChar];
 	console.log(`${player.username} switched ${char1.name} with ${char2.name}`);
+	player.message_damage = `${player.username} switched ${char1.name} with ${char2.name}`;
 }
 
 // function for when a characters dies during a turn
@@ -1156,7 +1208,7 @@ function attack(player, otherplayer, char1, char2) {
 	}
 	else {
 		defense(player, otherplayer, char1, char2);
-		player.message_block = (`${char2.name} multiplicated their defense for this turn by ${round(player.defense_multiplier)}`);
+		player.message_block = (`${char2.name} multiplicated their defense for this turn by ${round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
@@ -1206,7 +1258,7 @@ function dodge(player, otherplayer, char_1, char_2) {
 
 function defense(player, otherplayer, char1, char2) {
 	if (char1.crit_chance > Math.floor(Math.random() * 100)) {
-		player.dmg = (char1.atk * (1 - ((char2.def * player.defense_multiplier) / 100))) * char1.crit_multi;
+		player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100))) * char1.crit_multi;
 		console.log(player.dmg);
 		if (player.dmg < 0) {
 			player.dmg = 0;
@@ -1214,14 +1266,14 @@ function defense(player, otherplayer, char1, char2) {
 		player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
 	}
 	else {
-		player.dmg = char1.atk * (1 - ((char2.def * player.defense_multiplier) / 100));
+		player.dmg = char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100));
 		console.log(player.dmg);
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
 		player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
 	}
-	player.defense_stack = 0;
+	otherplayer.defense_stack = 0;
 }
 
 function magic(player, otherplayer, char1, char2) {
@@ -1557,6 +1609,7 @@ function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
 		status();
+		eachPlayerCharList(player1, player2);
 		if (p1CharDied) {
 			omgHeDead(player1);
 			p1CharDied = false;
