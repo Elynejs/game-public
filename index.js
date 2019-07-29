@@ -878,7 +878,7 @@ function eachPlayerCharList(p1, p2) {
 		embed: {
 			color: 16286691,
 			author: {
-				name: client.author.username,
+				name: client.user.username,
 				icon_url: client.user.avatarURL,
 			},
 			fields: [{
@@ -1760,17 +1760,18 @@ client.on('message', msg => {
 			}
 			// editing command for player1.char
 			else if (args[0] === 'editchar') {
+				const p = args[4];
 				if (args[1] === 'help') {
-					msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value]');
+					msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value] [player]');
 				}
-				else if (args.length > 2) {
+				else if (args.length > 3) {
 					let a;
-					for (a = 0; a < char.length; a++) {
-						if (args[1] === char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
-							console.log(`value found : ${char[a].name}`);
+					for (a = 0; a < p.char.length; a++) {
+						if (args[1] === p.char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
+							console.log(`value found : ${p.char[a].name}`);
 							const char_value = parseInt(args[3]);
 							char[a][args[2]] = char_value;
-							msg.channel.send(`Admin changed the value of ${char[a].name}'s ${args[2]} to ${args[3]}`);
+							msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${args[2]} to ${args[3]}`);
 							console.log(char[a]);
 						}
 					}
