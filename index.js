@@ -1,8 +1,9 @@
 // importing librarie
-import { Client as client } from 'discord.js';
-import { _ as config } from './config.json';
-import { token as _token } from './token.json';
-client.login(_token);
+const Discord = require('discord.js');
+const client = new Discord.Client();
+const config = require('./config.json');
+const token = require('./token.json');
+client.login(token.token);
 
 // Global variables
 let testmod = false;
@@ -23,7 +24,7 @@ let p2CharDied = false;
 const dodgecdMax = 2;
 const player1 = {
 	id: 0,
-	alive: 0,
+	active: 0,
 	futurChar: 0,
 	lastAliveChar: 0,
 	charAmount: char_amount,
@@ -41,7 +42,7 @@ const player1 = {
 };
 const player2 = {
 	id: 0,
-	alive: 0,
+	active: 0,
 	futurChar: 0,
 	lastAliveChar: 0,
 	charAmount: char_amount,
@@ -846,19 +847,19 @@ function react_selection(selected_char) {
 
 function react_KO(p) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_KO1}`);
+		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO1}`);
 	}
 	else {
-		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_KO2}`);
+		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO2}`);
 	}
 }
 
 function react_victory(p) {
 	if (Math.floor(Math.random() * 2) >= 1) {
-		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_victory1}`);
+		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
 	}
 	else {
-		client.channels.get(channelID).send(`${p.char[p.alive].emoji} ${p.char[p.alive].react_victory1}`);
+		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
 	}
 }
 
@@ -941,16 +942,16 @@ function addTurn() {
 
 // function for special abilities
 function passive(player_1, player_2) {
-	if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-		all_or_nothing(player_1.char[player_1.alive]);
+	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+		all_or_nothing(player_1.char[player_1.active]);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
-		crushing_strength(player_2.char[player_2.alive]);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
+		crushing_strength(player_2.char[player_2.active]);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
-		black_poison(player_2.char[player_2.alive]);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
+		black_poison(player_2.char[player_2.active]);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
 		care_taker(player_1);
 	}
 	else {
@@ -959,20 +960,20 @@ function passive(player_1, player_2) {
 }
 
 function active(player_1, player_2) {
-	if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
-		snipe(player_1.char[player_1.alive], player_2.char[player_2.alive], player_1);
+	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
+		snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
-		rage(player_1.char[player_1.alive], player_1);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+		rage(player_1.char[player_1.active], player_1);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-		explosion(player_1.char[player_1.alive], player_2, player_1);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+		explosion(player_1.char[player_1.active], player_2, player_1);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
-		pill(player_1.char[player_1.alive], player_1);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+		pill(player_1.char[player_1.active], player_1);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'kairen') {
-		ressurection(player_1.char[player_1.alive], player_2.char[player_2.alive], player_1);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'kairen') {
+		ressurection(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
 	}
 	else {
 		console.log('I fucked up\nA character without active skill managed to activate the function for active selection');
@@ -980,15 +981,15 @@ function active(player_1, player_2) {
 }
 
 function remove_active_effect(player_1) {
-	if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
-		player_1.char[player_1.alive].atk /= 5;
-		player_1.char[player_1.alive].def /= 2;
-		player_1.char[player_1.alive].rgn /= 3;
-		client.channels.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of rage.`);
+	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+		player_1.char[player_1.active].atk /= 5;
+		player_1.char[player_1.active].def /= 2;
+		player_1.char[player_1.active].rgn /= 3;
+		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of rage.`);
 	}
-	else if (player_1.char[player_1.alive].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
-		player_1.char[player_1.alive].atk /= 3;
-		client.channels.get(channelID).send(`${player_1.char[player_1.alive].name} lost the effects of pill.`);
+	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+		player_1.char[player_1.active].atk /= 3;
+		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of pill.`);
 	}
 }
 // passives for gold
@@ -1089,7 +1090,7 @@ function ressurection(player_1, target, player) {
 	target.hp = target.hpmax;
 	target.isAlive = true;
 	player_1.skill_cd = player_1.skill_cd_max;
-	player.message_damage = `\`\`\`diff\n+ ${player.char[player.alive].name} ressurected ${target.name} !\`\`\``;
+	player.message_damage = `\`\`\`diff\n+ ${player.char[player.active].name} ressurected ${target.name} !\`\`\``;
 }
 
 // function for status display
@@ -1102,24 +1103,24 @@ function status() {
 				icon_url: client.user.avatarURL,
 			},
 			fields: [{
-				name: `${player1.char[player1.alive].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player2.char[player2.alive].emoji}`,
+				name: `${player1.char[player1.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player2.char[player2.active].emoji}`,
 				value: `${player2.message_block} ${player1.message_damage} ${player2.message_dodge}`,
 			},
 			{
-				name: `${player2.char[player2.alive].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player1.char[player1.alive].emoji}`,
+				name: `${player2.char[player2.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player1.char[player1.active].emoji}`,
 				value: `${player1.message_block} ${player2.message_damage} ${player1.message_dodge}`,
 			},
 			{
 				name: '**REGENERATION**',
-				value: `\`\`\`Diff\n+ ${player1.char[player1.alive].name} has regenerated ${player1.char[player1.alive].rgn} HP.\n+ ${player2.char[player2.alive].name} has regenerated ${player2.char[player2.alive].rgn} HP.\`\`\``,
+				value: `\`\`\`Diff\n+ ${player1.char[player1.active].name} has regenerated ${player1.char[player1.active].rgn} HP.\n+ ${player2.char[player2.active].name} has regenerated ${player2.char[player2.active].rgn} HP.\`\`\``,
 			},
 			{
-				name: `${player1.char[player1.alive].emoji} **STATUS**`,
-				value: `\`\`\`ini\n[${player1.char[player1.alive].name} has ${player1.char[player1.alive].hp}/${player1.char[player1.alive].hpmax} HP left!]\n[${player1.char[player1.alive].name} Mag CD : ${player1.char[player1.alive].magcd}/${player1.char[player1.alive].magcdmax}]\`\`\``,
+				name: `${player1.char[player1.active].emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player1.char[player1.active].name} has ${player1.char[player1.active].hp}/${player1.char[player1.active].hpmax} HP left!]\n[${player1.char[player1.active].name} Mag CD : ${player1.char[player1.active].magcd}/${player1.char[player1.active].magcdmax}]\`\`\``,
 			},
 			{
-				name: `${player2.char[player2.alive].emoji} **STATUS**`,
-				value: `\`\`\`ini\n[${player2.char[player2.alive].name} has ${player2.char[player2.alive].hp}/${player2.char[player2.alive].hpmax} HP left!]\n[${player2.char[player2.alive].name} Mag CD : ${player2.char[player2.alive].magcd}/${player2.char[player2.alive].magcdmax}]\`\`\``,
+				name: `${player2.char[player2.active].emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player2.char[player2.active].name} has ${player2.char[player2.active].hp}/${player2.char[player2.active].hpmax} HP left!]\n[${player2.char[player2.active].name} Mag CD : ${player2.char[player2.active].magcd}/${player2.char[player2.active].magcdmax}]\`\`\``,
 			},
 			],
 			timestamp: new Date(),
@@ -1141,20 +1142,20 @@ function statusEnd() {
 				icon_url: client.user.avatarURL,
 			},
 			fields: [{
-				name: `${player1.char[player1.alive].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player2.char[player2.alive].emoji}`,
+				name: `${player1.char[player1.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player2.char[player2.active].emoji}`,
 				value: `${player2.message_block} ${player1.message_damage} ${player2.message_dodge}`,
 			},
 			{
-				name: `${player2.char[player2.alive].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player1.char[player1.alive].emoji}`,
+				name: `${player2.char[player2.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${player1.char[player1.active].emoji}`,
 				value: `${player1.message_block} ${player2.message_damage} ${player1.message_dodge}`,
 			},
 			{
-				name: `${player1.char[player1.alive].emoji} **STATUS**`,
-				value: `\`\`\`ini\n[${player1.char[player1.alive].name} has ${player1.char[player1.alive].hp}/${player1.char[player1.alive].hpmax} HP left!]\`\`\``,
+				name: `${player1.char[player1.active].emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player1.char[player1.active].name} has ${player1.char[player1.active].hp}/${player1.char[player1.active].hpmax} HP left!]\`\`\``,
 			},
 			{
-				name: `${player2.char[player2.alive].emoji} **STATUS**`,
-				value: `\`\`\`ini\n[${player2.char[player2.alive].name} has ${player2.char[player2.alive].hp}/${player2.char[player2.alive].hpmax} HP left!]\`\`\``,
+				name: `${player2.char[player2.active].emoji} **STATUS**`,
+				value: `\`\`\`ini\n[${player2.char[player2.active].name} has ${player2.char[player2.active].hp}/${player2.char[player2.active].hpmax} HP left!]\`\`\``,
 			},
 			],
 			timestamp: new Date(),
@@ -1192,7 +1193,7 @@ function attack(player, otherplayer, char1, char2) {
 				player.dmg = 0;
 			}
 			console.log(player.dmg);
-			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+			player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 		}
 		else {
 			player.dmg = char1.atk * (1 - (char2.def / 100));
@@ -1226,7 +1227,7 @@ function dodge(player, otherplayer, char_1, char_2) {
 					player.dmg = 0;
 					char_1.dodgecd = dodgecdMax;
 					player.message_damage = ' ';
-					otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
+					otherplayer.message_dodge = (`**${char_1.name} dodged ${char_2.name}'s attack.**`);
 				}
 				else {
 					console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
@@ -1262,7 +1263,7 @@ function defense(player, otherplayer, char1, char2) {
 		if (player.dmg < 0) {
 			player.dmg = 0;
 		}
-		player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+		player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 	}
 	else {
 		player.dmg = char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100));
@@ -1280,11 +1281,11 @@ function magic(player, otherplayer, char1, char2) {
 		if (char2.tier === 'H') {
 			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
 				player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
-				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
 				console.log(player.dmg);
-				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+				player.char[player.active].magcd = player.char[player.active].magcdmax;
 			}
 			else {
 				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
@@ -1292,17 +1293,17 @@ function magic(player, otherplayer, char1, char2) {
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
 				console.log(player.dmg);
-				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+				player.char[player.active].magcd = player.char[player.active].magcdmax;
 			}
 		}
 		else if (char2.tier !== 'H') {
 			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
 				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
-				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.alive].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.alive].name} !\`\`\`**`);
+				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
 				console.log(player.dmg);
-				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+				player.char[player.active].magcd = player.char[player.active].magcdmax;
 			}
 			else {
 				player.dmg = char1.mag * (1 - (char2.magdef / 100));
@@ -1310,7 +1311,7 @@ function magic(player, otherplayer, char1, char2) {
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
 				console.log(player.dmg);
-				player.char[player.alive].magcd = player.char[player.alive].magcdmax;
+				player.char[player.active].magcd = player.char[player.active].magcdmax;
 			}
 		}
 	}
@@ -1440,32 +1441,32 @@ function actionphase(firstplayer, secondplayer) {
 	if (actionAmount === 2) {
 		whoIsActive(player1);
 		whoIsActive(player2);
-		if (firstplayer.char[firstplayer.alive].spd > secondplayer.char[secondplayer.alive].spd) {
+		if (firstplayer.char[firstplayer.active].spd > secondplayer.char[secondplayer.active].spd) {
 			// player1.char is faster than player2.char so it's attack is done before
 			if (firstplayer.action === 'changechar') {
-				changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
+				changechar(player1, player1.char[player1.active], player1.char[player1.active]);
 			}
 			if (firstplayer.action === 'attack') {
-				attack(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-				IsGameOver(player1, player2, player2.char[player2.alive]);
+				attack(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+				IsGameOver(player1, player2, player2.char[player2.active]);
 			}
 			if (firstplayer.action === 'magic') {
-				magic(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-				IsGameOver(player1, player2, player2.char[player2.alive]);
+				magic(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+				IsGameOver(player1, player2, player2.char[player2.active]);
 			}
 			if (firstplayer.action === 'skill') {
 				active(player1, player2);
 			}
 			if (secondplayer.action === 'changechar') {
-				changechar(player2, player2.char[player2.alive], player2.char[player2.alive]);
+				changechar(player2, player2.char[player2.active], player2.char[player2.active]);
 			}
 			if (secondplayer.action === 'attack') {
-				attack(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-				IsGameOver(player2, player1, player1.char[player1.alive]);
+				attack(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+				IsGameOver(player2, player1, player1.char[player1.active]);
 			}
 			if (secondplayer.action === 'magic') {
-				magic(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-				IsGameOver(player2, player1, player1.char[player1.alive]);
+				magic(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+				IsGameOver(player2, player1, player1.char[player1.active]);
 			}
 			if (secondplayer.action === 'skill') {
 				active(player2, player1);
@@ -1476,31 +1477,31 @@ function actionphase(firstplayer, secondplayer) {
 			actionAmount = 0;
 			addTurn();
 		}
-		else if (firstplayer.char[firstplayer.alive].spd < secondplayer.char[secondplayer.alive].spd) {
+		else if (firstplayer.char[firstplayer.active].spd < secondplayer.char[secondplayer.active].spd) {
 			if (secondplayer.action === 'changechar') {
-				changechar(player2, player2.char[player2.alive], player1.char[player1.alive]);
+				changechar(player2, player2.char[player2.active], player1.char[player1.active]);
 			}
 			if (secondplayer.action === 'attack') {
-				attack(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-				IsGameOver(player2, player1, player1.char[player1.alive]);
+				attack(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+				IsGameOver(player2, player1, player1.char[player1.active]);
 			}
 			if (secondplayer.action === 'magic') {
-				magic(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-				IsGameOver(player2, player1, player1.char[player1.alive]);
+				magic(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+				IsGameOver(player2, player1, player1.char[player1.active]);
 			}
 			if (secondplayer.action === 'skill') {
 				active(player2, player1);
 			}
 			if (firstplayer.action === 'changechar') {
-				changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
+				changechar(player1, player1.char[player1.active], player1.char[player1.active]);
 			}
 			if (firstplayer.action === 'attack') {
-				attack(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-				IsGameOver(player1, player2, player2.char[player2.alive]);
+				attack(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+				IsGameOver(player1, player2, player2.char[player2.active]);
 			}
 			if (firstplayer.action === 'magic') {
-				magic(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-				IsGameOver(player1, player2, player2.char[player2.alive]);
+				magic(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+				IsGameOver(player1, player2, player2.char[player2.active]);
 			}
 			if (firstplayer.action === 'skill') {
 				active(player1, player2);
@@ -1511,33 +1512,33 @@ function actionphase(firstplayer, secondplayer) {
 			actionAmount = 0;
 			addTurn();
 		}
-		else if (firstplayer.char[firstplayer.alive].spd === secondplayer.char[secondplayer.alive].spd) {
+		else if (firstplayer.char[firstplayer.active].spd === secondplayer.char[secondplayer.active].spd) {
 			if (Math.floor(Math.random() * 2) >= 1) {
 				console.log('succesfully reached speed detection');
 				if (firstplayer.action === 'changechar') {
-					changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
+					changechar(player1, player1.char[player1.active], player1.char[player1.active]);
 				}
 				if (firstplayer.action === 'attack') {
-					attack(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-					IsGameOver(player1, player2, player2.char[player2.alive]);
+					attack(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+					IsGameOver(player1, player2, player2.char[player2.active]);
 				}
 				if (firstplayer.action === 'magic') {
-					magic(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-					IsGameOver(player1, player2, player2.char[player2.alive]);
+					magic(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+					IsGameOver(player1, player2, player2.char[player2.active]);
 				}
 				if (firstplayer.action === 'skill') {
 					active(player1, player2);
 				}
 				if (secondplayer.action === 'changechar') {
-					changechar(player2, player2.char[player2.alive], player1.char[player1.alive]);
+					changechar(player2, player2.char[player2.active], player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'attack') {
-					attack(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-					IsGameOver(player2, player1, player1.char[player1.alive]);
+					attack(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+					IsGameOver(player2, player1, player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'magic') {
-					magic(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-					IsGameOver(player2, player1, player1.char[player1.alive]);
+					magic(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+					IsGameOver(player2, player1, player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'skill') {
 					active(player2, player1);
@@ -1550,29 +1551,29 @@ function actionphase(firstplayer, secondplayer) {
 			}
 			else {
 				if (secondplayer.action === 'changechar') {
-					changechar(player2, player2.char[player2.alive], player1.char[player1.alive]);
+					changechar(player2, player2.char[player2.active], player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'attack') {
-					attack(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-					IsGameOver(player2, player1, player1.char[player1.alive]);
+					attack(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+					IsGameOver(player2, player1, player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'magic') {
-					magic(player2, player1, player2.char[player2.alive], player1.char[player1.alive]);
-					IsGameOver(player2, player1, player1.char[player1.alive]);
+					magic(player2, player1, player2.char[player2.active], player1.char[player1.active]);
+					IsGameOver(player2, player1, player1.char[player1.active]);
 				}
 				if (secondplayer.action === 'skill') {
 					active(player2, player1);
 				}
 				if (firstplayer.action === 'changechar') {
-					changechar(player1, player1.char[player1.alive], player1.char[player1.alive]);
+					changechar(player1, player1.char[player1.active], player1.char[player1.active]);
 				}
 				if (firstplayer.action === 'attack') {
-					attack(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-					IsGameOver(player1, player2, player2.char[player2.alive]);
+					attack(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+					IsGameOver(player1, player2, player2.char[player2.active]);
 				}
 				if (firstplayer.action === 'magic') {
-					magic(player1, player2, player1.char[player1.alive], player2.char[player2.alive]);
-					IsGameOver(player1, player2, player2.char[player2.alive]);
+					magic(player1, player2, player1.char[player1.active], player2.char[player2.active]);
+					IsGameOver(player1, player2, player2.char[player2.active]);
 				}
 				if (firstplayer.action === 'skill') {
 					active(player1, player2);
@@ -1791,7 +1792,7 @@ client.on('message', msg => {
 				player1.choseChar = true;
 				player2.choseChar = true;
 				player2.char.push(char[1]);
-				msg.channel.send(`Fast started the game with ${config.usernameID1} as player1 with ${player1.char[player1.alive].name} and ${config.usernameID2} as player2 with ${player2.char[player2.alive].name}`);
+				msg.channel.send(`Fast started the game with ${config.usernameID1} as player1 with ${player1.char[player1.active].name} and ${config.usernameID2} as player2 with ${player2.char[player2.active].name}`);
 			}
 			// return true if gameStarting is true
 			else if (args[0] === 'gamestarting') {
@@ -1895,7 +1896,7 @@ client.on('message', msg => {
 			const name = char[i].name.toLowerCase().trim();
 			if (command === name.replace(/\s+/g, '')) {
 				if (msg.member.id == player1.id) {
-					if (player1.choseChar !== true) {
+					if (!player1.choseChar) {
 						player1.char.push(char[i]);
 						msg.reply(` chose ${char[i].name}`);
 						react_selection(player1.char[arp1]);
@@ -1911,7 +1912,7 @@ client.on('message', msg => {
 					}
 				}
 				else if (msg.member.id == player2.id) {
-					if (player2.choseChar !== true) {
+					if (!player2.choseChar) {
 						player2.char.push(char[i]);
 						msg.reply(` chose ${char[i].name}`);
 						react_selection(player2.char[arp2]);
@@ -1944,8 +1945,8 @@ client.on('message', msg => {
 		reset_cd(player2);
 		passive(player1, player2);
 		passive(player2, player1);
-		player1.char[0].isAlive = true;
-		player2.char[0].isAlive = true;
+		player1.char[0].isActive = true;
+		player2.char[0].isActive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
 	}
 
@@ -1958,7 +1959,7 @@ client.on('message', msg => {
 				if (args.length < 1) {
 					msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
 				}
-				else if (player1.char[player1.alive].name === c) {
+				else if (player1.char[player1.active].name === c) {
 					msg.channel.send('You can\'t switch to this character since it is already in play');
 				}
 				else {
@@ -1970,7 +1971,7 @@ client.on('message', msg => {
 								break;
 							}
 							else {
-								player1.char[player1.alive].isActive = false;
+								player1.char[player1.active].isActive = false;
 								player1.lastAliveChar = player1.alive;
 								player1.char[i].isActive = true;
 								player1.alive = i;
@@ -1998,7 +1999,7 @@ client.on('message', msg => {
 				if (args.length < 1) {
 					msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
 				}
-				else if (player2.char[player2.alive].name === c) {
+				else if (player2.char[player2.active].name === c) {
 					msg.channel.send('You can\'t switch to this character since it is already in play');
 				}
 				else {
@@ -2010,7 +2011,7 @@ client.on('message', msg => {
 								break;
 							}
 							else {
-								player2.char[player2.alive].isActive = false;
+								player2.char[player2.active].isActive = false;
 								player2.lastAliveChar = player2.alive;
 								player2.char[i].isActive = true;
 								player2.alive = i;
@@ -2107,10 +2108,10 @@ client.on('message', msg => {
 			break;
 		case 'magic':
 			if (msg.member.id === player1.id && player1.choseAction === false) {
-				if (player1.char[player1.alive].mag === 0) {
-					msg.channel.send(`${player1.char[player1.alive].name} can't cast magic. Please chose another action.`);
+				if (player1.char[player1.active].mag === 0) {
+					msg.channel.send(`${player1.char[player1.active].name} can't cast magic. Please chose another action.`);
 				}
-				else if (player1.char[player1.alive].magcd === 0) {
+				else if (player1.char[player1.active].magcd === 0) {
 					player1.choseAction = true;
 					player1.action = 'magic';
 					msg.reply(`${player1.username} chose to use magic this turn.`);
@@ -2128,10 +2129,10 @@ client.on('message', msg => {
 				}
 			}
 			else if (msg.member.id === player2.id && player2.choseAction === false) {
-				if (player2.char[player2.alive].mag === 0) {
-					msg.channel.send(`${player2.char[player2.alive].name} can't cast magic. Please chose another action.`);
+				if (player2.char[player2.active].mag === 0) {
+					msg.channel.send(`${player2.char[player2.active].name} can't cast magic. Please chose another action.`);
 				}
-				else if (player2.char[player2.alive].magcd === 0) {
+				else if (player2.char[player2.active].magcd === 0) {
 					player2.choseAction = true;
 					player2.action = 'magic';
 					actionAmount += 1;
@@ -2153,7 +2154,7 @@ client.on('message', msg => {
 			break;
 		case 'skill':
 			if (msg.member.id === player1.id && player1.choseAction === false) {
-				if (player1.char[player1.alive].has_active_skill === true) {
+				if (player1.char[player1.active].has_active_skill === true) {
 					player1.choseAction = true;
 					player1.action = 'skill';
 					actionAmount += 1;
@@ -2170,7 +2171,7 @@ client.on('message', msg => {
 				}
 			}
 			else if (msg.member.id === player2.id && player2.choseAction === false) {
-				if (player2.char[player2.alive].has_active_skill === true) {
+				if (player2.char[player2.active].has_active_skill === true) {
 					player2.choseAction = true;
 					player2.action = 'skill';
 					actionAmount += 1;
