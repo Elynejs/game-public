@@ -112,6 +112,7 @@ const char = [{
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
 	emoji_ko: config.emote_undefined_ko,
+	ico: config.ico_undefined,
 	// emoji for the various characters reaction (discord emoji code found in config.json)
 	has_active_skill: false,
 	has_passive_skill: false,
@@ -177,6 +178,7 @@ const char = [{
 	react_victory2: 'undefined',
 	emoji: config.emote_undefined,
 	emoji_ko: config.emote_undefined_ko,
+	ico: config.ico_undefined,
 	// emoji for the various characters reaction (discord emoji code found in config.json)
 	has_active_skill: false,
 	has_passive_skill: false,
@@ -218,6 +220,7 @@ const char = [{
 	react_victory2: 'YOU DON\'T SAY ?',
 	emoji: config.emote_seize,
 	emoji_ko: config.emote_seize_ko,
+	ico: config.ico_seize,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -258,6 +261,7 @@ const char = [{
 	react_victory2: 'You\'ll do better next time.',
 	emoji: config.emote_fusoku,
 	emoji_ko: config.emote_fusoku_ko,
+	ico: config.ico_fusoku,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -298,6 +302,7 @@ const char = [{
 	react_victory2: 'So can I leave now ?',
 	emoji: config.emote_leoppsccay,
 	emoji_ko: config.emote_leoppsccay_ko,
+	ico: config.ico_leoppscay,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -338,6 +343,7 @@ const char = [{
 	react_victory2: '...',
 	emoji: config.emote_gold,
 	emoji_ko: config.emote_gold_ko,
+	ico: config.ico_gold,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -378,6 +384,7 @@ const char = [{
 	react_victory2: 'It\'s not like you could do anything against it.',
 	emoji: config.emote_ayddan,
 	emoji_ko: config.emote_ayddan_ko,
+	ico: config.ico_ayddan,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -418,6 +425,7 @@ const char = [{
 	react_victory2: 'Objective accomplished.',
 	emoji: config.emote_snipefox,
 	emoji_ko: config.emote_snipepfox_ko,
+	ico: config.ico_snipefox,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 5,
@@ -458,6 +466,7 @@ const char = [{
 	react_victory2: 'See ?! I\'m so fast right ?!',
 	emoji: config.emote_yellowstrike,
 	emoji_ko: config.emote_yellowstrike_ko,
+	ico: config.ico_yellowstrike,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -498,6 +507,7 @@ const char = [{
 	react_victory2: 'Pathetic',
 	emoji: config.emote_pinky,
 	emoji_ko: config.emote_pinky_ko,
+	ico: config.ico_pinky,
 	has_active_skill: true,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -538,6 +548,7 @@ const char = [{
 	react_victory2: 'That\'s what you get for opposing the Queen.',
 	emoji: config.emote_redqueen,
 	emoji_ko: config.emote_redqueen_ko,
+	ico: config.ico_redqueen,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -578,6 +589,7 @@ const char = [{
 	react_victory2: 'Easy !',
 	emoji: config.emote_kairo,
 	emoji_ko: config.emote_kairo_ko,
+	ico: config.ico_kairo,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -618,6 +630,7 @@ const char = [{
 	react_victory2: 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
 	emoji: config.emote_lyzan,
 	emoji_ko: config.emote_lyzan_ko,
+	ico: config.ico_lyzan,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 10,
@@ -658,6 +671,7 @@ const char = [{
 	react_victory2: 'That\'s over now !',
 	emoji: config.emote_usabi,
 	emoji_ko: config.emote_usabi_ko,
+	ico: config.ico_usabi,
 	has_active_skill: false,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -698,6 +712,7 @@ const char = [{
 	react_victory2: 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
 	emoji: config.emote_ellfayrh,
 	emoji_ko: config.emote_ellfayrh_ko,
+	ico: config.ico_ellfayrh,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -738,6 +753,7 @@ const char = [{
 	react_victory2: 'WHAT ?! REALLY ?',
 	emoji: config.emote_may,
 	emoji_ko: config.emote_may_ko,
+	ico: config.ico_may,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 6,
@@ -778,6 +794,7 @@ const char = [{
 	react_victory2: 'Just surrend, there is no need for anyone to get hurt anymore, it\'s over.',
 	emoji: config.emote_dyakkoo,
 	emoji_ko: config.emote_dyakkoo_ko,
+	ico: config.ico_dyakko,
 	has_active_skill: false,
 	has_passive_skill: true,
 	skill_cd: 0,
@@ -818,6 +835,7 @@ const char = [{
 	react_victory2: 'That was a nice game, let\'s play again !',
 	emoji: config.emote_kairen,
 	emoji_ko: config.emote_kairen_ko,
+	ico: config.ico_kairen,
 	has_active_skill: true,
 	has_passive_skill: false,
 	skill_cd: 0,
@@ -897,16 +915,36 @@ function eachPlayerCharList(p1, p2) {
 	});
 }
 
+// function for action selector embed
+function displayActionSelector(p) {
+	client.channels.get(channelID).send({
+		embed: {
+			color: 16286691,
+			author: {
+				name: p.char[p.active].name,
+				icon_url: p.char[p.active].ico,
+			},
+			fields: [{
+				name: 'What should I do ?',
+				value: '*Choose by reacting to this message with the appropriate action*',
+			},
+			],
+			timestamp: new Date(),
+		},
+	});
+}
+
 // function for player.defense_stack
 function IsDefenseStackReset(player) {
 	if (player.defense_stack >= 2) {
 		player.defense_multiplier = 2;
 	}
-	else if (player.defense_multiplier >= 1) {
-		player.defense_multiplier = 1;
-	}
 	else {
 		player.defense_multiplier -= (1 / 3);
+		if (player.defense_multiplier <= 1) {
+			player.defense_multiplier = 1;
+		}
+		console.log(player.defense_multiplier);
 	}
 }
 
@@ -915,7 +953,8 @@ function whoIsActive(pl) {
 	let i;
 	for (i = 0; i < pl.char.length; i++) {
 		if (pl.char[i].isActive === true) {
-			pl.alive = i;
+			pl.active = i;
+			console.log(`${pl.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is active.`);
 			break;
 		}
 		else {
@@ -982,13 +1021,13 @@ function active(player_1, player_2) {
 
 function remove_active_effect(player_1) {
 	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
-		player_1.char[player_1.active].atk /= 5;
-		player_1.char[player_1.active].def /= 2;
-		player_1.char[player_1.active].rgn /= 3;
+		player_1.char[player_1.active].atk = char[12].atk;
+		player_1.char[player_1.active].def = char[12].def;
+		player_1.char[player_1.active].rgn = char[12].rgn;
 		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of rage.`);
 	}
 	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
-		player_1.char[player_1.active].atk /= 3;
+		player_1.char[player_1.active].atk = char[15].atk;
 		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of pill.`);
 	}
 }
@@ -1002,7 +1041,7 @@ function black_poison(target) {
 		}
 		target.rgn -= (target.rgn * (50 / 100));
 		console.log('Black poison is in action.');
-		target.receivedPassiveFromGold === true;
+		target.receivedPassiveFromGold = true;
 	}
 	else {
 		console.log('Cant activate passive since it has already proced.');
@@ -1018,7 +1057,7 @@ function crushing_strength(target) {
 		}
 		target.def -= (target.def * (25 / 100));
 		console.log('Crushing strength is in action.');
-		target.receivedPassiveFromAyddan === true;
+		target.receivedPassiveFromAyddan = true;
 	}
 	else {
 		console.log('Cant activate passive since it has already proced.');
@@ -1028,7 +1067,7 @@ function crushing_strength(target) {
 function snipe(player_1, target, player) {
 	// snipe => activate the CD of the opponent MAG (CD:5)
 	console.log('snipe working');
-	target.madcd = target.magcdmax;
+	target.magcd = target.magcdmax;
 	player_1.skill_cd = player_1.skill_cd_max;
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
 }
@@ -1427,8 +1466,11 @@ function cd_iteration(pl) {
 		if (pl.char[cdi].skill_cd > 0 && pl.char[cdi].skill_cd_max >= pl.char[cdi].skill_cd) {
 			pl.char[cdi].skill_cd -= 1;
 		}
-		if (pl.char[cdi].skill_timer > 0) {
+		if (pl.char[cdi].skill_timer >= 0) {
 			pl.char[cdi].skill_timer -= 1;
+			if (pl.char[cdi].skill_timer < 0) {
+				pl.char[cdi].skill_timer = 0;
+			}
 			if (pl.char[cdi].skill_timer === 0 && pl.char[cdi].has_active_skill === true) {
 				remove_active_effect(pl);
 			}
@@ -1593,13 +1635,10 @@ function actionphase(firstplayer, secondplayer) {
 
 // function for regen
 function regen(pl) {
-	let kms;
-	for (kms = 0; kms < pl.char.length; kms++) {
-		if (pl.char[kms].hp < pl.char[kms].hpmax) {
-			pl.char[kms].hp += pl.char[kms].rgn;
-			if (pl.char[kms].hp > pl.char[kms].hpmax) {
-				pl.char[kms].hp = pl.char[kms].hpmax;
-			}
+	if (pl.char[pl.active].hp < pl.char[pl.active].hpmax) {
+		pl.char[pl.active].hp += pl.char[pl.active].rgn;
+		if (pl.char[pl.active].hp > pl.char[pl.active].hpmax) {
+			pl.char[pl.active].hp = pl.char[pl.active].hpmax;
 		}
 	}
 }
@@ -1608,21 +1647,22 @@ function regen(pl) {
 function NewTurnPhase() {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
-		status();
 		eachPlayerCharList(player1, player2);
 		if (p1CharDied) {
 			omgHeDead(player1);
 			p1CharDied = false;
 		}
-		else if (p2CharDied) {
+		if (p2CharDied) {
 			omgHeDead(player2);
 			p2CharDied = false;
 		}
-		else {
-			console.log('No characters died this turn.');
-		}
 		regen(player1);
 		regen(player2);
+		cd_iteration(player1);
+		cd_iteration(player2);
+		passive(player1, player2);
+		passive(player2, player1);
+		status();
 		player1.dmg = 0;
 		player2.dmg = 0;
 		player1.message_block = ' ';
@@ -1635,10 +1675,6 @@ function NewTurnPhase() {
 		player2.defense_stack += 1;
 		IsDefenseStackReset(player1);
 		IsDefenseStackReset(player2);
-		cd_iteration(player1);
-		cd_iteration(player2);
-		passive(player1, player2);
-		passive(player2, player1);
 		client.channels.get(channelID).send(`\`\`\`diff\nTurn ${turn} has started. Chose your character's action.\`\`\``);
 		turnPhase = true;
 	}
@@ -1758,7 +1794,7 @@ client.on('message', msg => {
 					msg.channel.send('**```diff\n- TEST MODE HAS BEEN DE-ACTIVATED. CHARACTERS CAN DIE AND GAME WILL FINISH.```**');
 				}
 			}
-			// editing command for player1.char
+			// editing command for player.char
 			else if (args[0] === 'editchar') {
 				const p = args[4];
 				if (args[1] === 'help') {
@@ -1948,6 +1984,8 @@ client.on('message', msg => {
 		player1.char[0].isActive = true;
 		player2.char[0].isActive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
+		displayActionSelector(player1);
+		displayActionSelector(player2);
 	}
 
 	// turn phase of the combat phase
