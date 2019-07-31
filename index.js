@@ -1,9 +1,8 @@
 // importing librarie
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const config = require('./config.json');
-const token = require('./token.json');
-client.login(token.token);
+import { Client as client } from 'discord.js';
+import { _ as config } from './config.json';
+import { token as _token } from './token.json';
+client.login(_token);
 
 // Global variables
 let testmod = false;
