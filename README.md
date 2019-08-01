@@ -12,8 +12,4 @@ npm install discord.js
 
 *Note that if it is not working you might need to install npm*
 
-Then, download the bot on github
-
-<p align="left">
-    <a href="https://github.com/Elynejs/game-public/archive/master.zip"></a>
-</p>
+Then, download the bot on github [by clicking this](https://github.com/Elynejs/game-public/archive/master.zip "Download link for the bot")
