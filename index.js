@@ -1677,6 +1677,8 @@ function NewTurnPhase() {
 		IsDefenseStackReset(player2);
 		client.channels.get(channelID).send(`\`\`\`diff\nTurn ${turn} has started. Chose your character's action.\`\`\``);
 		turnPhase = true;
+		displayActionSelector(player1);
+		displayActionSelector(player2);
 	}
 }
 
@@ -1984,8 +1986,18 @@ client.on('message', msg => {
 		player1.char[0].isActive = true;
 		player2.char[0].isActive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
-		displayActionSelector(player1);
-		displayActionSelector(player2);
+		displayActionSelector(player1)
+			.then(msg.react(config.emote_switch))
+			.then(msg.react(config.emote_attack))
+			.then(msg.react(config.emote_defense))
+			.then(msg.react(config.emote_magic))
+			.then(msg.react(config.emote_skill));
+		displayActionSelector(player2)
+			.then(msg.react(config.emote_switch))
+			.then(msg.react(config.emote_attack))
+			.then(msg.react(config.emote_defense))
+			.then(msg.react(config.emote_magic))
+			.then(msg.react(config.emote_skill));
 	}
 
 	// turn phase of the combat phase
