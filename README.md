@@ -19,3 +19,5 @@ And type :
 ```
 node index.js
 ```
+
+__**Don't forget to change the channel ID and the token in the config.json file**__
