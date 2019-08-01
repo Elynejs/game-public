@@ -13,7 +13,7 @@ npm install discord.js
 *Note that if it is not working you might need to install npm*
 
 Then, download the bot on github [by clicking this](https://github.com/Elynejs/game-public/archive/master.zip "Download link for the bot") unzip the file somewhere and open a console at the location where you unzipped the file
-> you can shift + right-click on the background of the folder to open powershell or open cmd and typind cd "the path to your folder"
+> you can shift + right-click on the background of the folder to open powershell or open cmd and type cd "the path to your folder"
 
 And type :
 ```
