@@ -924,6 +924,9 @@ function displayActionSelector(p) {
 				name: p.char[p.active].name,
 				icon_url: p.char[p.active].ico,
 			},
+			thumbnail: {
+				url: p.char[p.active].ico,
+			},
 			fields: [{
 				name: 'What should I do ?',
 				value: '*Choose by reacting to this message with the appropriate action*',
@@ -1986,18 +1989,8 @@ client.on('message', msg => {
 		player1.char[0].isActive = true;
 		player2.char[0].isActive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
-		displayActionSelector(player1)
-			.then(msg.react(config.emote_switch))
-			.then(msg.react(config.emote_attack))
-			.then(msg.react(config.emote_defense))
-			.then(msg.react(config.emote_magic))
-			.then(msg.react(config.emote_skill));
-		displayActionSelector(player2)
-			.then(msg.react(config.emote_switch))
-			.then(msg.react(config.emote_attack))
-			.then(msg.react(config.emote_defense))
-			.then(msg.react(config.emote_magic))
-			.then(msg.react(config.emote_skill));
+		displayActionSelector(player1);
+		displayActionSelector(player2);
 	}
 
 	// turn phase of the combat phase
