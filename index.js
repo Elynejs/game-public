@@ -850,7 +850,7 @@ const char = [{
 // Defining bot activity
 client.on('ready', () => {
 	client.user.setActivity('Type !register to start a game.');
-	console.log('Ready!');
+	console.log('Bot has been launched without issues!');
 });
 
 // functions for displaying characters gimmicks
@@ -1741,7 +1741,7 @@ client.on('message', msg => {
 				const msglimit = args[1];
 				if(msg.channel.type == 'text') {
 					msg.channel.fetchMessages({ limit: msglimit }).then(messages => {
-						const botMsg = messages.filter(delmel => delmel.author.bot);
+						const botMsg = messages.filter(author => author.author.bot);
 						if (botMsg.array().length > 1) {
 							msg.channel.bulkDelete(botMsg);
 						}
@@ -1989,8 +1989,72 @@ client.on('message', msg => {
 		player1.char[0].isActive = true;
 		player2.char[0].isActive = true;
 		msg.channel.send(`Turn ${turn} has started. Chose your character's action.`);
-		displayActionSelector(player1);
-		displayActionSelector(player2);
+		msg.channel.send({
+			embed: {
+				color: 16286691,
+				author: {
+					name: player1.char[player1.active].name,
+					icon_url: player1.char[player1.active].ico,
+				},
+				thumbnail: {
+					url: player1.char[player1.active].ico,
+				},
+				fields: [{
+					name: 'What should I do ?',
+					value: '*Choose by reacting to this message with the appropriate action*',
+				}],
+				timestamp: new Date(),
+			},
+		})
+			.then((embedMessage) => {
+				embedMessage.react('603772499431260196');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603768004010049541');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603769186463907845');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603770838709305371');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603767542846193712');
+			})
+			.catch(console.error);
+		msg.channel.send({
+			embed: {
+				color: 16286691,
+				author: {
+					name: player2.char[player2.active].name,
+					icon_url: player2.char[player2.active].ico,
+				},
+				thumbnail: {
+					url: player2.char[player2.active].ico,
+				},
+				fields: [{
+					name: 'What should I do ?',
+					value: '*Choose by reacting to this message with the appropriate action*',
+				}],
+				timestamp: new Date(),
+			},
+		})
+			.then((embedMessage) => {
+				embedMessage.react('603772499431260196');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603768004010049541');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603769186463907845');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603770838709305371');
+			})
+			.then((embedMessage) => {
+				embedMessage.react('603767542846193712');
+			})
+			.catch(console.error);
 	}
 
 	// turn phase of the combat phase
