@@ -2007,18 +2007,10 @@ client.on('message', msg => {
 			},
 		})
 			.then((embedMessage) => {
-				embedMessage.react('603772499431260196');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603768004010049541');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603769186463907845');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603770838709305371');
-			})
-			.then((embedMessage) => {
+				embedMessage.react('603772499431260196'),
+				embedMessage.react('603768004010049541'),
+				embedMessage.react('603769186463907845'),
+				embedMessage.react('603770838709305371'),
 				embedMessage.react('603767542846193712');
 			})
 			.catch(console.error);
@@ -2040,18 +2032,10 @@ client.on('message', msg => {
 			},
 		})
 			.then((embedMessage) => {
-				embedMessage.react('603772499431260196');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603768004010049541');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603769186463907845');
-			})
-			.then((embedMessage) => {
-				embedMessage.react('603770838709305371');
-			})
-			.then((embedMessage) => {
+				embedMessage.react('603772499431260196'),
+				embedMessage.react('603768004010049541'),
+				embedMessage.react('603769186463907845'),
+				embedMessage.react('603770838709305371'),
 				embedMessage.react('603767542846193712');
 			})
 			.catch(console.error);
