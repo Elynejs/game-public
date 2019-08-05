@@ -22,6 +22,12 @@ let arp2 = 0;
 let p1CharDied = false;
 let p2CharDied = false;
 const dodgecdMax = 2;
+
+/*
+--------------------------------------
+THIS ARE THE OBJECT FOR BOTH THE PLAYERS AND THE CHARACTERS, IT ENDS ON LINE 853
+---------------------------------------
+*/
 const player1 = {
 	id: 0,
 	active: 0,
@@ -846,6 +852,11 @@ const char = [{
 	receivedPassiveFromGold: false,
 	receivedPassiveFromAyddan: false,
 }];
+/*
+---------------------------------------------
+END OF THE OBJECTS FOR PLAYERS AND CHARACTERS
+---------------------------------------------
+*/
 
 // Defining bot activity
 client.on('ready', () => {
@@ -853,36 +864,42 @@ client.on('ready', () => {
 	console.log('Bot has been launched without issues!');
 });
 
+/*
+---------------------------------------------------
+BEGINING OF FUNCTIONS DEFINITION, IT ENDS ON LINE 1721
+---------------------------------------------------
+*/
+
 // functions for displaying characters gimmicks
-function react_selection(selected_char) {
+const react_selection = selected_char => {
 	if (Math.floor(Math.random() * 2) >= 1) {
 		client.channels.get(channelID).send(`${selected_char.emoji} ${selected_char.react_selection1}`);
 	}
 	else {
 		client.channels.get(channelID).send(`${selected_char.emoji} ${selected_char.react_selection2}`);
 	}
-}
+};
 
-function react_KO(p) {
+const react_KO = p => {
 	if (Math.floor(Math.random() * 2) >= 1) {
 		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO1}`);
 	}
 	else {
 		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO2}`);
 	}
-}
+};
 
-function react_victory(p) {
+const react_victory = p => {
 	if (Math.floor(Math.random() * 2) >= 1) {
 		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
 	}
 	else {
 		client.channels.get(channelID).send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
 	}
-}
+};
 
 // function for status display of how many characters each players still has
-function eachPlayerCharList(p1, p2) {
+const eachPlayerCharList = (p1, p2) => {
 	let i;
 	const p1emote = [' ', ' ', ' ', ' ', ' '];
 	for (i = 0; i < p1.char.length; i++) {
@@ -913,11 +930,11 @@ function eachPlayerCharList(p1, p2) {
 			timestamp: new Date(),
 		},
 	});
-}
+};
 
 // function for action selector embed
-function displayActionSelector(p) {
-	client.channels.get(channelID).send({
+const displayActionSelector = (p, message) => {
+	message.channel.send({
 		embed: {
 			color: 16286691,
 			author: {
@@ -935,10 +952,10 @@ function displayActionSelector(p) {
 			timestamp: new Date(),
 		},
 	});
-}
+};
 
 // function for player.defense_stack
-function IsDefenseStackReset(player) {
+const IsDefenseStackReset = player => {
 	if (player.defense_stack >= 2) {
 		player.defense_multiplier = 2;
 	}
@@ -949,10 +966,10 @@ function IsDefenseStackReset(player) {
 		}
 		console.log(player.defense_multiplier);
 	}
-}
+};
 
 // function for alive array char
-function whoIsActive(pl) {
+const whoIsActive = pl => {
 	let i;
 	for (i = 0; i < pl.char.length; i++) {
 		if (pl.char[i].isActive === true) {
@@ -964,7 +981,7 @@ function whoIsActive(pl) {
 			console.log(`${pl.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is not fighting.`);
 		}
 	}
-}
+};
 
 // function for eval
 const clean = text => {
@@ -977,13 +994,13 @@ const clean = text => {
 };
 
 // function for passing from one turn to another
-function addTurn() {
+const addTurn = () => {
 	turn += 1;
 	NewTurnPhase();
-}
+};
 
 // function for special abilities
-function passive(player_1, player_2) {
+const passive = (player_1, player_2) => {
 	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
 		all_or_nothing(player_1.char[player_1.active]);
 	}
@@ -999,9 +1016,9 @@ function passive(player_1, player_2) {
 	else {
 		console.log('No passive ability detected.');
 	}
-}
+};
 
-function active(player_1, player_2) {
+const active = (player_1, player_2) => {
 	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
 		snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
 	}
@@ -1020,9 +1037,9 @@ function active(player_1, player_2) {
 	else {
 		console.log('I fucked up\nA character without active skill managed to activate the function for active selection');
 	}
-}
+};
 
-function remove_active_effect(player_1) {
+const remove_active_effect = player_1 => {
 	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
 		player_1.char[player_1.active].atk = char[12].atk;
 		player_1.char[player_1.active].def = char[12].def;
@@ -1033,9 +1050,10 @@ function remove_active_effect(player_1) {
 		player_1.char[player_1.active].atk = char[15].atk;
 		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of pill.`);
 	}
-}
+};
+
 // passives for gold
-function black_poison(target) {
+const black_poison = target => {
 	// black poison => -50% to enemy RGN
 	if (target.receivedPassiveFromGold === false) {
 		if (target.receivedPassiveFromAyddan === true) {
@@ -1049,9 +1067,10 @@ function black_poison(target) {
 	else {
 		console.log('Cant activate passive since it has already proced.');
 	}
-}
+};
+
 // passive for ayddan
-function crushing_strength(target) {
+const crushing_strength = target => {
 	// crushing_strength => -25% to enemy DEF
 	if (target.receivedPassiveFromAyddan == false) {
 		if (target.receivedPassiveFromGold === true) {
@@ -1065,17 +1084,19 @@ function crushing_strength(target) {
 	else {
 		console.log('Cant activate passive since it has already proced.');
 	}
-}
+};
+
 // active for snipefox
-function snipe(player_1, target, player) {
+const snipe = (player_1, target, player) => {
 	// snipe => activate the CD of the opponent MAG (CD:5)
 	console.log('snipe working');
 	target.magcd = target.magcdmax;
 	player_1.skill_cd = player_1.skill_cd_max;
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
-}
+};
+
 // active for lyzan
-function rage(player_1, player) {
+const rage = (player_1, player) => {
 	// rage => ATK*5, DEF*2, RGN*3 for 2 turn (CD:10)
 	console.log('rage working');
 	player_1.atk *= 5;
@@ -1084,18 +1105,20 @@ function rage(player_1, player) {
 	player_1.skill_cd = player_1.skill_cd_max;
 	player_1.skill_timer = 3;
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
-}
+};
+
 // active for pinky
-function explosion(player_1, target, player) {
+const explosion = (player_1, target, player) => {
 	// explosion => MAG*2; cost 300HP
 	console.log('explosion working');
 	player_1.hp -= 300;
 	player.dmg = player_1.mag * 2;
 	target.hp -= player.dmg;
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
-}
+};
+
 // passive for pinky
-function all_or_nothing(char1) {
+const all_or_nothing = (char1) => {
 	// all or nothing => Atk*3 if hp < 30%
 	if (char1.receivedPassive === false) {
 		if (char1.hp < (char1.hpmax * (30 / 100))) {
@@ -1105,18 +1128,20 @@ function all_or_nothing(char1) {
 	else {
 		console.log('Cant activate passive since it has already proced.');
 	}
-}
+};
+
 // active for may
-function pill(player_1, player) {
+const pill = (player_1, player) => {
 	console.log('pill working');
 	// pill => ATK*3 for 3 turn (CD:6)
 	player_1.atk *= 3;
 	player_1.skill_cd = player_1.skill_cd_max;
 	player_1.skill_timer = 4;
 	player.message_damage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
-}
+};
+
 // passive for dyakko
-function care_taker(player) {
+const care_taker = player => {
 	// care taker => heal 10% of HP to every character in his team every turn while the character is alive and fighting
 	let i;
 	for (i = 0; i < player.char.length; i++) {
@@ -1124,19 +1149,20 @@ function care_taker(player) {
 		console.log(`Dyakko regenerated 10% of the maximum HP of ${player.char[i].name}`);
 	}
 	client.channels.get(channelID).send('Dyakko regenerated 10% of the maximum HP of all their team.');
-}
+};
+
 // active for kairen
-function ressurection(player_1, target, player) {
+const ressurection = (player_1, target, player) => {
 	// ressurection => heal a character to 100% HP (even if he is ko'ed) (CD:15)
 	console.log('ressurection working');
 	target.hp = target.hpmax;
 	target.isAlive = true;
 	player_1.skill_cd = player_1.skill_cd_max;
 	player.message_damage = `\`\`\`diff\n+ ${player.char[player.active].name} ressurected ${target.name} !\`\`\``;
-}
+};
 
 // function for status display
-function status() {
+const status = () => {
 	client.channels.get(channelID).send({
 		embed: {
 			color: 16286691,
@@ -1172,10 +1198,10 @@ function status() {
 			},
 		},
 	});
-}
+};
 
 // function for status display when a character dies
-function statusEnd() {
+const statusEnd = () => {
 	client.channels.get(channelID).send({
 		embed: {
 			color: 16286691,
@@ -1207,27 +1233,28 @@ function statusEnd() {
 			},
 		},
 	});
-}
+};
 
 // functions for turn actions
-function changechar(player, char2) {
+const changechar = (player, char2) => {
 	const char1 = player.char[player.lastAliveChar];
 	console.log(`${player.username} switched ${char1.name} with ${char2.name}`);
 	player.message_damage = `${player.username} switched ${char1.name} with ${char2.name}`;
-}
+};
 
 // function for when a characters dies during a turn
-function omgHeDead(player) {
+const omgHeDead = player => {
 	react_KO(player);
 	client.channels.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
 	player.alive = player.futurChar;
-}
-// function to round numbers to 2 decimals
-function round(value) {
-	return Number(Math.round(value + 'e2') + 'e-2');
-}
+};
 
-function attack(player, otherplayer, char1, char2) {
+// function to round numbers to 2 decimals
+const round = value => {
+	return Number(Math.round(value + 'e2') + 'e-2');
+};
+
+const attack = (player, otherplayer, char1, char2) => {
 	if (otherplayer.action !== 'defense') {
 		if (char1.crit_chance > Math.floor(Math.random() * 100)) {
 			player.dmg = (char1.atk * (1 - (char2.def / 100))) * char1.crit_multi;
@@ -1256,9 +1283,9 @@ function attack(player, otherplayer, char1, char2) {
 		}
 		char2.hp -= Math.floor(player.dmg);
 	}
-}
+};
 
-function dodge(player, otherplayer, char_1, char_2) {
+const dodge = (player, otherplayer, char_1, char_2) => {
 	if (player.action === 'attack') {
 		if (char_1.dodgecd === 0) {
 			let dodgeValue = 0;
@@ -1296,9 +1323,9 @@ function dodge(player, otherplayer, char_1, char_2) {
 			console.log(`${char_1.name} tried to dodge ${char_2.name}'s magic but failed.`);
 		}
 	}
-}
+};
 
-function defense(player, otherplayer, char1, char2) {
+const defense = (player, otherplayer, char1, char2) => {
 	if (char1.crit_chance > Math.floor(Math.random() * 100)) {
 		player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100))) * char1.crit_multi;
 		console.log(player.dmg);
@@ -1316,9 +1343,9 @@ function defense(player, otherplayer, char1, char2) {
 		player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
 	}
 	otherplayer.defense_stack = 0;
-}
+};
 
-function magic(player, otherplayer, char1, char2) {
+const magic = (player, otherplayer, char1, char2) => {
 	if (char1.magcd === 0) {
 		if (char2.tier === 'H') {
 			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
@@ -1360,9 +1387,9 @@ function magic(player, otherplayer, char1, char2) {
 	else {
 		client.channels.get(channelID).send(`${char1.name} got his cd activated and can't use magic.`);
 	}
-}
+};
 
-function gameEnd(winner, looser) {
+const gameEnd = (winner, looser) => {
 	react_KO(looser);
 	react_victory(winner);
 	client.channels.get(channelID).send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
@@ -1398,10 +1425,10 @@ function gameEnd(winner, looser) {
 	player1.action = '';
 	player2.action = '';
 	turn = 1;
-}
+};
 
 // function for gameend
-function IsGameOver(player, otherplayer, char1) {
+const IsGameOver = (player, otherplayer, char1) => {
 	if (testmod === false) {
 		if (char1.hp <= 0) {
 			char1.hp = 0;
@@ -1444,45 +1471,45 @@ function IsGameOver(player, otherplayer, char1) {
 	else {
 		client.channels.get(channelID).send('Test mode is ON. Characters can\'t die.');
 	}
-}
+};
 
 // function for cd reset
-function reset_cd(pl) {
-	let pf;
-	for (pf = 0; pf < pl.char.length; pf++) {
-		pl.char[pf].skill_cd = 0;
-		pl.char[pf].magcd = 0;
-		pl.char[pf].dodgecd = 0;
+const reset_cd = pl => {
+	let i;
+	for (i = 0; i < pl.char.length; i++) {
+		pl.char[i].skill_cd = 0;
+		pl.char[i].magcd = 0;
+		pl.char[i].dodgecd = 0;
 	}
-}
+};
 
 // function for cd iteration
-function cd_iteration(pl) {
-	let cdi;
-	for (cdi = 0; cdi < pl.char.length; cdi++) {
-		if (pl.char[cdi].magcd > 0 && pl.char[cdi].magcdmax >= pl.char[cdi].magcd) {
-			pl.char[cdi].magcd -= 1;
+const cd_iteration = pl => {
+	let i;
+	for (i = 0; i < pl.char.length; i++) {
+		if (pl.char[i].magcd > 0 && pl.char[i].magcdmax >= pl.char[i].magcd) {
+			pl.char[i].magcd -= 1;
 		}
-		if (pl.char[cdi].dodgecd > 0 && dodgecdMax >= pl.char[cdi].dodgecd) {
-			pl.char[cdi].dodgecd -= 1;
+		if (pl.char[i].dodgecd > 0 && dodgecdMax >= pl.char[i].dodgecd) {
+			pl.char[i].dodgecd -= 1;
 		}
-		if (pl.char[cdi].skill_cd > 0 && pl.char[cdi].skill_cd_max >= pl.char[cdi].skill_cd) {
-			pl.char[cdi].skill_cd -= 1;
+		if (pl.char[i].skill_cd > 0 && pl.char[i].skill_cd_max >= pl.char[i].skill_cd) {
+			pl.char[i].skill_cd -= 1;
 		}
-		if (pl.char[cdi].skill_timer >= 0) {
-			pl.char[cdi].skill_timer -= 1;
-			if (pl.char[cdi].skill_timer < 0) {
-				pl.char[cdi].skill_timer = 0;
+		if (pl.char[i].skill_timer >= 0) {
+			pl.char[i].skill_timer -= 1;
+			if (pl.char[i].skill_timer < 0) {
+				pl.char[i].skill_timer = 0;
 			}
-			if (pl.char[cdi].skill_timer === 0 && pl.char[cdi].has_active_skill === true) {
+			if (pl.char[i].skill_timer === 0 && pl.char[i].has_active_skill === true) {
 				remove_active_effect(pl);
 			}
 		}
 	}
-}
+};
 
 // function for action phase
-function actionphase(firstplayer, secondplayer) {
+const actionphase = (firstplayer, secondplayer) => {
 	if (actionAmount === 2) {
 		whoIsActive(player1);
 		whoIsActive(player2);
@@ -1634,20 +1661,20 @@ function actionphase(firstplayer, secondplayer) {
 	else {
 		console.log('If I see this then I fucked up.');
 	}
-}
+};
 
 // function for regen
-function regen(pl) {
+const regen = pl => {
 	if (pl.char[pl.active].hp < pl.char[pl.active].hpmax) {
 		pl.char[pl.active].hp += pl.char[pl.active].rgn;
 		if (pl.char[pl.active].hp > pl.char[pl.active].hpmax) {
 			pl.char[pl.active].hp = pl.char[pl.active].hpmax;
 		}
 	}
-}
+};
 
 // function for resetting turn phase
-function NewTurnPhase() {
+const NewTurnPhase = () => {
 	// allowing combat regen and preventing it from going past max hp and deducing cd
 	if (gamePhase === true && turnPhase === false) {
 		eachPlayerCharList(player1, player2);
@@ -1683,16 +1710,31 @@ function NewTurnPhase() {
 		displayActionSelector(player1);
 		displayActionSelector(player2);
 	}
-}
+};
 
 // function for char_amount
-function charAmount(amount) {
+const charAmount = amount => {
 	char_amount = amount;
 	player1.charAmount = amount;
 	player2.charAmount = amount;
 	client.channels.get(channelID).send(`Please choose ${amount} characters each.\nChoose your characters by typing "!*character_name*".\nYou can type !list to see the list of characters.`);
 	gameStarting = true;
-}
+};
+
+/*
+--------------------------------------------
+END OF FUNCTIONS DEFINITION
+--------------------------------------------
+*/
+
+/*
+--------------------------------------------
+--------------------------------------------
+BEGINING OF MESSAGE EVENT HANDLER
+--------------------------------------------
+--------------------------------------------
+*/
+
 // commands
 client.on('message', msg => {
 	if (msg.author.bot) return;
@@ -1942,7 +1984,7 @@ client.on('message', msg => {
 						msg.reply(` chose ${char[i].name}`);
 						react_selection(player1.char[arp1]);
 						arp1 += 1;
-						if (player1.char.length == player1.charAmount) {
+						if (player1.char.length === player1.charAmount) {
 							msg.channel.send(`${player1.username} chose all of their characters.`);
 							player1.choseChar = true;
 							arp1 = 0;
@@ -1958,7 +2000,7 @@ client.on('message', msg => {
 						msg.reply(` chose ${char[i].name}`);
 						react_selection(player2.char[arp2]);
 						arp2 += 1;
-						if (player2.char.length == player2.charAmount) {
+						if (player2.char.length === player2.charAmount) {
 							msg.channel.send(`${player2.username} chose all of their characters.`);
 							player2.choseChar = true;
 							arp2 = 0;
