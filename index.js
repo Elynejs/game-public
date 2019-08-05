@@ -3,6 +3,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
 const token = require('./token.json');
+const Keyv = require('keyv');
+const customChar = new Keyv('redis://elyne:elyne@localhost:6379', { namespace: 'customChar', serialize : JSON.stringify, deserialize : JSON.parse });
+customChar.on('error', err => console.log('Keyv connection error:', err));
 client.login(token.token);
 
 // Global variables
@@ -25,8 +28,8 @@ const dodgecdMax = 2;
 
 /*
 --------------------------------------
-THIS ARE THE OBJECT FOR BOTH THE PLAYERS AND THE CHARACTERS, IT ENDS ON LINE 853
----------------------------------------
+THIS ARE THE OBJECT FOR BOTH THE PLAYERS AND THE CHARACTERS
+--------------------------------------
 */
 const player1 = {
 	id: 0,
@@ -866,7 +869,7 @@ client.on('ready', () => {
 
 /*
 ---------------------------------------------------
-BEGINING OF FUNCTIONS DEFINITION, IT ENDS ON LINE 1721
+BEGINING OF FUNCTIONS DEFINITION
 ---------------------------------------------------
 */
 
@@ -2048,12 +2051,12 @@ client.on('message', msg => {
 				timestamp: new Date(),
 			},
 		})
-			.then((embedMessage) => {
-				embedMessage.react('603772499431260196'),
-				embedMessage.react('603768004010049541'),
-				embedMessage.react('603769186463907845'),
-				embedMessage.react('603770838709305371'),
-				embedMessage.react('603767542846193712');
+			.then(async (embedMessage) => {
+				await embedMessage.react('603772499431260196'),
+				await embedMessage.react('603768004010049541'),
+				await embedMessage.react('603769186463907845'),
+				await embedMessage.react('603770838709305371'),
+				await embedMessage.react('603767542846193712');
 			})
 			.catch(console.error);
 		msg.channel.send({
@@ -2073,12 +2076,12 @@ client.on('message', msg => {
 				timestamp: new Date(),
 			},
 		})
-			.then((embedMessage) => {
-				embedMessage.react('603772499431260196'),
-				embedMessage.react('603768004010049541'),
-				embedMessage.react('603769186463907845'),
-				embedMessage.react('603770838709305371'),
-				embedMessage.react('603767542846193712');
+			.then(async (embedMessage) => {
+				await embedMessage.react('603772499431260196'),
+				await embedMessage.react('603768004010049541'),
+				await embedMessage.react('603769186463907845'),
+				await embedMessage.react('603770838709305371'),
+				await embedMessage.react('603767542846193712');
 			})
 			.catch(console.error);
 	}
