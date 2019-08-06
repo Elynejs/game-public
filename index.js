@@ -8,15 +8,12 @@ But nevertheless I'm rather proud of the level I was able to aquire in this shor
 // importing librarie
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const fs = require('fs');
 const config = require('./config.json');
 const token = require('./token.json');
-const Keyv = require('keyv');
-const customChar = new Keyv({ namespace: 'customChar', serialize : JSON.stringify, deserialize : JSON.parse });
-customChar.on('error', err => console.log('Keyv connection error:', err));
 client.login(token.token);
 
 // Global variables
-let testmod = false;
 let channelID = config.channelID;
 let actionAmount = 0;
 let turn = 1;
@@ -74,794 +71,7 @@ const player2 = {
 	message_dodge: ' ',
 	message_block: ' ',
 };
-const char = [{
-	tier: 'undefined',
-	// template with max stat for debugging purposes
-	name: 'test1',
-	// name of the character
-	hpmax: 9999,
-	// vitality, when it falls to 0 the character is unusable
-	hp: 9999,
-	// hp stat for damage calculation
-	atk: 200,
-	// maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
-	crit_multi: 2,
-	// multiplier of damage in case of Critical Hit
-	crit_chance: 100,
-	// chance for a physical attack to infllict Critical Hit
-	def: 90,
-	// damage points reduced from the attack function of the opponent
-	spd: 6,
-	// the character with the highest SPD will have his action executed first
-	agi: 5,
-	// determine how good the character is at dodging
-	acr: 5,
-	// will be deduced from your opponent agi stat if he does the dodge function
-	int: 9999,
-	// determines who wins a trap function
-	mag: 1000,
-	// used to determinate the damage of a magic attack, unaffected by defense
-	magcd: 1,
-	// number of turn to wait before using magic again
-	magdef: 50,
-	// defense stat for mag used by certain passive abilities
-	mag_crit_chance: 100,
-	// crit chance for mag used by certain passive abilities
-	mag_crit_multi: 1.5,
-	// crit multi for mag used by certain passive abilities
-	mag_dodgevalue: 50,
-	// chance to dodge mag used by certain passive abilities
-	magcdmax: 1,
-	// max cd stat for action calculation
-	dodgecd: 2,
-	// number of turn to wait before using dodge again
-	rgn: 9999,
-	// amount of hp the character regenerate at the end of each turn
-	react_selection1: 'undefined',
-	// sentence to display on selecting the character to show character's personality
-	react_selection2: 'undefined',
-	react_KO1: 'undefined',
-	// sentence to display on character's KO
-	react_KO2: 'undefined',
-	react_victory1: 'undefined',
-	// sentence to display on character's victory
-	react_victory2: 'undefined',
-	emoji: config.emote_undefined,
-	emoji_ko: config.emote_undefined_ko,
-	ico: config.ico_undefined,
-	// emoji for the various characters reaction (discord emoji code found in config.json)
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'undefined',
-	// template with max stat for debugging purposes
-	name: 'test2',
-	// name of the character
-	hpmax: 9999,
-	// vitality, when it falls to 0 the character is unusable
-	hp: 9999,
-	// hp stat for damage calculation
-	atk: 200,
-	// maximum potentiel damage points for the attack function, the defense from the opponent will be deduced from it
-	crit_multi: 1,
-	// multiplier of damage in case of Critical Hit
-	crit_chance: 0,
-	// chance for a physical attack to infllict Critical Hit
-	def: 90,
-	// damage points reduced from the attack function of the opponent
-	spd: 5,
-	// the character with the highest SPD will have his action executed first
-	agi: 5,
-	// determine how good the character is at dodging
-	acr: 5,
-	// will be deduced from your opponent agi stat if he does the dodge function
-	int: 9999,
-	// determines who wins a trap function
-	mag: 1000,
-	// used to determinate the damage of a magic attack, unaffected by defense
-	magcd: 1,
-	// number of turn to wait before using magic again
-	magdef: 0,
-	// defense stat for mag used by certain passive abilities
-	mag_crit_chance: 0,
-	// crit chance for mag used by certain passive abilities
-	mag_crit_multi: 1,
-	// crit multi for mag used by certain passive abilities
-	mag_dodgevalue: 0,
-	// chance to dodge mag used by certain passive abilities
-	magcdmax: 1,
-	// max cd stat for action calculation
-	dodgecd: 2,
-	// number of turn to wait before using dodge again
-	rgn: 9999,
-	// amount of hp the character regenerate at the end of each turn
-	react_selection1: 'undefined',
-	// sentence to display on selecting the character to show character's personality
-	react_selection2: 'undefined',
-	react_KO1: 'undefined',
-	// sentence to display on character's KO
-	react_KO2: 'undefined',
-	react_victory1: 'undefined',
-	// sentence to display on character's victory
-	react_victory2: 'undefined',
-	emoji: config.emote_undefined,
-	emoji_ko: config.emote_undefined_ko,
-	ico: config.ico_undefined,
-	// emoji for the various characters reaction (discord emoji code found in config.json)
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'S',
-	name: 'Seize',
-	hpmax: 3600,
-	hp: 3600,
-	atk: 610,
-	def: 35,
-	crit_multi: 1.9,
-	crit_chance: 20,
-	spd: 9,
-	agi: 12,
-	acr: 7,
-	int: 179,
-	mag: 1600,
-	magcd: 4,
-	magdef: 0,
-	mag_crit_chance: 10,
-	mag_crit_multi: 1.9,
-	mag_dodgevalue: 30,
-	magcdmax: 4,
-	dodgecd: 2,
-	rgn: 110,
-	react_selection1: 'Ready to play with any of you <3',
-	react_selection2: 'Please don\'t be too boring...',
-	react_KO1: 'Okay that\'s just too boring, I\'m leaving.',
-	react_KO2: 'Aaaaaaah ! So fucking boring.',
-	react_victory1: 'A rather expected outcome, duh.',
-	react_victory2: 'YOU DON\'T SAY ?',
-	emoji: config.emote_seize,
-	emoji_ko: config.emote_seize_ko,
-	ico: config.ico_seize,
-	has_active_skill: false,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'S',
-	name: 'Fusoku',
-	hpmax: 4700,
-	hp: 4700,
-	atk: 870,
-	crit_multi: 1.6,
-	crit_chance: 30,
-	def: 65,
-	spd: 5,
-	agi: 4,
-	acr: 4,
-	int: 85,
-	mag: 0,
-	magcd: 0,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 0,
-	dodgecd: 2,
-	rgn: 30,
-	react_selection1: 'I will fight for you, with honor.',
-	react_selection2: 'I will fight for you, with honor.',
-	react_KO1: 'I\'m sorry... I can\'t continue...',
-	react_KO2: 'I can\'t...',
-	react_victory1: 'You fought well.',
-	react_victory2: 'You\'ll do better next time.',
-	emoji: config.emote_fusoku,
-	emoji_ko: config.emote_fusoku_ko,
-	ico: config.ico_fusoku,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'S',
-	name: 'Leoppscaay',
-	hpmax: 2400,
-	hp: 2400,
-	atk: 460,
-	crit_multi: 1.2,
-	crit_chance: 60,
-	def: 40,
-	spd: 6,
-	agi: 5,
-	acr: 4,
-	int: 100,
-	mag: 600,
-	magcd: 2,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 2,
-	dodgecd: 2,
-	rgn: 80,
-	react_selection1: 'Nhh... can I just go home ?',
-	react_selection2: 'Nhh... can I just go home ?',
-	react_KO1: 'I didn\'t even wanted to take part in that ti begin with...',
-	react_KO2: 'It\'s over, leave me alone !',
-	react_victory1: 'So can I leave now ?',
-	react_victory2: 'So can I leave now ?',
-	emoji: config.emote_leoppsccay,
-	emoji_ko: config.emote_leoppsccay_ko,
-	ico: config.ico_leoppscay,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'S',
-	name: 'Gold',
-	hpmax: 3900,
-	hp: 3900,
-	atk: 590,
-	crit_multi: 1.3,
-	crit_chance: 50,
-	def: 50,
-	spd: 6,
-	agi: 3,
-	acr: 5,
-	int: 120,
-	mag: 1900,
-	magcd: 8,
-	magdef: 30,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 8,
-	dodgecd: 2,
-	rgn: 35,
-	react_selection1: '...',
-	react_selection2: '...',
-	react_KO1: '...!? How ?',
-	react_KO2: '.....',
-	react_victory1: '...Done.',
-	react_victory2: '...',
-	emoji: config.emote_gold,
-	emoji_ko: config.emote_gold_ko,
-	ico: config.ico_gold,
-	has_active_skill: false,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'S',
-	name: 'Ayddan',
-	hpmax: 5000,
-	hp: 5000,
-	atk: 900,
-	crit_multi: 2,
-	crit_chance: 10,
-	def: 60,
-	spd: 3,
-	agi: 2,
-	acr: 3,
-	int: 110,
-	mag: 0,
-	magcd: 0,
-	magdef: 20,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 0,
-	dodgecd: 2,
-	rgn: 20,
-	react_selection1: 'Guess you want to be in the winning team, uh ?',
-	react_selection2: 'Ready to win that one as well~',
-	react_KO1: 'What the hell... ?!',
-	react_KO2: 'Seriously...?',
-	react_victory1: 'Told ya~',
-	react_victory2: 'It\'s not like you could do anything against it.',
-	emoji: config.emote_ayddan,
-	emoji_ko: config.emote_ayddan_ko,
-	ico: config.ico_ayddan,
-	has_active_skill: false,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Snipefox',
-	hpmax: 1900,
-	hp: 1900,
-	atk: 450,
-	crit_multi: 2.5,
-	crit_chance: 30,
-	def: 25,
-	spd: 7,
-	agi: 10,
-	acr: 15,
-	int: 130,
-	mag: 1400,
-	magcd: 5,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 5,
-	dodgecd: 2,
-	rgn: 10,
-	react_selection1: 'Who\'s the target ?',
-	react_selection2: 'Who\'s the target ?',
-	react_KO1: 'I can\'t make it, I must retreat.',
-	react_KO2: 'I can\'t make it, I must retreat.',
-	react_victory1: 'Target neutralised.',
-	react_victory2: 'Objective accomplished.',
-	emoji: config.emote_snipefox,
-	emoji_ko: config.emote_snipepfox_ko,
-	ico: config.ico_snipefox,
-	has_active_skill: true,
-	has_passive_skill: false,
-	skill_cd: 5,
-	skill_cd_max: 5,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Yellow Strike',
-	hpmax: 1500,
-	hp: 1500,
-	atk: 440,
-	crit_multi: 1.7,
-	crit_chance: 20,
-	def: 60,
-	spd: 10,
-	agi: 15,
-	acr: 6,
-	int: 130,
-	mag: 900,
-	magcd: 4,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 4,
-	dodgecd: 2,
-	rgn: 10,
-	react_selection1: 'I bet you\'re not even going to hit me ! You\'re all so slow !',
-	react_selection2: 'Do you think you\'ll even be able to touch me ?!',
-	react_KO1: 'I lost... my bet, damnit.',
-	react_KO2: '...Almost...',
-	react_victory1: 'Haha ! Told you !',
-	react_victory2: 'See ?! I\'m so fast right ?!',
-	emoji: config.emote_yellowstrike,
-	emoji_ko: config.emote_yellowstrike_ko,
-	ico: config.ico_yellowstrike,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Pinky',
-	hpmax: 1000,
-	hp: 1000,
-	atk: 510,
-	crit_multi: 2.5,
-	crit_chance: 15,
-	def: 20,
-	spd: 7,
-	agi: 3,
-	acr: 6,
-	int: 120,
-	mag: 700,
-	magcd: 3,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 3,
-	dodgecd: 2,
-	rgn: 0,
-	react_selection1: 'Why did you choose me ... ?',
-	react_selection2: 'Why did you choose me ... ?',
-	react_KO1: '...Finally.',
-	react_KO2: '...Finally.',
-	react_victory1: 'Pathetic',
-	react_victory2: 'Pathetic',
-	emoji: config.emote_pinky,
-	emoji_ko: config.emote_pinky_ko,
-	ico: config.ico_pinky,
-	has_active_skill: true,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Red Queen',
-	hpmax: 2000,
-	hp: 2000,
-	atk: 310,
-	crit_multi: 1.2,
-	crit_chance: 30,
-	def: 70,
-	spd: 4,
-	agi: 2,
-	acr: 4,
-	int: 120,
-	mag: 300,
-	magcd: 3,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 3,
-	dodgecd: 2,
-	rgn: 10,
-	react_selection1: 'Who is even daring to fight the Queen ?!',
-	react_selection2: 'Who is even daring to fight the Queen ?!',
-	react_KO1: 'You\'re going to be punished... For that...',
-	react_KO2: 'You\'re going to be punished... For that...',
-	react_victory1: 'That\'s what you get for opposing the Queen.',
-	react_victory2: 'That\'s what you get for opposing the Queen.',
-	emoji: config.emote_redqueen,
-	emoji_ko: config.emote_redqueen_ko,
-	ico: config.ico_redqueen,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Kairo',
-	hpmax: 2000,
-	hp: 2000,
-	atk: 750,
-	crit_multi: 1.5,
-	crit_chance: 20,
-	def: 50,
-	spd: 5,
-	agi: 4,
-	acr: 3,
-	int: 75,
-	mag: 0,
-	magcd: 0,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 0,
-	dodgecd: 2,
-	rgn: 20,
-	react_selection1: 'So you need me for a fight right ? Let\'s do that.',
-	react_selection2: 'Let\'s go.',
-	react_KO1: 'Fuck you !',
-	react_KO2: 'Fuck you !',
-	react_victory1: 'Easy !',
-	react_victory2: 'Easy !',
-	emoji: config.emote_kairo,
-	emoji_ko: config.emote_kairo_ko,
-	ico: config.ico_kairo,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'A',
-	name: 'Lyzan',
-	hpmax: 1500,
-	hp: 1500,
-	atk: 200,
-	crit_multi: 5,
-	crit_chance: 30,
-	def: 30,
-	spd: 6,
-	agi: 7,
-	acr: 5,
-	int: 140,
-	mag: 2100,
-	magcd: 15,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 15,
-	dodgecd: 2,
-	rgn: 100,
-	react_selection1: 'I\'m sorry but if you thought I was defenceless, I\'m going to have to disappoint you, bring it on !',
-	react_selection2: 'You know I don\'t like to fight right ?!',
-	react_KO1: 'I really need to... Upgrade that strength boost...',
-	react_KO2: 'Ran out of energy too soon again...Fuck.',
-	react_victory1: '... May I collect some blood sample while you\'re busy bleeding that mutch ?',
-	react_victory2: 'Don\'t you piss me off again or that\'s your neck I\'ll break next time.',
-	emoji: config.emote_lyzan,
-	emoji_ko: config.emote_lyzan_ko,
-	ico: config.ico_lyzan,
-	has_active_skill: true,
-	has_passive_skill: false,
-	skill_cd: 10,
-	skill_cd_max: 10,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'B',
-	name: 'USaBi',
-	hpmax: 900,
-	hp: 900,
-	atk: 240,
-	crit_multi: 2,
-	crit_chance: 20,
-	def: 30,
-	spd: 6,
-	agi: 6,
-	acr: 5,
-	int: 90,
-	mag: 500,
-	magcd: 5,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 5,
-	dodgecd: 2,
-	rgn: 0,
-	react_selection1: 'This again ?!',
-	react_selection2: 'You really piss me off !',
-	react_KO1: 'I\'m out of... Battery............. Disconnecting.',
-	react_KO2: 'I\'m out of... Battery............. Disconnecting.',
-	react_victory1: 'That\'s over now !',
-	react_victory2: 'That\'s over now !',
-	emoji: config.emote_usabi,
-	emoji_ko: config.emote_usabi_ko,
-	ico: config.ico_usabi,
-	has_active_skill: false,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'B',
-	name: 'Ell\'Fayrh',
-	hpmax: 1000,
-	hp: 1000,
-	atk: 180,
-	crit_multi: 3,
-	crit_chance: 10,
-	def: 85,
-	spd: 3,
-	agi: 2,
-	acr: 9,
-	int: 190,
-	mag: 1500,
-	magcd: 10,
-	magdef: 60,
-	mag_crit_chance: 30,
-	mag_crit_multi: 1.5,
-	mag_dodgevalue: 0,
-	magcdmax: 10,
-	dodgecd: 2,
-	rgn: 0,
-	react_selection1: 'Hhh... Another of those pointless fights, uh ?',
-	react_selection2: 'Let\'s see if I can get some data from this fight at least...',
-	react_KO1: 'Tsk... Of course this was going to end like this, I\'m not a fighter.',
-	react_KO2: '...Thoses data are rather interesting...',
-	react_victory1: 'Considering your capacity I don\'t even know why you picked a fight to begin with.',
-	react_victory2: 'You\'re stronger, yet your strategy...Even less than mediocre. And you lost.',
-	emoji: config.emote_ellfayrh,
-	emoji_ko: config.emote_ellfayrh_ko,
-	ico: config.ico_ellfayrh,
-	has_active_skill: false,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'C',
-	name: 'May',
-	hpmax: 700,
-	hp: 700,
-	atk: 120,
-	crit_multi: 1.1,
-	crit_chance: 40,
-	def: 20,
-	spd: 7,
-	agi: 6,
-	acr: 6,
-	int: 120,
-	mag: 250,
-	magcd: 3,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 3,
-	dodgecd: 2,
-	rgn: 5,
-	react_selection1: 'I\'m going to do the best I can !... Which is not much, but...',
-	react_selection2: 'I\'m going to do the best I can !... Which is not much, but...',
-	react_KO1: 'Nhh... I did the best I could, sorry.',
-	react_KO2: 'I knew it... I can\'t win...',
-	react_victory1: 'What ?! I won ? Really ?',
-	react_victory2: 'WHAT ?! REALLY ?',
-	emoji: config.emote_may,
-	emoji_ko: config.emote_may_ko,
-	ico: config.ico_may,
-	has_active_skill: true,
-	has_passive_skill: false,
-	skill_cd: 6,
-	skill_cd_max: 6,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'H',
-	name: 'Dyakkoo',
-	hpmax: 1300,
-	hp: 1300,
-	atk: 100,
-	crit_multi: 1,
-	crit_chance: 0,
-	def: 90,
-	spd: 2,
-	agi: 4,
-	acr: 3,
-	int: 115,
-	mag: 0,
-	magcd: 0,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 0,
-	dodgecd: 2,
-	rgn: 20,
-	react_selection1: 'It\'s just a friendly fight so everyone calm down please... No need for anyone to get hurt.',
-	react_selection2: 'It\'s just a friendly fight so everyone calm down please... No need for anyone to get hurt. ',
-	react_KO1: 'This wasn\'t supposed... To be that violent !',
-	react_KO2: 'This wasn\'t supposed... To be that violent !',
-	react_victory1: 'Surrender yourself, there is no need for anyone to get hurt anymore, it\'s over.',
-	react_victory2: 'Just surrend, there is no need for anyone to get hurt anymore, it\'s over.',
-	emoji: config.emote_dyakkoo,
-	emoji_ko: config.emote_dyakkoo_ko,
-	ico: config.ico_dyakko,
-	has_active_skill: false,
-	has_passive_skill: true,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-},
-{
-	tier: 'H',
-	name: 'Kairen',
-	hpmax: 600,
-	hp: 600,
-	atk: 70,
-	crit_multi: 1,
-	crit_chance: 0,
-	def: 25,
-	spd: 5,
-	agi: 7,
-	acr: 4,
-	int: 100,
-	mag: 0,
-	magcd: 0,
-	magdef: 0,
-	mag_crit_chance: 0,
-	mag_crit_multi: 1,
-	mag_dodgevalue: 0,
-	magcdmax: 0,
-	dodgecd: 2,
-	rgn: 0,
-	react_selection1: 'I\'ll do my best, so please be kind.',
-	react_selection2: 'I hope I\'ll be usefull...',
-	react_KO1: 'Please... Help...',
-	react_KO2: 'Please... Help...',
-	react_victory1: 'I\'m happy I got to win !',
-	react_victory2: 'That was a nice game, let\'s play again !',
-	emoji: config.emote_kairen,
-	emoji_ko: config.emote_kairen_ko,
-	ico: config.ico_kairen,
-	has_active_skill: true,
-	has_passive_skill: false,
-	skill_cd: 0,
-	skill_cd_max: 0,
-	skill_timer: 0,
-	isActive: false,
-	isAlive: true,
-	receivedPassiveFromGold: false,
-	receivedPassiveFromAyddan: false,
-}];
+const char = require('./characters.json');
 /*
 ---------------------------------------------
 ---------------------------------------------
@@ -939,28 +149,6 @@ const eachPlayerCharList = (p1, p2) => {
 				name: `__**${p2.username}'s list of characters :**__`,
 				value: p2emote[0] + p2emote[1] + p2emote[2] + p2emote[3] + p2emote[4],
 				inline: true,
-			},
-			],
-			timestamp: new Date(),
-		},
-	});
-};
-
-// function for action selector embed
-const displayActionSelector = p => {
-	client.channels.get(channelID).send({
-		embed: {
-			color: 16286691,
-			author: {
-				name: p.char[p.active].name,
-				icon_url: p.char[p.active].ico,
-			},
-			thumbnail: {
-				url: p.char[p.active].ico,
-			},
-			fields: [{
-				name: 'What should I do ?',
-				value: '*Choose by reacting to this message with the appropriate action*',
 			},
 			],
 			timestamp: new Date(),
@@ -1279,8 +467,8 @@ const omgHeDead = player => {
 		embed: {
 			color: 16286691,
 			fields: [{
-				name: `**${player.char[player.lastAliveChar].ico} ${player.char[player.lastAliveChar].name}, got K.O.'ed.**`,
-				value: `Sending ${player.char[player.futurChar].name} ${player.char[player.futurChar].ico}`,
+				name: `**${player.char[player.lastAliveChar].emoji} ${player.char[player.lastAliveChar].name}, got K.O.'ed.**`,
+				value: `Sending ${player.char[player.futurChar].name} ${player.char[player.futurChar].emoji}`,
 			},
 			],
 			timestamp: new Date(),
@@ -1469,47 +657,42 @@ const gameEnd = (winner, looser) => {
 
 // function for gameend
 const IsGameOver = (player, otherplayer, char1) => {
-	if (testmod === false) {
-		if (char1.hp <= 0) {
-			char1.hp = 0;
-			char1.isAlive = false;
-			if (otherplayer.id === player1.id) {
-				p1CharDied = true;
-			}
-			else if (otherplayer.id === player2.id) {
-				p2CharDied = true;
-			}
-			else {
-				console.log('An unregistered character had one of his characters dying, good luck with fixing that shit');
-			}
-			let i;
-			for (i = 0; i <= otherplayer.charAmount; i++) {
-				if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
-					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
-					console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
-					otherplayer.lastAliveChar = otherplayer.char.indexOf(char1);
-					otherplayer.futurChar = i;
-					break;
-				}
-				else if (otherplayer.char[i].hp <= 0) {
-					if (i === (otherplayer.charAmount - 1)) {
-						console.log('No characters are alive anymore so we end the game.');
-						statusEnd();
-						gameEnd(player, otherplayer);
-						break;
-					}
-					else {
-						console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
-					}
-				}
-			}
+	if (char1.hp <= 0) {
+		char1.hp = 0;
+		char1.isAlive = false;
+		if (otherplayer.id === player1.id) {
+			p1CharDied = true;
+		}
+		else if (otherplayer.id === player2.id) {
+			p2CharDied = true;
 		}
 		else {
-			console.log(`${char1.name} is still alive.`);
+			console.log('An unregistered character had one of his characters dying, good luck with fixing that shit');
+		}
+		let i;
+		for (i = 0; i <= otherplayer.charAmount; i++) {
+			if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
+				console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
+				console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
+				otherplayer.lastAliveChar = otherplayer.char.indexOf(char1);
+				otherplayer.futurChar = i;
+				break;
+			}
+			else if (otherplayer.char[i].hp <= 0) {
+				if (i === (otherplayer.charAmount - 1)) {
+					console.log('No characters are alive anymore so we end the game.');
+					statusEnd();
+					gameEnd(player, otherplayer);
+					break;
+				}
+				else {
+					console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
+				}
+			}
 		}
 	}
 	else {
-		client.channels.get(channelID).send('Test mode is ON. Characters can\'t die.');
+		console.log(`${char1.name} is still alive.`);
 	}
 };
 
@@ -1747,8 +930,56 @@ const NewTurnPhase = () => {
 		IsDefenseStackReset(player2);
 		client.channels.get(channelID).send(`\`\`\`diff\nTurn ${turn} has started. Chose your character's action.\`\`\``);
 		turnPhase = true;
-		displayActionSelector(player1);
-		displayActionSelector(player2);
+		client.channels.get(channelID).send({
+			embed: {
+				color: 16286691,
+				author: {
+					name: player1.char[player1.active].name,
+					icon_url: player1.char[player1.active].ico,
+				},
+				thumbnail: {
+					url: player1.char[player1.active].ico,
+				},
+				fields: [{
+					name: 'What should I do ?',
+					value: '*Choose by reacting to this message with the appropriate action*',
+				}],
+				timestamp: new Date(),
+			},
+		})
+			.then(async (p1Selector) => {
+				await p1Selector.react('603772499431260196'),
+				await p1Selector.react('603768004010049541'),
+				await p1Selector.react('603769186463907845'),
+				await p1Selector.react('603770838709305371'),
+				await p1Selector.react('603767542846193712');
+			})
+			.catch(console.error);
+		client.channels.get(channelID).send({
+			embed: {
+				color: 16286691,
+				author: {
+					name: player2.char[player2.active].name,
+					icon_url: player2.char[player2.active].ico,
+				},
+				thumbnail: {
+					url: player2.char[player2.active].ico,
+				},
+				fields: [{
+					name: 'What should I do ?',
+					value: '*Choose by reacting to this message with the appropriate action*',
+				}],
+				timestamp: new Date(),
+			},
+		})
+			.then(async (p2Selector) => {
+				await p2Selector.react('603772499431260196'),
+				await p2Selector.react('603768004010049541'),
+				await p2Selector.react('603769186463907845'),
+				await p2Selector.react('603770838709305371'),
+				await p2Selector.react('603767542846193712');
+			})
+			.catch(console.error);
 	}
 };
 
@@ -1807,7 +1038,45 @@ client.on('message', msg => {
 	if (command === 'ad') {
 		if (msg.member.id === config.ownerID || config.adminID) {
 		// leave a specific guild
-			if (args[0] === 'gleave') {
+			if (args[0] === 'help') {
+				msg.channel.send({
+					embed: {
+						color: 16286691,
+						fields: [{
+							name: '**gleave**',
+							value: '```!ad gleave [Guild ID] => Makes the bot leave a guild specified by it\'s ID```',
+						},
+						{
+							name: '**clear**',
+							value: '```!ad clear [Number] => Makes the bot deletes his own messages among the specified last number of messages```',
+						},
+						{
+							name: '**editchan**',
+							value: '```!ad editchan [Channel ID] => Makes the bot change his default channel ID```',
+						},
+						{
+							name: '**editchar**',
+							value: '```!ad editchar [name][stat][value][player] => Allows you to edit the stats of a character, type !ad editchar help for more information```',
+						},
+						{
+							name: '**start**',
+							value: '```!ad start => Makes the bot start a game with default players and characters (set in config.json) !!!DEBUG ONLY!!!```',
+						},
+						{
+							name: '**reset**',
+							value: '```!ad reset => Makes the bot reset the current game```',
+						}],
+					},
+				}
+				);
+			}
+			else if (args[0] === 'saveChar') {
+				fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
+					if (err) throw err;
+					console.log('Characters has successfully been saved');
+				});
+			}
+			else if (args[0] === 'gleave') {
 				if (msg.guild.id == args[1]) {
 				// this is just a bit of security measure to make sure the user knows what server he is going to leave
 					msg.guild.leave()
@@ -1819,7 +1088,7 @@ client.on('message', msg => {
 				}
 			}
 			// clear bot's message on a channel
-			if (args[0] === 'clear') {
+			else if (args[0] === 'clear') {
 				const msglimit = args[1];
 				if(msg.channel.type == 'text') {
 					msg.channel.fetchMessages({ limit: msglimit }).then(messages => {
@@ -1839,26 +1108,9 @@ client.on('message', msg => {
 						// Logging amount of messages deleted
 						console.log(`Deletion of messages successful. Amount of messages deleted : ${messagesDeleted}`);
 					}).catch(err => {
-						console.log('Error while deleting files');
-						console.log(err);
+						console.log('Error while deleting files', err);
 					});
 				}
-			}
-			// log player1 object
-			if (args[0] === 'p1') {
-				console.log(player1);
-			}
-			// log player2 object
-			if (args[0] === 'p2') {
-				console.log(player2);
-			}
-			// check if player1 chose a playable character
-			if (args[0] === 'c1') {
-				console.log(player1.char);
-			}
-			// check if player2 chose a playable character
-			else if (args[0] === 'c2') {
-				console.log(player2.char);
 			}
 			// command to edit channel
 			else if (args[0] === 'editchan') {
@@ -1868,17 +1120,6 @@ client.on('message', msg => {
 				}
 				else {
 					msg.channel.send(`Default channel ID is already set to ${args[1]}`);
-				}
-			}
-			// command to toggle testmod (characters can't die)
-			else if (args[0] === 'testmod') {
-				if (testmod === false) {
-					testmod = true;
-					msg.channel.send('**```diff\n- TEST MODE HAS BEEN ACTIVATED. CHARACTERS CAN\'T DIE AND GAME WON\'T FINISH.```**');
-				}
-				else {
-					testmod = false;
-					msg.channel.send('**```diff\n- TEST MODE HAS BEEN DE-ACTIVATED. CHARACTERS CAN DIE AND GAME WILL FINISH.```**');
 				}
 			}
 			// editing command for player.char
@@ -1900,7 +1141,7 @@ client.on('message', msg => {
 					}
 				}
 				else {
-					msg.channel.send('Syntaxe Error, type !editchar help for more information.');
+					msg.channel.send('Syntaxe Error, type !ad editchar help for more information.');
 				}
 			}
 			// autostart a game with two predetermined discord account e.g. see config.json
@@ -1910,30 +1151,26 @@ client.on('message', msg => {
 				player2.id = config.testID2;
 				player2.username = config.usernameID2;
 				playerCount = 2;
+				char_amount = 2;
 				gameStarting = true;
+				player1.charAmount = 2;
 				player1.char.push(char[0]);
+				player1.char.push(char[1]);
 				player1.choseChar = true;
-				player2.choseChar = true;
+				player2.charAmount = 2;
+				player2.char.push(char[0]);
 				player2.char.push(char[1]);
-				msg.channel.send(`Fast started the game with ${config.usernameID1} as player1 with ${player1.char[player1.active].name} and ${config.usernameID2} as player2 with ${player2.char[player2.active].name}`);
-			}
-			// return true if gameStarting is true
-			else if (args[0] === 'gamestarting') {
-				msg.channel.send(`gameStarting : ${gameStarting}`);
-			}
-			// return actionAmount value
-			else if (args[0] === 'actionamount') {
-				msg.channel.send(`actionAmount : ${actionAmount}`);
-			}
-			// return true if turnPhase is true
-			else if (args[0] === 'turnphase') {
-				msg.channel.send(`turnPhase : ${turnPhase}`);
+				player2.choseChar = true;
+				msg.channel.send('Fast started the game.');
 			}
 			// gameEnd function test command
 			else if (args[0] === 'reset') {
 				gameEnd(player1, player2);
 				console.log(player1);
 				console.log(player2);
+			}
+			else {
+				msg.channel.send('It seems no command matches your input, please type "!ad help" to see the list of admin commands.');
 			}
 		}
 		else {
@@ -2088,12 +1325,12 @@ client.on('message', msg => {
 				timestamp: new Date(),
 			},
 		})
-			.then(async (embedMessage) => {
-				await embedMessage.react('603772499431260196'),
-				await embedMessage.react('603768004010049541'),
-				await embedMessage.react('603769186463907845'),
-				await embedMessage.react('603770838709305371'),
-				await embedMessage.react('603767542846193712');
+			.then(async (p1Selector) => {
+				await p1Selector.react('603772499431260196'),
+				await p1Selector.react('603768004010049541'),
+				await p1Selector.react('603769186463907845'),
+				await p1Selector.react('603770838709305371'),
+				await p1Selector.react('603767542846193712');
 			})
 			.catch(console.error);
 		msg.channel.send({
@@ -2113,12 +1350,12 @@ client.on('message', msg => {
 				timestamp: new Date(),
 			},
 		})
-			.then(async (embedMessage) => {
-				await embedMessage.react('603772499431260196'),
-				await embedMessage.react('603768004010049541'),
-				await embedMessage.react('603769186463907845'),
-				await embedMessage.react('603770838709305371'),
-				await embedMessage.react('603767542846193712');
+			.then(async (p2Selector) => {
+				await p2Selector.react('603772499431260196'),
+				await p2Selector.react('603768004010049541'),
+				await p2Selector.react('603769186463907845'),
+				await p2Selector.react('603770838709305371'),
+				await p2Selector.react('603767542846193712');
 			})
 			.catch(console.error);
 	}
