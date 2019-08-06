@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const token = require('./token.json');
 const Keyv = require('keyv');
-const customChar = new Keyv('redis://elyne:elyne@localhost:6379', { namespace: 'customChar', serialize : JSON.stringify, deserialize : JSON.parse });
+const customChar = new Keyv({ namespace: 'customChar', serialize : JSON.stringify, deserialize : JSON.parse });
 customChar.on('error', err => console.log('Keyv connection error:', err));
 client.login(token.token);
 
@@ -936,8 +936,8 @@ const eachPlayerCharList = (p1, p2) => {
 };
 
 // function for action selector embed
-const displayActionSelector = (p, message) => {
-	message.channel.send({
+const displayActionSelector = p => {
+	client.channels.get(channelID).send({
 		embed: {
 			color: 16286691,
 			author: {
@@ -1022,19 +1022,19 @@ const passive = (player_1, player_2) => {
 };
 
 const active = (player_1, player_2) => {
-	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'snipefox') {
+	if (player_1.char[player_1.active].name.toLowerCase() === 'snipefox') {
 		snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
 	}
-	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+	else if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
 		rage(player_1.char[player_1.active], player_1);
 	}
-	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+	else if (player_1.char[player_1.active].name.toLowerCase() === 'pinky') {
 		explosion(player_1.char[player_1.active], player_2, player_1);
 	}
-	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+	else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
 		pill(player_1.char[player_1.active], player_1);
 	}
-	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'kairen') {
+	else if (player_1.char[player_1.active].name.toLowerCase() === 'kairen') {
 		ressurection(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
 	}
 	else {
@@ -1043,15 +1043,31 @@ const active = (player_1, player_2) => {
 };
 
 const remove_active_effect = player_1 => {
-	if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'lyzan') {
+	if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
 		player_1.char[player_1.active].atk = char[12].atk;
 		player_1.char[player_1.active].def = char[12].def;
 		player_1.char[player_1.active].rgn = char[12].rgn;
-		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of rage.`);
+		client.channels.get(channelID).send({
+			embed: {
+				color: 16286691,
+				fields: [{
+					name: player_1.char[player_1.active].emote,
+					value: '${player_1.char[player_1.active].name} lost the effects of rage.',
+				}],
+			},
+		});
 	}
-	else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'may') {
+	else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
 		player_1.char[player_1.active].atk = char[15].atk;
-		client.channels.get(channelID).send(`${player_1.char[player_1.active].name} lost the effects of pill.`);
+		client.channels.get(channelID).send({
+			embed: {
+				color: 16286691,
+				fields: [{
+					name: player_1.char[player_1.active].emote,
+					value: '${player_1.char[player_1.active].name} lost the effects of pill.',
+				}],
+			},
+		});
 	}
 };
 
@@ -1248,8 +1264,18 @@ const changechar = (player, char2) => {
 // function for when a characters dies during a turn
 const omgHeDead = player => {
 	react_KO(player);
-	client.channels.get(channelID).send(`${player.username}'s character, ${player.char[player.lastAliveChar].name}, got K.O.'ed. Sending ${player.char[player.futurChar].name}`);
-	player.alive = player.futurChar;
+	client.channels.get(channelID).send({
+		embed: {
+			color: 16286691,
+			fields: [{
+				name: `**${player.char[player.lastAliveChar].ico} ${player.char[player.lastAliveChar].name}, got K.O.'ed.**`,
+				value: `Sending ${player.char[player.futurChar].name} ${player.char[player.futurChar].ico}`,
+			},
+			],
+			timestamp: new Date(),
+		},
+	});
+	player.active = player.futurChar;
 };
 
 // function to round numbers to 2 decimals
@@ -2114,7 +2140,7 @@ client.on('message', msg => {
 								player1.choseAction = true;
 								player1.action = 'changechar';
 								actionAmount += 1;
-								if (actionAmount == 2) {
+								if (actionAmount === 2) {
 									actionphase(player1, player2);
 								}
 								else {
@@ -2154,7 +2180,7 @@ client.on('message', msg => {
 								player2.choseAction = true;
 								player2.action = 'changechar';
 								actionAmount += 1;
-								if (actionAmount == 2) {
+								if (actionAmount === 2) {
 									actionphase(player2, player2);
 								}
 								else {
@@ -2179,7 +2205,7 @@ client.on('message', msg => {
 				player1.choseAction = true;
 				player1.action = 'attack';
 				actionAmount += 1;
-				if (actionAmount == 2) {
+				if (actionAmount === 2) {
 					actionphase(player1, player2);
 				}
 				else {
@@ -2191,7 +2217,7 @@ client.on('message', msg => {
 				player2.choseAction = true;
 				player2.action = 'attack';
 				actionAmount += 1;
-				if (actionAmount == 2) {
+				if (actionAmount === 2) {
 					actionphase(player1, player2);
 				}
 				else {
@@ -2209,7 +2235,7 @@ client.on('message', msg => {
 					player1.choseAction = true;
 					player1.action = 'defense';
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
@@ -2226,7 +2252,7 @@ client.on('message', msg => {
 					player2.choseAction = true;
 					player2.action = 'defense';
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
@@ -2252,12 +2278,12 @@ client.on('message', msg => {
 					player1.action = 'magic';
 					msg.reply(`${player1.username} chose to use magic this turn.`);
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
 						console.log(`actionAmount : ${actionAmount}`);
-						console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
+						console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then I\'m done');
 					}
 				}
 				else {
@@ -2272,7 +2298,7 @@ client.on('message', msg => {
 					player2.choseAction = true;
 					player2.action = 'magic';
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
@@ -2294,7 +2320,7 @@ client.on('message', msg => {
 					player1.choseAction = true;
 					player1.action = 'skill';
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
@@ -2311,7 +2337,7 @@ client.on('message', msg => {
 					player2.choseAction = true;
 					player2.action = 'skill';
 					actionAmount += 1;
-					if (actionAmount == 2) {
+					if (actionAmount === 2) {
 						actionphase(player1, player2);
 					}
 					else {
