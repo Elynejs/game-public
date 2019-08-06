@@ -1,3 +1,10 @@
+/*
+This is a discord bot written in javascript that let's you play a rpg-like game of versus-fighting
+This is my first ever attempt at programmation and I learned on the fly
+It particularly shows when you look at older part of the code
+This could be easily done in way less lines and time it took me to do it and I know it
+But nevertheless I'm rather proud of the level I was able to aquire in this short amount of time
+*/
 // importing librarie
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -857,7 +864,9 @@ const char = [{
 }];
 /*
 ---------------------------------------------
+---------------------------------------------
 END OF THE OBJECTS FOR PLAYERS AND CHARACTERS
+---------------------------------------------
 ---------------------------------------------
 */
 
@@ -869,7 +878,9 @@ client.on('ready', () => {
 
 /*
 ---------------------------------------------------
+---------------------------------------------------
 BEGINING OF FUNCTIONS DEFINITION
+---------------------------------------------------
 ---------------------------------------------------
 */
 
