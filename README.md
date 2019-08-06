@@ -6,7 +6,6 @@ This is a rpg-like game made as a bot on discord. It's not made to be publicaly 
 
 First you must install discord.js, to do that go to your console and type :
 
-
 *Note that if it is not working you might need to install npm and node.js*
 
 ```powershell
