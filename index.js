@@ -8,7 +8,7 @@ But nevertheless I'm rather proud of the level I was able to aquire in this shor
 // importing librarie
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const fs = require('fs');
+const fs = require('fs'); // eslint-disable-line
 const config = require('./config.json');
 const token = require('./token.json');
 client.login(token.token);
@@ -1042,40 +1042,41 @@ client.on('message', msg => {
 				msg.channel.send({
 					embed: {
 						color: 16286691,
+						description: '__**List of all admin commands**__',
 						fields: [{
-							name: '**gleave**',
+							name: '**Leave guild**',
 							value: '```!ad gleave [Guild ID] => Makes the bot leave a guild specified by it\'s ID```',
 						},
 						{
-							name: '**clear**',
+							name: '**Clear**',
 							value: '```!ad clear [Number] => Makes the bot deletes his own messages among the specified last number of messages```',
 						},
 						{
-							name: '**editchan**',
+							name: '**Channel edit**',
 							value: '```!ad editchan [Channel ID] => Makes the bot change his default channel ID```',
 						},
 						{
-							name: '**editchar**',
+							name: '**Character edit**',
 							value: '```!ad editchar [name][stat][value][player] => Allows you to edit the stats of a character, type !ad editchar help for more information```',
 						},
 						{
-							name: '**start**',
+							name: '**Debug start**',
 							value: '```!ad start => Makes the bot start a game with default players and characters (set in config.json) !!!DEBUG ONLY!!!```',
 						},
 						{
-							name: '**reset**',
+							name: '**Game reset**',
 							value: '```!ad reset => Makes the bot reset the current game```',
 						}],
 					},
 				}
 				);
 			}
-			else if (args[0] === 'saveChar') {
+			/* else if (args[0] === 'saveChar') {
 				fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
 					if (err) throw err;
 					console.log('Characters has successfully been saved');
 				});
-			}
+			}*/
 			else if (args[0] === 'gleave') {
 				if (msg.guild.id == args[1]) {
 				// this is just a bit of security measure to make sure the user knows what server he is going to leave
