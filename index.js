@@ -1075,12 +1075,18 @@ client.on('message', msg => {
 				}
 				);
 			}
-			/* else if (args[0] === 'saveChar') {
+			/* else if (args[0] === 'saveChar') { // I removed this command to prevent the overwriting of characters
 				fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
 					if (err) throw err;
 					console.log('Characters has successfully been saved');
 				});
 			}*/
+			// One day, I woke up and said to myself "Math is cool, especially statistics".
+			// So I decided to make a command that would display basics statistics math about the character stats of this game.
+			// Decision I strongly regretted later on when I realised I had no idea what the fuck I am doing
+			// So just, skip pass that command, don't ever try to read or debug it, you'll go crazy
+			// This is worse than r/badcode
+			// I warned you
 			else if (args[0] === 'math') {
 				let i;
 				const S = {
@@ -1764,6 +1770,7 @@ client.on('message', msg => {
 				}
 				const Stats = [
 					{
+						// This is stats for S tier characters
 						hpAvg: round((S.hp / S.charCount)), hpMin: round(S.hpMin), hpMax: round(S.hpMax),
 						atkAvg: round((S.atk / S.charCount)), atkMin: round(S.atkMin), atkMax: round(S.atkMax),
 						critMultiAvg: round((S.critMulti / S.charCount)), critMultiMin: round(S.critMultiMin), critMultiMax: round(S.critMultiMax),
@@ -1776,6 +1783,7 @@ client.on('message', msg => {
 						magAvg: round((S.mag / (S.charCount - S.noMagChar))) || 0, magMin: round(S.magMin), magMax: round(S.magMax),
 					},
 					{
+						// Stats for A tier characters
 						hpAvg: round((A.hp / A.charCount)), hpMin: round(A.hpMin), hpMax: round(A.hpMax),
 						atkAvg: round((A.atk / A.charCount)), atkMin: round(A.atkMin), atkMax: round(A.atkMax),
 						critMultiAvg: round((A.critMulti / A.charCount)), critMultiMin: round(A.critMultiMin), critMultiMax: round(A.critMultiMax),
@@ -1788,6 +1796,7 @@ client.on('message', msg => {
 						magAvg: round((A.mag / (A.charCount - A.noMagChar))) || 0, magMin: round(A.magMin), magMax: round(A.magMax),
 					},
 					{
+						// Stats for B tier characters
 						hpAvg: round((B.hp / B.charCount)), hpMin: round(B.hpMin), hpMax: round(B.hpMax),
 						atkAvg: round((B.atk / B.charCount)), atkMin: round(B.atkMin), atkMax: round(B.atkMax),
 						critMultiAvg: round((B.critMulti / B.charCount)), critMultiMin: round(B.critMultiMin), critMultiMax: round(B.critMultiMax),
@@ -1800,6 +1809,7 @@ client.on('message', msg => {
 						magAvg: round((B.mag / (B.charCount - B.noMagChar))) || 0, magMin: round(B.magMin), magMax: round(B.magMax),
 					},
 					{
+						// Stats for C tier characters
 						hpAvg: round((C.hp / C.charCount)), hpMin: round(C.hpMin), hpMax: round(C.hpMax),
 						atkAvg: round((C.atk / C.charCount)), atkMin: round(C.atkMin), atkMax: round(C.atkMax),
 						critMultiAvg: round((C.critMulti / C.charCount)), critMultiMin: round(C.critMultiMin), critMultiMax: round(C.critMultiMax),
@@ -1812,6 +1822,7 @@ client.on('message', msg => {
 						magAvg: round((C.mag / (C.charCount - C.noMagChar))) || 0, magMin: round(C.magMin), magMax: round(C.magMax),
 					},
 					{
+						// Stats for H tier characters
 						hpAvg: round((H.hp / H.charCount)), hpMin: round(H.hpMin), hpMax: round(H.hpMax),
 						atkAvg: round((H.atk / H.charCount)), atkMin: round(H.atkMin), atkMax: round(H.atkMax),
 						critMultiAvg: round((H.critMulti / H.charCount)), critMultiMin: round(H.critMultiMin), critMultiMax: round(H.critMultiMax),
@@ -1823,7 +1834,6 @@ client.on('message', msg => {
 						rgnAvg: round((H.rgn / H.charCount)), rgnMin: round(H.rgnMin), rgnMax: round(H.rgnMax),
 						magAvg: round((H.mag / (H.charCount - H.noMagChar))) || 0, magMin: round(H.magMin), magMax: round(H.magMax),
 					}];
-				console.log(Stats);
 				msg.channel.send(`__**Stats for Tier S :**__ *${S.charCount} characters iterated*\n` + '```python\n' +
 'Average HP              : ' + Stats[0].hpAvg + '	' + 'Min HP : ' + Stats[0].hpMin + '	' + 'Max HP : ' + Stats[0].hpMax + '\n' +
 'Average Attack          : ' + Stats[0].atkAvg + '	' + 'Min Attack : ' + Stats[0].atkMin + '	' + 'Max Attack : ' + Stats[0].atkMax + '\n' +
@@ -1913,7 +1923,6 @@ client.on('message', msg => {
 							console.log('Nothing to delete');
 						}
 						const messagesDeleted = botMsg.array().length;
-
 						// Logging amount of messages deleted
 						console.log(`Deletion of messages successful. Amount of messages deleted : ${messagesDeleted}`);
 					}).catch(err => {
