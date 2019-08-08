@@ -484,8 +484,8 @@ const round = value => {
 
 const attack = (player, otherplayer, char1, char2) => {
 	if (otherplayer.action !== 'defense') {
-		if (char1.crit_chance > Math.floor(Math.random() * 100)) {
-			player.dmg = (char1.atk * (1 - (char2.def / 100))) * char1.crit_multi;
+		if (char1.critChance > Math.floor(Math.random() * 100)) {
+			player.dmg = (char1.atk * (1 - (char2.def / 100))) * char1.critMulti;
 			if (player.dmg < 0) {
 				player.dmg = 0;
 			}
@@ -554,8 +554,8 @@ const dodge = (player, otherplayer, char_1, char_2) => {
 };
 
 const defense = (player, otherplayer, char1, char2) => {
-	if (char1.crit_chance > Math.floor(Math.random() * 100)) {
-		player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100))) * char1.crit_multi;
+	if (char1.critChance > Math.floor(Math.random() * 100)) {
+		player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100))) * char1.critMulti;
 		console.log(player.dmg);
 		if (player.dmg < 0) {
 			player.dmg = 0;
@@ -576,8 +576,8 @@ const defense = (player, otherplayer, char1, char2) => {
 const magic = (player, otherplayer, char1, char2) => {
 	if (char1.magcd === 0) {
 		if (char2.tier === 'H') {
-			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
-				player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi) * 5;
+			if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
+				player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti) * 5;
 				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
@@ -594,8 +594,8 @@ const magic = (player, otherplayer, char1, char2) => {
 			}
 		}
 		else if (char2.tier !== 'H') {
-			if (char1.mag_crit_chance > Math.floor(Math.random() * 100)) {
-				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_crit_multi;
+			if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
+				player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti;
 				player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
 				dodge(player, otherplayer, char2, char1);
 				char2.hp -= Math.floor(player.dmg);
@@ -1066,6 +1066,10 @@ client.on('message', msg => {
 						{
 							name: '**Game reset**',
 							value: '```!ad reset => Makes the bot reset the current game```',
+						},
+						{
+							name: '**Statistics**',
+							value: '```!ad math => Makes the bot display statistics about characters depending on their Tier ( + It\'s dyanamic!!)```',
 						}],
 					},
 				}
@@ -1077,6 +1081,810 @@ client.on('message', msg => {
 					console.log('Characters has successfully been saved');
 				});
 			}*/
+			else if (args[0] === 'math') {
+				let i;
+				const S = {
+					hp: 0,
+					hpMin: 0,
+					hpMax: 0,
+					atk: 0,
+					atkMin: 0,
+					atkMax: 0,
+					critMulti: 0,
+					critMultiMin: 0,
+					critMultiMax: 0,
+					critChance: 0,
+					critChanceMin: 0,
+					critChanceMax: 0,
+					def: 0,
+					defMin: 0,
+					defMax: 0,
+					spd: 0,
+					spdMin: 0,
+					spdMax: 0,
+					agi: 0,
+					agiMin: 0,
+					agiMax: 0,
+					acr: 0,
+					acrMin: 0,
+					acrMax: 0,
+					mag: 0,
+					magMin: 0,
+					magMax: 0,
+					rgn: 0,
+					rgnMin: 0,
+					rgnMax: 0,
+					charCount: 0,
+					noMagChar: 0,
+				};
+				const A = {
+					hp: 0,
+					hpMin: 0,
+					hpMax: 0,
+					atk: 0,
+					atkMin: 0,
+					atkMax: 0,
+					critMulti: 0,
+					critMultiMin: 0,
+					critMultiMax: 0,
+					critChance: 0,
+					critChanceMin: 0,
+					critChanceMax: 0,
+					def: 0,
+					defMin: 0,
+					defMax: 0,
+					spd: 0,
+					spdMin: 0,
+					spdMax: 0,
+					agi: 0,
+					agiMin: 0,
+					agiMax: 0,
+					acr: 0,
+					acrMin: 0,
+					acrMax: 0,
+					mag: 0,
+					magMin: 0,
+					magMax: 0,
+					rgn: 0,
+					rgnMin: 0,
+					rgnMax: 0,
+					charCount: 0,
+					noMagChar: 0,
+				};
+				const B = {
+					hp: 0,
+					hpMin: 0,
+					hpMax: 0,
+					atk: 0,
+					atkMin: 0,
+					atkMax: 0,
+					critMulti: 0,
+					critMultiMin: 0,
+					critMultiMax: 0,
+					critChance: 0,
+					critChanceMin: 0,
+					critChanceMax: 0,
+					def: 0,
+					defMin: 0,
+					defMax: 0,
+					spd: 0,
+					spdMin: 0,
+					spdMax: 0,
+					agi: 0,
+					agiMin: 0,
+					agiMax: 0,
+					acr: 0,
+					acrMin: 0,
+					acrMax: 0,
+					mag: 0,
+					magMin: 0,
+					magMax: 0,
+					rgn: 0,
+					rgnMin: 0,
+					rgnMax: 0,
+					charCount: 0,
+					noMagChar: 0,
+				};
+				const C = {
+					hp: 0,
+					hpMin: 0,
+					hpMax: 0,
+					atk: 0,
+					atkMin: 0,
+					atkMax: 0,
+					critMulti: 0,
+					critMultiMin: 0,
+					critMultiMax: 0,
+					critChance: 0,
+					critChanceMin: 0,
+					critChanceMax: 0,
+					def: 0,
+					defMin: 0,
+					defMax: 0,
+					spd: 0,
+					spdMin: 0,
+					spdMax: 0,
+					agi: 0,
+					agiMin: 0,
+					agiMax: 0,
+					acr: 0,
+					acrMin: 0,
+					acrMax: 0,
+					mag: 0,
+					magMin: 0,
+					magMax: 0,
+					rgn: 0,
+					rgnMin: 0,
+					rgnMax: 0,
+					charCount: 0,
+					noMagChar: 0,
+				};
+				const H = {
+					hp: 0,
+					hpMin: 0,
+					hpMax: 0,
+					atk: 0,
+					atkMin: 0,
+					atkMax: 0,
+					critMulti: 0,
+					critMultiMin: 0,
+					critMultiMax: 0,
+					critChance: 0,
+					critChanceMin: 0,
+					critChanceMax: 0,
+					def: 0,
+					defMin: 0,
+					defMax: 0,
+					spd: 0,
+					spdMin: 0,
+					spdMax: 0,
+					agi: 0,
+					agiMin: 0,
+					agiMax: 0,
+					acr: 0,
+					acrMin: 0,
+					acrMax: 0,
+					mag: 0,
+					magMin: 0,
+					magMax: 0,
+					rgn: 0,
+					rgnMin: 0,
+					rgnMax: 0,
+					charCount: 0,
+					noMagChar: 0,
+				};
+				for (i = 0; i < char.length; i++) {
+					if (char[i]['tier'] === 'S') {
+						S.hp += char[i].hp;
+						S.atk += char[i].atk;
+						S.critMulti += char[i].critMulti;
+						S.critChance += char[i].critChance;
+						S.def += char[i].def;
+						S.spd += char[i].spd;
+						S.agi += char[i].agi;
+						S.acr += char[i].acr;
+						S.rgn += char[i].rgn;
+						if (char[i].mag !== 0) {
+							S.mag += char[i].mag;
+						}
+						else {
+							S.noMagChar++;
+						}
+						if (S.charCount === 0) {
+							S.hpMax = char[i].hp;
+							S.hpMin = char[i].hp;
+							S.atkMin = char[i].atk;
+							S.atkMax = char[i].atk;
+							S.critMultiMax = char[i].critMulti;
+							S.critMultiMin = char[i].critMulti;
+							S.critChanceMin = char[i].critChance;
+							S.critChanceMax = char[i].critChance;
+							S.defMin = char[i].def;
+							S.defMax = char[i].def;
+							S.spdMin = char[i].spd;
+							S.spdMax = char[i].spd;
+							S.agiMin = char[i].agi;
+							S.agiMax = char[i].agi;
+							S.acrMin = char[i].acr;
+							S.acrMax = char[i].acr;
+							S.rgnMin = char[i].rgn;
+							S.rgnMax = char[i].rgn;
+						}
+						if (S.charCount > 0) {
+							if (char[i].hp > S.hpMax) {
+								S.hpMax = char[i].hp;
+							}
+							else if (char[i].hp < S.hpMin) {
+								S.hpMin = char[i].hp;
+							}
+							if (char[i].atk > S.atkMax) {
+								S.atkMax = char[i].atk;
+							}
+							else if (char[i].atk < S.atkMin) {
+								S.atkMin = char[i].atk;
+							}
+							if (char[i].critMulti > S.critMultiMax) {
+								S.critMultiMax = char[i].critMulti;
+							}
+							else if (char[i].critMulti < S.critMultiMin) {
+								S.critMultiMin = char[i].critMulti;
+							}
+							if (char[i].critChance > S.critChanceMax) {
+								S.critChanceMax = char[i].critChance;
+							}
+							else if (char[i].critChance < S.critChanceMin) {
+								S.critChanceMin = char[i].critChance;
+							}
+							if (char[i].def > S.defMax) {
+								S.defMax = char[i].def;
+							}
+							else if (char[i].def < S.defMin) {
+								S.defMin = char[i].def;
+							}
+							if (char[i].spd > S.spdMax) {
+								S.spdMax = char[i].spd;
+							}
+							else if (char[i].spd < S.spdMin) {
+								S.spdMin = char[i].spd;
+							}
+							if (char[i].agi > S.agiMax) {
+								S.agiMax = char[i].agi;
+							}
+							else if (char[i].agi < S.agiMin) {
+								S.agiMin = char[i].agi;
+							}
+							if (char[i].acr > S.acrMax) {
+								S.acrMax = char[i].acr;
+							}
+							else if (char[i].acr < S.acrMin) {
+								S.acrMin = char[i].acr;
+							}
+							if (char[i].rgn > S.rgnMax) {
+								S.rgnMax = char[i].rgn;
+							}
+							else if (char[i].rgn < S.rgnMin) {
+								S.rgnMin = char[i].rgn;
+							}
+							if (char[i].mag > S.magMax) {
+								S.magMax = char[i].mag;
+							}
+							else if (char[i].mag < S.magMin) {
+								S.magMin = char[i].mag;
+							}
+						}
+						S.charCount++;
+					}
+					else if (char[i]['tier'] === 'A') {
+						A.hp += char[i].hp;
+						A.atk += char[i].atk;
+						A.critMulti += char[i].critMulti;
+						A.critChance += char[i].critChance;
+						A.def += char[i].def;
+						A.spd += char[i].spd;
+						A.agi += char[i].agi;
+						A.acr += char[i].acr;
+						A.rgn += char[i].rgn;
+						if (char[i].mag !== 0) {
+							A.mag += char[i].mag;
+						}
+						else {
+							A.noMagChar++;
+						}
+						if (A.charCount === 0) {
+							A.hpMax = char[i].hp;
+							A.hpMin = char[i].hp;
+							A.atkMin = char[i].atk;
+							A.atkMax = char[i].atk;
+							A.critMultiMax = char[i].critMulti;
+							A.critMultiMin = char[i].critMulti;
+							A.critChanceMin = char[i].critChance;
+							A.critChanceMax = char[i].critChance;
+							A.defMin = char[i].def;
+							A.defMax = char[i].def;
+							A.spdMin = char[i].spd;
+							A.spdMax = char[i].spd;
+							A.agiMin = char[i].agi;
+							A.agiMax = char[i].agi;
+							A.acrMin = char[i].acr;
+							A.acrMax = char[i].acr;
+							A.rgnMin = char[i].rgn;
+							A.rgnMax = char[i].rgn;
+						}
+						if (A.charCount > 0) {
+							if (char[i].hp > A.hpMax) {
+								A.hpMax = char[i].hp;
+							}
+							else if (char[i].hp < A.hpMin) {
+								A.hpMin = char[i].hp;
+							}
+							if (char[i].atk > A.atkMax) {
+								A.atkMax = char[i].atk;
+							}
+							else if (char[i].atk < A.atkMin) {
+								A.atkMin = char[i].atk;
+							}
+							if (char[i].critMulti > A.critMultiMax) {
+								A.critMultiMax = char[i].critMulti;
+							}
+							else if (char[i].critMulti < A.critMultiMin) {
+								A.critMultiMin = char[i].critMulti;
+							}
+							if (char[i].critChance > A.critChanceMax) {
+								A.critChanceMax = char[i].critChance;
+							}
+							else if (char[i].critChance < A.critChanceMin) {
+								A.critChanceMin = char[i].critChance;
+							}
+							if (char[i].def > A.defMax) {
+								A.defMax = char[i].def;
+							}
+							else if (char[i].def < A.defMin) {
+								A.defMin = char[i].def;
+							}
+							if (char[i].spd > A.spdMax) {
+								A.spdMax = char[i].spd;
+							}
+							else if (char[i].spd < A.spdMin) {
+								A.spdMin = char[i].spd;
+							}
+							if (char[i].agi > A.agiMax) {
+								A.agiMax = char[i].agi;
+							}
+							else if (char[i].agi < A.agiMin) {
+								A.agiMin = char[i].agi;
+							}
+							if (char[i].acr > A.acrMax) {
+								A.acrMax = char[i].acr;
+							}
+							else if (char[i].acr < A.acrMin) {
+								A.acrMin = char[i].acr;
+							}
+							if (char[i].rgn > A.rgnMax) {
+								A.rgnMax = char[i].rgn;
+							}
+							else if (char[i].rgn < A.rgnMin) {
+								A.rgnMin = char[i].rgn;
+							}
+							if (char[i].mag > A.magMax) {
+								A.magMax = char[i].mag;
+							}
+							else if (char[i].mag < A.magMin) {
+								A.magMin = char[i].mag;
+							}
+						}
+						A.charCount++;
+					}
+					else if (char[i]['tier'] === 'B') {
+						B.hp += char[i].hp;
+						B.atk += char[i].atk;
+						B.critMulti += char[i].critMulti;
+						B.critChance += char[i].critChance;
+						B.def += char[i].def;
+						B.spd += char[i].spd;
+						B.agi += char[i].agi;
+						B.acr += char[i].acr;
+						B.rgn += char[i].rgn;
+						if (char[i].mag !== 0) {
+							B.mag += char[i].mag;
+						}
+						else {
+							B.noMagChar++;
+						}
+						if (B.charCount === 0) {
+							B.hpMax = char[i].hp;
+							B.hpMin = char[i].hp;
+							B.atkMin = char[i].atk;
+							B.atkMax = char[i].atk;
+							B.critMultiMax = char[i].critMulti;
+							B.critMultiMin = char[i].critMulti;
+							B.critChanceMin = char[i].critChance;
+							B.critChanceMax = char[i].critChance;
+							B.defMin = char[i].def;
+							B.defMax = char[i].def;
+							B.spdMin = char[i].spd;
+							B.spdMax = char[i].spd;
+							B.agiMin = char[i].agi;
+							B.agiMax = char[i].agi;
+							B.acrMin = char[i].acr;
+							B.acrMax = char[i].acr;
+							B.rgnMin = char[i].rgn;
+							B.rgnMax = char[i].rgn;
+							B.magMin = char[i].mag;
+							B.magMax = char[i].mag;
+						}
+						if (B.charCount > 0) {
+							if (char[i].hp > B.hpMax) {
+								B.hpMax = char[i].hp;
+							}
+							else if (char[i].hp < B.hpMin) {
+								B.hpMin = char[i].hp;
+							}
+							if (char[i].atk > B.atkMax) {
+								B.atkMax = char[i].atk;
+							}
+							else if (char[i].atk < B.atkMin) {
+								B.atkMin = char[i].atk;
+							}
+							if (char[i].critMulti > B.critMultiMax) {
+								B.critMultiMax = char[i].critMulti;
+							}
+							else if (char[i].critMulti < B.critMultiMin) {
+								B.critMultiMin = char[i].critMulti;
+							}
+							if (char[i].critChance > B.critChanceMax) {
+								B.critChanceMax = char[i].critChance;
+							}
+							else if (char[i].critChance < B.critChanceMin) {
+								B.critChanceMin = char[i].critChance;
+							}
+							if (char[i].def > B.defMax) {
+								B.defMax = char[i].def;
+							}
+							else if (char[i].def < B.defMin) {
+								B.defMin = char[i].def;
+							}
+							if (char[i].spd > B.spdMax) {
+								B.spdMax = char[i].spd;
+							}
+							else if (char[i].spd < B.spdMin) {
+								B.spdMin = char[i].spd;
+							}
+							if (char[i].agi > B.agiMax) {
+								B.agiMax = char[i].agi;
+							}
+							else if (char[i].agi < B.agiMin) {
+								B.agiMin = char[i].agi;
+							}
+							if (char[i].acr > B.acrMax) {
+								B.acrMax = char[i].acr;
+							}
+							else if (char[i].acr < B.acrMin) {
+								B.acrMin = char[i].acr;
+							}
+							if (char[i].rgn > B.rgnMax) {
+								B.rgnMax = char[i].rgn;
+							}
+							else if (char[i].rgn < B.rgnMin) {
+								B.rgnMin = char[i].rgn;
+							}
+							if (char[i].mag > B.magMax) {
+								B.magMax = char[i].mag;
+							}
+							else if (char[i].mag < B.magMin) {
+								B.magMin = char[i].mag;
+							}
+						}
+						B.charCount++;
+					}
+					else if (char[i]['tier'] === 'C') {
+						C.hp += char[i].hp;
+						C.atk += char[i].atk;
+						C.critMulti += char[i].critMulti;
+						C.critChance += char[i].critChance;
+						C.def += char[i].def;
+						C.spd += char[i].spd;
+						C.agi += char[i].agi;
+						C.acr += char[i].acr;
+						C.rgn += char[i].rgn;
+						if (char[i].mag !== 0) {
+							C.mag += char[i].mag;
+						}
+						else {
+							C.noMagChar++;
+						}
+						if (C.charCount === 0) {
+							C.hpMax = char[i].hp;
+							C.hpMin = char[i].hp;
+							C.atkMin = char[i].atk;
+							C.atkMax = char[i].atk;
+							C.critMultiMax = char[i].critMulti;
+							C.critMultiMin = char[i].critMulti;
+							C.critChanceMin = char[i].critChance;
+							C.critChanceMax = char[i].critChance;
+							C.defMin = char[i].def;
+							C.defMax = char[i].def;
+							C.spdMin = char[i].spd;
+							C.spdMax = char[i].spd;
+							C.agiMin = char[i].agi;
+							C.agiMax = char[i].agi;
+							C.acrMin = char[i].acr;
+							C.acrMax = char[i].acr;
+							C.rgnMin = char[i].rgn;
+							C.rgnMax = char[i].rgn;
+							C.magMin = char[i].mag;
+							C.magMax = char[i].mag;
+						}
+						if (C.charCount > 0) {
+							if (char[i].hp > C.hpMax) {
+								C.hpMax = char[i].hp;
+							}
+							else if (char[i].hp < C.hpMin) {
+								C.hpMin = char[i].hp;
+							}
+							if (char[i].atk > C.atkMax) {
+								C.atkMax = char[i].atk;
+							}
+							else if (char[i].atk < C.atkMin) {
+								C.atkMin = char[i].atk;
+							}
+							if (char[i].critMulti > C.critMultiMax) {
+								C.critMultiMax = char[i].critMulti;
+							}
+							else if (char[i].critMulti < C.critMultiMin) {
+								C.critMultiMin = char[i].critMulti;
+							}
+							if (char[i].critChance > C.critChanceMax) {
+								C.critChanceMax = char[i].critChance;
+							}
+							else if (char[i].critChance < C.critChanceMin) {
+								C.critChanceMin = char[i].critChance;
+							}
+							if (char[i].def > C.defMax) {
+								C.defMax = char[i].def;
+							}
+							else if (char[i].def < C.defMin) {
+								C.defMin = char[i].def;
+							}
+							if (char[i].spd > C.spdMax) {
+								C.spdMax = char[i].spd;
+							}
+							else if (char[i].spd < C.spdMin) {
+								C.spdMin = char[i].spd;
+							}
+							if (char[i].agi > C.agiMax) {
+								C.agiMax = char[i].agi;
+							}
+							else if (char[i].agi < C.agiMin) {
+								C.agiMin = char[i].agi;
+							}
+							if (char[i].acr > C.acrMax) {
+								C.acrMax = char[i].acr;
+							}
+							else if (char[i].acr < C.acrMin) {
+								C.acrMin = char[i].acr;
+							}
+							if (char[i].rgn > C.rgnMax) {
+								C.rgnMax = char[i].rgn;
+							}
+							else if (char[i].rgn < C.rgnMin) {
+								C.rgnMin = char[i].rgn;
+							}
+							if (char[i].mag > C.magMax) {
+								C.magMax = char[i].mag;
+							}
+							else if (char[i].mag < C.magMin) {
+								C.magMin = char[i].mag;
+							}
+						}
+						C.charCount++;
+					}
+					else if (char[i]['tier'] === 'H') {
+						H.hp += char[i].hp;
+						H.atk += char[i].atk;
+						H.critMulti += char[i].critMulti;
+						H.critChance += char[i].critChance;
+						H.def += char[i].def;
+						H.spd += char[i].spd;
+						H.agi += char[i].agi;
+						H.acr += char[i].acr;
+						H.rgn += char[i].rgn;
+						if (char[i].mag !== 0) {
+							H.mag += char[i].mag;
+						}
+						else {
+							H.noMagChar++;
+						}
+						if (H.charCount === 0) {
+							H.hpMax = char[i].hp;
+							H.hpMin = char[i].hp;
+							H.atkMin = char[i].atk;
+							H.atkMax = char[i].atk;
+							H.critMultiMax = char[i].critMulti;
+							H.critMultiMin = char[i].critMulti;
+							H.critChanceMin = char[i].critChance;
+							H.critChanceMax = char[i].critChance;
+							H.defMin = char[i].def;
+							H.defMax = char[i].def;
+							H.spdMin = char[i].spd;
+							H.spdMax = char[i].spd;
+							H.agiMin = char[i].agi;
+							H.agiMax = char[i].agi;
+							H.acrMin = char[i].acr;
+							H.acrMax = char[i].acr;
+							H.rgnMin = char[i].rgn;
+							H.rgnMax = char[i].rgn;
+						}
+						if (H.charCount > 0) {
+							if (char[i].hp > H.hpMax) {
+								H.hpMax = char[i].hp;
+							}
+							else if (char[i].hp < H.hpMin) {
+								H.hpMin = char[i].hp;
+							}
+							if (char[i].atk > H.atkMax) {
+								H.atkMax = char[i].atk;
+							}
+							else if (char[i].atk < H.atkMin) {
+								H.atkMin = char[i].atk;
+							}
+							if (char[i].critMulti > H.critMultiMax) {
+								H.critMultiMax = char[i].critMulti;
+							}
+							else if (char[i].critMulti < H.critMultiMin) {
+								H.critMultiMin = char[i].critMulti;
+							}
+							if (char[i].critChance > H.critChanceMax) {
+								H.critChanceMax = char[i].critChance;
+							}
+							else if (char[i].critChance < H.critChanceMin) {
+								H.critChanceMin = char[i].critChance;
+							}
+							if (char[i].def > H.defMax) {
+								H.defMax = char[i].def;
+							}
+							else if (char[i].def < H.defMin) {
+								H.defMin = char[i].def;
+							}
+							if (char[i].spd > H.spdMax) {
+								H.spdMax = char[i].spd;
+							}
+							else if (char[i].spd < H.spdMin) {
+								H.spdMin = char[i].spd;
+							}
+							if (char[i].agi > H.agiMax) {
+								H.agiMax = char[i].agi;
+							}
+							else if (char[i].agi < H.agiMin) {
+								H.agiMin = char[i].agi;
+							}
+							if (char[i].acr > H.acrMax) {
+								H.acrMax = char[i].acr;
+							}
+							else if (char[i].acr < H.acrMin) {
+								H.acrMin = char[i].acr;
+							}
+							if (char[i].rgn > H.rgnMax) {
+								H.rgnMax = char[i].rgn;
+							}
+							else if (char[i].rgn < H.rgnMin) {
+								H.rgnMin = char[i].rgn;
+							}
+							if (char[i].mag > H.magMax) {
+								H.magMax = char[i].mag;
+							}
+							else if (char[i].mag < H.magMin) {
+								H.magMin = char[i].mag;
+							}
+						}
+						H.charCount++;
+					}
+					else {
+						console.log('Iterated character had an undefined tier, most likely test1 or test2');
+					}
+				}
+				const Stats = [
+					{
+						hpAvg: round((S.hp / S.charCount)), hpMin: round(S.hpMin), hpMax: round(S.hpMax),
+						atkAvg: round((S.atk / S.charCount)), atkMin: round(S.atkMin), atkMax: round(S.atkMax),
+						critMultiAvg: round((S.critMulti / S.charCount)), critMultiMin: round(S.critMultiMin), critMultiMax: round(S.critMultiMax),
+						critChanceAvg: round((S.critChance / S.charCount)), critChanceMin: round(S.critChanceMin), critChanceMax: round(S.critChanceMax),
+						defAvg: round((S.def / S.charCount)), defMin: round(S.defMin), defMax: round(S.defMax),
+						spdAvg: round((S.spd / S.charCount)), spdMin: round(S.spdMin), spdMax: round(S.spdMax),
+						agiAvg: round((S.agi / S.charCount)), agiMin: round(S.agiMin), agiMax: round(S.agiMax),
+						acrAvg: round((S.acr / S.charCount)), acrMin: round(S.acrMin), acrMax: round(S.acrMax),
+						rgnAvg: round((S.rgn / S.charCount)), rgnMin: round(S.rgnMin), rgnMax: round(S.rgnMax),
+						magAvg: round((S.mag / (S.charCount - S.noMagChar))) || 0, magMin: round(S.magMin), magMax: round(S.magMax),
+					},
+					{
+						hpAvg: round((A.hp / A.charCount)), hpMin: round(A.hpMin), hpMax: round(A.hpMax),
+						atkAvg: round((A.atk / A.charCount)), atkMin: round(A.atkMin), atkMax: round(A.atkMax),
+						critMultiAvg: round((A.critMulti / A.charCount)), critMultiMin: round(A.critMultiMin), critMultiMax: round(A.critMultiMax),
+						critChanceAvg: round((A.critChance / A.charCount)), critChanceMin: round(A.critChanceMin), critChanceMax: round(A.critChanceMax),
+						defAvg: round((A.def / A.charCount)), defMin: round(A.defMin), defMax: round(A.defMax),
+						spdAvg: round((A.spd / A.charCount)), spdMin: round(A.spdMin), spdMax: round(A.spdMax),
+						agiAvg: round((A.agi / A.charCount)), agiMin: round(A.agiMin), agiMax: round(A.agiMax),
+						acrAvg: round((A.acr / A.charCount)), acrMin: round(A.acrMin), acrMax: round(A.acrMax),
+						rgnAvg: round((A.rgn / A.charCount)), rgnMin: round(A.rgnMin), rgnMax: round(A.rgnMax),
+						magAvg: round((A.mag / (A.charCount - A.noMagChar))) || 0, magMin: round(A.magMin), magMax: round(A.magMax),
+					},
+					{
+						hpAvg: round((B.hp / B.charCount)), hpMin: round(B.hpMin), hpMax: round(B.hpMax),
+						atkAvg: round((B.atk / B.charCount)), atkMin: round(B.atkMin), atkMax: round(B.atkMax),
+						critMultiAvg: round((B.critMulti / B.charCount)), critMultiMin: round(B.critMultiMin), critMultiMax: round(B.critMultiMax),
+						critChanceAvg: round((B.critChance / B.charCount)), critChanceMin: round(B.critChanceMin), critChanceMax: round(B.critChanceMax),
+						defAvg: round((B.def / B.charCount)), defMin: round(B.defMin), defMax: round(B.defMax),
+						spdAvg: round((B.spd / B.charCount)), spdMin: round(B.spdMin), spdMax: round(B.spdMax),
+						agiAvg: round((B.agi / B.charCount)), agiMin: round(B.agiMin), agiMax: round(B.agiMax),
+						acrAvg: round((B.acr / B.charCount)), acrMin: round(B.acrMin), acrMax: round(B.acrMax),
+						rgnAvg: round((B.rgn / B.charCount)), rgnMin: round(B.rgnMin), rgnMax: round(B.rgnMax),
+						magAvg: round((B.mag / (B.charCount - B.noMagChar))) || 0, magMin: round(B.magMin), magMax: round(B.magMax),
+					},
+					{
+						hpAvg: round((C.hp / C.charCount)), hpMin: round(C.hpMin), hpMax: round(C.hpMax),
+						atkAvg: round((C.atk / C.charCount)), atkMin: round(C.atkMin), atkMax: round(C.atkMax),
+						critMultiAvg: round((C.critMulti / C.charCount)), critMultiMin: round(C.critMultiMin), critMultiMax: round(C.critMultiMax),
+						critChanceAvg: round((C.critChance / C.charCount)), critChanceMin: round(C.critChanceMin), critChanceMax: round(C.critChanceMax),
+						defAvg: round((C.def / C.charCount)), defMin: round(C.defMin), defMax: round(C.defMax),
+						spdAvg: round((C.spd / C.charCount)), spdMin: round(C.spdMin), spdMax: round(C.spdMax),
+						agiAvg: round((C.agi / C.charCount)), agiMin: round(C.agiMin), agiMax: round(C.agiMax),
+						acrAvg: round((C.acr / C.charCount)), acrMin: round(C.acrMin), acrMax: round(C.acrMax),
+						rgnAvg: round((C.rgn / C.charCount)), rgnMin: round(C.rgnMin), rgnMax: round(C.rgnMax),
+						magAvg: round((C.mag / (C.charCount - C.noMagChar))) || 0, magMin: round(C.magMin), magMax: round(C.magMax),
+					},
+					{
+						hpAvg: round((H.hp / H.charCount)), hpMin: round(H.hpMin), hpMax: round(H.hpMax),
+						atkAvg: round((H.atk / H.charCount)), atkMin: round(H.atkMin), atkMax: round(H.atkMax),
+						critMultiAvg: round((H.critMulti / H.charCount)), critMultiMin: round(H.critMultiMin), critMultiMax: round(H.critMultiMax),
+						critChanceAvg: round((H.critChance / H.charCount)), critChanceMin: round(H.critChanceMin), critChanceMax: round(H.critChanceMax),
+						defAvg: round((H.def / H.charCount)), defMin: round(H.defMin), defMax: round(H.defMax),
+						spdAvg: round((H.spd / H.charCount)), spdMin: round(H.spdMin), spdMax: round(H.spdMax),
+						agiAvg: round((H.agi / H.charCount)), agiMin: round(H.agiMin), agiMax: round(H.agiMax),
+						acrAvg: round((H.acr / H.charCount)), acrMin: round(H.acrMin), acrMax: round(H.acrMax),
+						rgnAvg: round((H.rgn / H.charCount)), rgnMin: round(H.rgnMin), rgnMax: round(H.rgnMax),
+						magAvg: round((H.mag / (H.charCount - H.noMagChar))) || 0, magMin: round(H.magMin), magMax: round(H.magMax),
+					}];
+				console.log(Stats);
+				msg.channel.send(`__**Stats for Tier S :**__ *${S.charCount} characters iterated*\n` + '```python\n' +
+'Average HP              : ' + Stats[0].hpAvg + '	' + 'Min HP : ' + Stats[0].hpMin + '	' + 'Max HP : ' + Stats[0].hpMax + '\n' +
+'Average Attack          : ' + Stats[0].atkAvg + '	' + 'Min Attack : ' + Stats[0].atkMin + '	' + 'Max Attack : ' + Stats[0].atkMax + '\n' +
+'Average Crit Multi      : ' + Stats[0].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[0].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[0].critMultiMax + '\n' +
+'Average Crit Chance     : ' + Stats[0].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[0].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[0].critChanceMax + '\n' +
+'Average Defense         : ' + Stats[0].defAvg + '	' + 'Min Defense : ' + Stats[0].defMin + '	' + 'Max Defense : ' + Stats[0].defMax + '\n' +
+'Average Speed           : ' + Stats[0].spdAvg + '	' + 'Min Speed : ' + Stats[0].spdMin + '	' + 'Max Speed : ' + Stats[0].spdMax + '\n' +
+'Average Agility         : ' + Stats[0].agiAvg + '	' + 'Min Agility : ' + Stats[0].agiMin + '	' + 'Max Agility : ' + Stats[0].agiMax + '\n' +
+'Average Accuracy        : ' + Stats[0].acrAvg + '	' + 'Min Accuracy : ' + Stats[0].acrMin + '	' + 'Max Accuracy : ' + Stats[0].acrMax + '\n' +
+'Average HP Regen        : ' + Stats[0].rgnAvg + '	' + 'Min HP Regen : ' + Stats[0].rgnMin + '	' + 'Max HP Regen : ' + Stats[0].rgnMax + '\n' +
+'Average Magic           : ' + Stats[0].magAvg + '	' + 'Min Magic : ' + Stats[0].magMin + '	' + 'Max Magic : ' + Stats[0].magMax + '\n' +
+'```' + `\n*Note that ${S.noMagChar} out of ${S.charCount} characters had no magic and where left out of the average calculation.*`);
+				msg.channel.send(`__**Stats for Tier A :**__ *${A.charCount} characters iterated*\n` + '```python\n' +
+'Average HP              : ' + Stats[1].hpAvg + '	' + 'Min HP : ' + Stats[1].hpMin + '	' + 'Max HP : ' + Stats[1].hpMax + '\n' +
+'Average Attack          : ' + Stats[1].atkAvg + '	' + 'Min Attack : ' + Stats[1].atkMin + '	' + 'Max Attack : ' + Stats[1].atkMax + '\n' +
+'Average Crit Multi      : ' + Stats[1].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[1].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[1].critMultiMax + '\n' +
+'Average Crit Chance     : ' + Stats[1].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[1].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[1].critChanceMax + '\n' +
+'Average Defense         : ' + Stats[1].defAvg + '	' + 'Min Defense : ' + Stats[1].defMin + '	' + 'Max Defense : ' + Stats[1].defMax + '\n' +
+'Average Speed           : ' + Stats[1].spdAvg + '	' + 'Min Speed : ' + Stats[1].spdMin + '	' + 'Max Speed : ' + Stats[1].spdMax + '\n' +
+'Average Agility         : ' + Stats[1].agiAvg + '	' + 'Min Agility : ' + Stats[1].agiMin + '	' + 'Max Agility : ' + Stats[1].agiMax + '\n' +
+'Average Accuracy        : ' + Stats[1].acrAvg + '	' + 'Min Accuracy : ' + Stats[1].acrMin + '	' + 'Max Accuracy : ' + Stats[1].acrMax + '\n' +
+'Average HP Regen        : ' + Stats[1].rgnAvg + '	' + 'Min HP Regen : ' + Stats[1].rgnMin + '	' + 'Max HP Regen : ' + Stats[1].rgnMax + '\n' +
+'Average Magic           : ' + Stats[1].magAvg + '	' + 'Min Magic : ' + Stats[1].magMin + '	' + 'Max Magic : ' + Stats[1].magMax + '\n' +
+'```' + `\n*Note that ${A.noMagChar} out of ${A.charCount} characters had no magic and where left out of the average calculation.*`);
+				msg.channel.send(`__**Stats for Tier B :**__ *${B.charCount} characters iterated*\n` + '```python\n' +
+'Average HP              : ' + Stats[2].hpAvg + '	' + 'Min HP : ' + Stats[2].hpMin + '	' + 'Max HP : ' + Stats[2].hpMax + '\n' +
+'Average Attack          : ' + Stats[2].atkAvg + '	' + 'Min Attack : ' + Stats[2].atkMin + '	' + 'Max Attack : ' + Stats[2].atkMax + '\n' +
+'Average Crit Multi      : ' + Stats[2].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[2].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[2].critMultiMax + '\n' +
+'Average Crit Chance     : ' + Stats[2].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[2].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[2].critChanceMax + '\n' +
+'Average Defense         : ' + Stats[2].defAvg + '	' + 'Min Defense : ' + Stats[2].defMin + '	' + 'Max Defense : ' + Stats[2].defMax + '\n' +
+'Average Speed           : ' + Stats[2].spdAvg + '	' + 'Min Speed : ' + Stats[2].spdMin + '	' + 'Max Speed : ' + Stats[2].spdMax + '\n' +
+'Average Agility         : ' + Stats[2].agiAvg + '	' + 'Min Agility : ' + Stats[2].agiMin + '	' + 'Max Agility : ' + Stats[2].agiMax + '\n' +
+'Average Accuracy        : ' + Stats[2].acrAvg + '	' + 'Min Accuracy : ' + Stats[2].acrMin + '	' + 'Max Accuracy : ' + Stats[2].acrMax + '\n' +
+'Average HP Regen        : ' + Stats[2].rgnAvg + '	' + 'Min HP Regen : ' + Stats[2].rgnMin + '	' + 'Max HP Regen : ' + Stats[2].rgnMax + '\n' +
+'Average Magic           : ' + Stats[2].magAvg + '	' + 'Min Magic : ' + Stats[2].magMin + '	' + 'Max Magic : ' + Stats[2].magMax + '\n' +
+'```' + `\n*Note that ${B.noMagChar} out of ${B.charCount} characters had no magic and where left out of the average calculation.*`);
+				msg.channel.send(`__**Stats for Tier C :**__ *${C.charCount} characters iterated*\n` + '```python\n' +
+'Average HP              : ' + Stats[3].hpAvg + '	' + 'Min HP : ' + Stats[3].hpMin + '	' + 'Max HP : ' + Stats[3].hpMax + '\n' +
+'Average Attack          : ' + Stats[3].atkAvg + '	' + 'Min Attack : ' + Stats[3].atkMin + '	' + 'Max Attack : ' + Stats[3].atkMax + '\n' +
+'Average Crit Multi      : ' + Stats[3].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[3].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[3].critMultiMax + '\n' +
+'Average Crit Chance     : ' + Stats[3].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[3].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[3].critChanceMax + '\n' +
+'Average Defense         : ' + Stats[3].defAvg + '	' + 'Min Defense : ' + Stats[3].defMin + '	' + 'Max Defense : ' + Stats[3].defMax + '\n' +
+'Average Speed           : ' + Stats[3].spdAvg + '	' + 'Min Speed : ' + Stats[3].spdMin + '	' + 'Max Speed : ' + Stats[3].spdMax + '\n' +
+'Average Agility         : ' + Stats[3].agiAvg + '	' + 'Min Agility : ' + Stats[3].agiMin + '	' + 'Max Agility : ' + Stats[3].agiMax + '\n' +
+'Average Accuracy        : ' + Stats[3].acrAvg + '	' + 'Min Accuracy : ' + Stats[3].acrMin + '	' + 'Max Accuracy : ' + Stats[3].acrMax + '\n' +
+'Average HP Regen        : ' + Stats[3].rgnAvg + '	' + 'Min HP Regen : ' + Stats[3].rgnMin + '	' + 'Max HP Regen : ' + Stats[3].rgnMax + '\n' +
+'Average Magic           : ' + Stats[3].magAvg + '	' + 'Min Magic : ' + Stats[3].magMin + '	' + 'Max Magic : ' + Stats[3].magMax + '\n' +
+'```' + `\n*Note that ${C.noMagChar} out of ${C.charCount} characters had no magic and where left out of the average calculation.*`);
+				msg.channel.send(`__**Stats for Tier H :**__ *${H.charCount} characters iterated*\n` + '```python\n' +
+'Average HP              : ' + Stats[4].hpAvg + '	' + 'Min HP : ' + Stats[4].hpMin + '	' + 'Max HP : ' + Stats[4].hpMax + '\n' +
+'Average Attack          : ' + Stats[4].atkAvg + '	' + 'Min Attack : ' + Stats[4].atkMin + '	' + 'Max Attack : ' + Stats[4].atkMax + '\n' +
+'Average Crit Multi      : ' + Stats[4].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[4].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[4].critMultiMax + '\n' +
+'Average Crit Chance     : ' + Stats[4].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[4].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[4].critChanceMax + '\n' +
+'Average Defense         : ' + Stats[4].defAvg + '	' + 'Min Defense : ' + Stats[4].defMin + '	' + 'Max Defense : ' + Stats[4].defMax + '\n' +
+'Average Speed           : ' + Stats[4].spdAvg + '	' + 'Min Speed : ' + Stats[4].spdMin + '	' + 'Max Speed : ' + Stats[4].spdMax + '\n' +
+'Average Agility         : ' + Stats[4].agiAvg + '	' + 'Min Agility : ' + Stats[4].agiMin + '	' + 'Max Agility : ' + Stats[4].agiMax + '\n' +
+'Average Accuracy        : ' + Stats[4].acrAvg + '	' + 'Min Accuracy : ' + Stats[4].acrMin + '	' + 'Max Accuracy : ' + Stats[4].acrMax + '\n' +
+'Average HP Regen        : ' + Stats[4].rgnAvg + '	' + 'Min HP Regen : ' + Stats[4].rgnMin + '	' + 'Max HP Regen : ' + Stats[4].rgnMax + '\n' +
+'Average Magic           : ' + Stats[4].magAvg + '	' + 'Min Magic : ' + Stats[4].magMin + '	' + 'Max Magic : ' + Stats[4].magMax + '\n' +
+'```' + `\n*Note that ${H.noMagChar} out of ${H.charCount} characters had no magic and where left out of the average calculation.*`);
+			}
 			else if (args[0] === 'gleave') {
 				if (msg.guild.id == args[1]) {
 				// this is just a bit of security measure to make sure the user knows what server he is going to leave
