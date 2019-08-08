@@ -72,6 +72,7 @@ const player2 = {
 	message_block: ' ',
 };
 const char = require('./characters.json');
+// const char = require('./charactersBulk.json');
 /*
 ---------------------------------------------
 ---------------------------------------------

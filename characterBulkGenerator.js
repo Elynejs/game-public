@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const Tiers = ['S', 'A', 'B', 'C', 'H'];
-const Bulk = 100;
+const Bulk = 10000;
 const char = [];
 
 const randInt = (min, max) => {
