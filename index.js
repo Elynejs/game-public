@@ -8,7 +8,6 @@ But nevertheless I'm rather proud of the level I was able to aquire in this shor
 // importing librarie
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const fs = require('fs'); // eslint-disable-line
 const config = require('./config.json');
 const token = require('./token.json');
 client.login(token.token);
@@ -1066,7 +1065,18 @@ client.on('message', msg => {
 				}
 				);
 			}
+			else if (args[0] === 'generate') {
+				const generator = require('./characterBulkGenerator.js');
+				if (!args[1]) {
+					msg.channel.send('Please input an amount of character to generate');
+				}
+				else {
+					generator(args[1]);
+					msg.channel.send(`${args[1]} characters have been automatically generated`);
+				}
+			}
 			/* else if (args[0] === 'saveChar') { // I removed this command to prevent the overwriting of characters
+				const fs = require('fs');
 				fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
 					if (err) throw err;
 					console.log('Characters has successfully been saved');
