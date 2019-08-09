@@ -943,19 +943,14 @@ const NewTurnPhase = () => {
 				},
 				fields: [{
 					name: 'What should I do ?',
-					value: '*Choose by reacting to this message with the appropriate action*',
+					value: '*Choose by typing one of the commands below*',
 				}],
+				image: {
+					url: 'https: //i.imgur.com/nuZbg4x.jpg',
+				},
 				timestamp: new Date(),
 			},
-		})
-			.then(async (p1Selector) => {
-				await p1Selector.react('603772499431260196'),
-				await p1Selector.react('603768004010049541'),
-				await p1Selector.react('603769186463907845'),
-				await p1Selector.react('603770838709305371'),
-				await p1Selector.react('603767542846193712');
-			})
-			.catch(console.error);
+		});
 		client.channels.get(channelID).send({
 			embed: {
 				color: 16286691,
@@ -968,19 +963,14 @@ const NewTurnPhase = () => {
 				},
 				fields: [{
 					name: 'What should I do ?',
-					value: '*Choose by reacting to this message with the appropriate action*',
+					value: '*Choose by typing one of the commands below*',
 				}],
+				image: {
+					url: 'https: //i.imgur.com/nuZbg4x.jpg',
+				},
 				timestamp: new Date(),
 			},
-		})
-			.then(async (p2Selector) => {
-				await p2Selector.react('603772499431260196'),
-				await p2Selector.react('603768004010049541'),
-				await p2Selector.react('603769186463907845'),
-				await p2Selector.react('603770838709305371'),
-				await p2Selector.react('603767542846193712');
-			})
-			.catch(console.error);
+		});
 	}
 };
 
