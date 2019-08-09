@@ -1,4 +1,4 @@
-export function bulkGenerator(amount) {
+module.exports = function(amount) {
 	const fs = require('fs');
 	const Tiers = ['S', 'A', 'B', 'C', 'H'];
 	const char = [];
@@ -80,4 +80,4 @@ export function bulkGenerator(amount) {
 		if (err) throw err;
 		console.log('Characters has successfully been saved');
 	});
-}
+};

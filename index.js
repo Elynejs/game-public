@@ -1075,13 +1075,6 @@ client.on('message', msg => {
 					msg.channel.send(`${args[1]} characters have been automatically generated and saved in charactersBulk.json`);
 				}
 			}
-			/* else if (args[0] === 'saveChar') { // I removed this command to prevent the overwriting of characters
-				const fs = require('fs');
-				fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
-					if (err) throw err;
-					console.log('Characters has successfully been saved');
-				});
-			}*/
 			// One day, I woke up and said to myself "Math is cool, especially statistics".
 			// So I decided to make a command that would display basics statistics math about the character stats of this game.
 			// Decision I strongly regretted later on when I realised I had no idea what the fuck I am doing
@@ -2026,7 +2019,7 @@ client.on('message', msg => {
 	}
 
 	// surrender command
-	if (command === 'surrender') {
+	else if (command === 'surrender') {
 		if (msg.member.id === player1.id) {
 			gameEnd(player2, player1);
 		}
@@ -2039,7 +2032,7 @@ client.on('message', msg => {
 	}
 
 	// starting the game
-	if (command === 'start') {
+	else if (command === 'start') {
 		if (playerCount !== 2) {
 			msg.channel.send('Not enough player registered yet. Please type !register.');
 		}
@@ -2055,18 +2048,62 @@ client.on('message', msg => {
 	}
 
 	// list command
-	if (command === 'list') {
+	else if (command === 'list') {
 		msg.reply('https://imgur.com/mtzCunX');
 	}
 
 	// stat command
-	if (command === 'stats') {
+	else if (command === 'stats') {
 		msg.reply('https://i.imgur.com/lY5H53N.jpg');
 	}
 
 	// action command
-	if (command === 'actions') {
+	else if (command === 'actions') {
 		msg.reply('https://i.imgur.com/nuZbg4x.jpg');
+	}
+
+	else if (command === 'customchar') {
+		const Tiers = ['S', 'A', 'B', 'C', 'H'];
+		const custChar = new Object();
+		msg.author.send('__**Welcome to the character creation screen**__\n' +
+			'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
+			'If you type anything other than the asked value then the creation will break\n' +
+			'Also note that you only have 10 minutes to type your response or the bot will consider that you somehow got transported into a wormhole and cancel the creation.');
+		msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
+		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make*')
+			.then(() => {
+				msg.author.awaitMessages(response1 => Tiers.includes(response1), {
+					max: 1,
+					time: 60000000,
+					errors: ['time'],
+				})
+					.then((collected1) => {
+						custChar.tier = collected1;
+						msg.author.send(`Your character is of tier ${collected1}`);
+						console.log(custChar);
+					})
+					.catch(() => {
+						msg.author.send('The 10 minutes time limit has passed.');
+					});
+			});
+		msg.author.send('What\'s the name of your character ?\n' +
+		'*Note that you can only use alphanumerical characters, space and \'*')
+			.then(() => {
+				msg.author.awaitMessages(response2 => typeof response2 === String, {
+					max: 1,
+					time: 60000000,
+					errors: ['time'],
+				})
+					.then((collected2) => {
+						custChar.name = collected2;
+						msg.author.send(`Your character's name is ${collected2}`);
+						console.log(custChar);
+					})
+					.catch(() => {
+						msg.author.send('The 10 minutes time limit has passed.');
+					});
+			});
+		char.push(custChar);
 	}
 	// character selection
 	if (gameStarting === true) {
@@ -2139,19 +2176,14 @@ client.on('message', msg => {
 				},
 				fields: [{
 					name: 'What should I do ?',
-					value: '*Choose by reacting to this message with the appropriate action*',
+					value: '*Choose by typing one of the commands below*',
 				}],
+				image: {
+					url: 'https: //i.imgur.com/nuZbg4x.jpg',
+				},
 				timestamp: new Date(),
 			},
-		})
-			.then(async (p1Selector) => {
-				await p1Selector.react('603772499431260196'),
-				await p1Selector.react('603768004010049541'),
-				await p1Selector.react('603769186463907845'),
-				await p1Selector.react('603770838709305371'),
-				await p1Selector.react('603767542846193712');
-			})
-			.catch(console.error);
+		});
 		msg.channel.send({
 			embed: {
 				color: 16286691,
@@ -2164,19 +2196,14 @@ client.on('message', msg => {
 				},
 				fields: [{
 					name: 'What should I do ?',
-					value: '*Choose by reacting to this message with the appropriate action*',
+					value: '*Choose by typing one of the commands below*',
 				}],
+				image: {
+					url: 'https: //i.imgur.com/nuZbg4x.jpg',
+				},
 				timestamp: new Date(),
 			},
-		})
-			.then(async (p2Selector) => {
-				await p2Selector.react('603772499431260196'),
-				await p2Selector.react('603768004010049541'),
-				await p2Selector.react('603769186463907845'),
-				await p2Selector.react('603770838709305371'),
-				await p2Selector.react('603767542846193712');
-			})
-			.catch(console.error);
+		});
 	}
 
 	// turn phase of the combat phase
@@ -2422,4 +2449,12 @@ client.on('message', msg => {
 			break;
 		}
 	}
+});
+
+client.on('disconnect', () => {
+	const fs = require('fs');
+	fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
+		if (err) throw err;
+		console.log('Characters has successfully been saved');
+	});
 });
