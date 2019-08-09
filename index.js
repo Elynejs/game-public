@@ -1071,8 +1071,8 @@ client.on('message', msg => {
 					msg.channel.send('Please input an amount of character to generate');
 				}
 				else {
-					generator(args[1]);
-					msg.channel.send(`${args[1]} characters have been automatically generated`);
+					generator(parseInt(args[1]));
+					msg.channel.send(`${args[1]} characters have been automatically generated and saved in charactersBulk.json`);
 				}
 			}
 			/* else if (args[0] === 'saveChar') { // I removed this command to prevent the overwriting of characters
