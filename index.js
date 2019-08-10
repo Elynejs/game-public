@@ -2065,45 +2065,49 @@ client.on('message', msg => {
 	else if (command === 'customchar') {
 		const Tiers = ['S', 'A', 'B', 'C', 'H'];
 		const custChar = new Object();
-		msg.author.send('__**Welcome to the character creation screen**__\n' +
+		const creation = async () => {
+			// const filter = () => true;
+			const firstMsg = await msg.author.send('__**Welcome to the character creation screen**__\n' +
 			'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
 			'If you type anything other than the asked value then the creation will break\n' +
 			'Also note that you only have 10 minutes to type your response or the bot will consider that you somehow got transported into a wormhole and cancel the creation.');
-		msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
-		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make*')
-			.then(() => {
-				msg.author.awaitMessages(response1 => Tiers.includes(response1), {
-					max: 1,
-					time: 60000000,
-					errors: ['time'],
-				})
-					.then((collected1) => {
-						custChar.tier = collected1;
-						msg.author.send(`Your character is of tier ${collected1}`);
-						console.log(custChar);
+			msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
+		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*')
+				.then(() => {
+					firstMsg.channel.awaitMessages(response1 => Tiers.includes(response1), {
+						max: 1,
+						time: 60000000,
+						errors: ['time'],
 					})
-					.catch(() => {
-						msg.author.send('The 10 minutes time limit has passed.');
-					});
-			});
-		msg.author.send('What\'s the name of your character ?\n' +
+						.then((collected1) => {
+							custChar.tier = collected1;
+							msg.author.send(`Your character is of tier ${collected1}`);
+							console.log(custChar);
+						})
+						.catch(() => {
+							msg.author.send('The 10 minutes time limit has passed.');
+						});
+				});
+			msg.author.send('What\'s the name of your character ?\n' +
 		'*Note that you can only use alphanumerical characters, space and \'*')
-			.then(() => {
-				msg.author.awaitMessages(response2 => typeof response2 === String, {
-					max: 1,
-					time: 60000000,
-					errors: ['time'],
-				})
-					.then((collected2) => {
-						custChar.name = collected2;
-						msg.author.send(`Your character's name is ${collected2}`);
-						console.log(custChar);
+				.then(() => {
+					firstMsg.channel.awaitMessages(response2 => typeof response2 === String, {
+						max: 1,
+						time: 60000000,
+						errors: ['time'],
 					})
-					.catch(() => {
-						msg.author.send('The 10 minutes time limit has passed.');
-					});
-			});
-		char.push(custChar);
+						.then((collected2) => {
+							custChar.name = collected2;
+							msg.author.send(`Your character's name is ${collected2}`);
+							console.log(custChar);
+						})
+						.catch(() => {
+							msg.author.send('The 10 minutes time limit has passed.');
+						});
+				});
+			char.push(custChar);
+		};
+		creation();
 	}
 	// character selection
 	if (gameStarting === true) {
@@ -2451,10 +2455,10 @@ client.on('message', msg => {
 	}
 });
 
-client.on('disconnect', () => {
+/* client.on('disconnect', () => {
 	const fs = require('fs');
 	fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
 		if (err) throw err;
 		console.log('Characters has successfully been saved');
 	});
-});
+});*/
