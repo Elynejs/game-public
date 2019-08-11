@@ -12,7 +12,6 @@ const fc = require('./functions.js');
 const gv = require('./globalVariable');
 const char = require('./characters.json');
 client.login(token.token);
-let channelID = config.channelID;
 // Defining bot activity
 client.on('ready', () => {
     client.user.setActivity('Type !register to start a game.');
@@ -69,10 +68,6 @@ client.on('message', msg => {
                         {
                             name: '**Clear**',
                             value: '```!ad clear [Number] => Makes the bot deletes his own messages among the specified last number of messages```',
-                        },
-                        {
-                            name: '**Channel edit**',
-                            value: '```!ad editchan [Channel ID] => Makes the bot change his default channel ID```',
                         },
                         {
                             name: '**Character edit**',
@@ -884,14 +879,6 @@ client.on('message', msg => {
                         console.log('Error while deleting files', err);
                     });
                 }
-            } else if (args[0] === 'editchan') {
-                // command to edit channel
-                if (args[1] !== channelID) {
-                    channelID = args[1];
-                    msg.channel.send(`Admin changed the default channel to ${args[1]}`);
-                } else {
-                    msg.channel.send(`Default channel ID is already set to ${args[1]}`);
-                }
             } else if (args[0] === 'editchar') {
                 // editing command for player.char
                 const p = args[4];
@@ -976,11 +963,11 @@ client.on('message', msg => {
         // starting the game
         if (gv.playerCount !== 2) {
             msg.channel.send('Not enough player registered yet. Please type !register.');
-        } else if (!args.length) {
+        } else if (args.length !== 0) {
             if (args[0] >= 5) {
                 args[0] = 5;
             }
-            fc.charAmount(args[0]);
+            fc.charAmount(args[0], msg);
         } else {
             msg.channel.send('An error occured! Please try again.');
         }
