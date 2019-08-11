@@ -1,4 +1,4 @@
-const gv = require('./index.js');
+const gv = require('./globalVariable.js');
 
 const func = {
     // functions for displaying characters gimmicks on selection of character

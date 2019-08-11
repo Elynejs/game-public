@@ -9,76 +9,9 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const token = require('./token.json');
 const fc = require('./functions.js');
+const gv = require('./globalVariable');
 client.login(token.token);
-
-/*
---------------------------------------
-THIS ARE THE OBJECT FOR BOTH THE PLAYERS AND THE CHARACTERS
---------------------------------------
-*/
 let channelID = config.channelID;
-const globalVariable = {
-    actionAmount: 0,
-    turn: 1,
-    gamePhase: false,
-    turnPhase: false,
-    gameStarting: false,
-    playerCount: 0,
-    char_amount: 1,
-    arp1: 0,
-    arp2: 0,
-    p1CharDied: false,
-    p2CharDied: false,
-    dodgecdMax: 2,
-    player1: {
-        id: 0,
-        active: 0,
-        futurChar: 0,
-        lastAliveChar: 0,
-        charAmount: gv.char_amount,
-        choseChar: false,
-        choseAction: false,
-        username: '',
-        dmg: 0,
-        char: [],
-        action: '',
-        defense_stack: 2,
-        defense_multiplier: 2,
-        message_damage: ' ',
-        message_dodge: ' ',
-        message_block: ' ',
-    },
-    player2: {
-        id: 0,
-        active: 0,
-        futurChar: 0,
-        lastAliveChar: 0,
-        charAmount: gv.char_amount,
-        choseChar: false,
-        choseAction: false,
-        username: '',
-        dmg: 0,
-        char: [],
-        action: '',
-        defense_stack: 2,
-        defense_multiplier: 2,
-        message_damage: ' ',
-        message_dodge: ' ',
-        message_block: ' ',
-    },
-    char: require('./characters.json'),
-    // char: require('./charactersBulk.json'),
-};
-module.exports = { globalVariable };
-const gv = globalVariable;
-/*
----------------------------------------------
----------------------------------------------
-END OF THE OBJECTS FOR PLAYERS AND CHARACTERS
----------------------------------------------
----------------------------------------------
-*/
-
 // Defining bot activity
 client.on('ready', () => {
     client.user.setActivity('Type !register to start a game.');
