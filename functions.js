@@ -1,4 +1,5 @@
 const gv = require('./globalVariable.js');
+const char = require('./characters.json');
 
 const func = {
     // functions for displaying characters gimmicks on selection of character
@@ -137,9 +138,9 @@ const func = {
 
     remove_active_effect: (player_1, client) => {
         if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
-            player_1.char[player_1.active].atk = gv.char[12].atk;
-            player_1.char[player_1.active].def = gv.char[12].def;
-            player_1.char[player_1.active].rgn = gv.char[12].rgn;
+            player_1.char[player_1.active].atk = char[12].atk;
+            player_1.char[player_1.active].def = char[12].def;
+            player_1.char[player_1.active].rgn = char[12].rgn;
             client.channel.send({
                 embed: {
                     color: 16286691,
@@ -150,7 +151,7 @@ const func = {
                 },
             });
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
-            player_1.char[player_1.active].atk = gv.char[15].atk;
+            player_1.char[player_1.active].atk = char[15].atk;
             client.channel.send({
                 embed: {
                     color: 16286691,
