@@ -929,7 +929,7 @@ client.on('message', msg => {
                 gv.player2.choseChar = true;
                 msg.channel.send('Fast started the game.');
             } else if (args[0] === 'reset') {
-                fc.gameEnd(gv.player1, gv.player2);
+                fc.gameEnd(gv.player1, gv.player2, msg);
                 console.log(gv.player1);
                 console.log(gv.player2);
             } else {
@@ -966,9 +966,9 @@ client.on('message', msg => {
     } else if (command === 'surrender') {
         // surrender command
         if (msg.member.id === gv.player1.id) {
-            fc.gameEnd(gv.player2, gv.player1);
+            fc.gameEnd(gv.player2, gv.player1, msg);
         } else if (msg.member.id === gv.player2.id) {
-            fc.gameEnd(gv.player1, gv.player2);
+            fc.gameEnd(gv.player1, gv.player2, msg);
         } else {
             msg.reply(' you can\'t surrender since you are not a registered player');
         }
@@ -1090,8 +1090,8 @@ client.on('message', msg => {
         gv.turn = 1;
         fc.reset_cd(gv.player1);
         fc.reset_cd(gv.player2);
-        fc.passive(gv.player1, gv.player2);
-        fc.passive(gv.player2, gv.player1);
+        fc.passive(gv.player1, gv.player2, msg);
+        fc.passive(gv.player2, gv.player1, msg);
         gv.player1.char[0].isActive = true;
         gv.player2.char[0].isActive = true;
         msg.channel.send(`Turn ${gv.turn} has started. Chose your character's action.`);
@@ -1163,7 +1163,7 @@ client.on('message', msg => {
                                 gv.player1.action = 'changechar';
                                 gv.actionAmount += 1;
                                 if (gv.actionAmount === 2) {
-                                    fc.actionphase(gv.player1, gv.player2);
+                                    fc.actionphase(gv.player1, gv.player2, msg);
                                 } else {
                                     console.log(`actionAmount : ${gv.actionAmount}`);
                                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1197,7 +1197,7 @@ client.on('message', msg => {
                                 gv.player2.action = 'changechar';
                                 gv.actionAmount += 1;
                                 if (gv.actionAmount === 2) {
-                                    fc.actionphase(gv.player2, gv.player2);
+                                    fc.actionphase(gv.player2, gv.player2, msg);
                                 } else {
                                     console.log(`actionAmount : ${gv.actionAmount}`);
                                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1219,7 +1219,7 @@ client.on('message', msg => {
                 gv.player1.action = 'attack';
                 gv.actionAmount += 1;
                 if (gv.actionAmount === 2) {
-                    fc.actionphase(gv.player1, gv.player2);
+                    fc.actionphase(gv.player1, gv.player2, msg);
                 } else {
                     console.log(`actionAmount : ${gv.actionAmount}`);
                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1229,7 +1229,7 @@ client.on('message', msg => {
                 gv.player2.action = 'attack';
                 gv.actionAmount += 1;
                 if (gv.actionAmount === 2) {
-                    fc.actionphase(gv.player1, gv.player2);
+                    fc.actionphase(gv.player1, gv.player2, msg);
                 } else {
                     console.log(`actionAmount : ${gv.actionAmount}`);
                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1245,7 +1245,7 @@ client.on('message', msg => {
                     gv.player1.action = 'defense';
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1259,7 +1259,7 @@ client.on('message', msg => {
                     gv.player2.action = 'defense';
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1281,7 +1281,7 @@ client.on('message', msg => {
                     msg.reply(`${gv.player1.username} chose to use magic this turn.`);
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then I\'m done');
@@ -1297,7 +1297,7 @@ client.on('message', msg => {
                     gv.player2.action = 'magic';
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1316,7 +1316,7 @@ client.on('message', msg => {
                     gv.player1.action = 'skill';
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -1330,7 +1330,7 @@ client.on('message', msg => {
                     gv.player2.action = 'skill';
                     gv.actionAmount += 1;
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2);
+                        fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');

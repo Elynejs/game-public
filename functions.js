@@ -99,13 +99,13 @@ const func = {
     },
 
     // function for passing from one turn to another
-    addTurn: () => {
+    addTurn: client => {
         gv.turn += 1;
-        func.NewTurnPhase();
+        func.NewTurnPhase(client);
     },
 
     // function for special abilities
-    passive: (player_1, player_2) => {
+    passive: (player_1, player_2, client) => {
         if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
             func.all_or_nothing(player_1.char[player_1.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
@@ -113,7 +113,7 @@ const func = {
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
             func.black_poison(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-            func.care_taker(player_1);
+            func.care_taker(player_1, client);
         } else {
             console.log('No passive ability detected.');
         }
@@ -352,7 +352,7 @@ const func = {
 
     // function for when a characters dies during a turn
     omgHeDead: (player, client) => {
-        func.react_KO(player);
+        func.react_KO(player, client);
         client.channel.send({
             embed: {
                 color: 16286691,
@@ -495,8 +495,8 @@ const func = {
     },
 
     gameEnd: (winner, looser, client) => {
-        func.react_KO(looser);
-        func.react_victory(winner);
+        func.react_KO(looser, client);
+        func.react_victory(winner, client);
         client.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
         gv.gamePhase = false;
         gv.turnPhase = false;
@@ -533,7 +533,7 @@ const func = {
     },
 
     // function for gameend
-    IsGameOver: (player, otherplayer, char1) => {
+    isGameOver: (player, otherplayer, char1, client) => {
         if (char1.hp <= 0) {
             char1.hp = 0;
             char1.isAlive = false;
@@ -555,8 +555,8 @@ const func = {
                 } else if (otherplayer.char[i].hp <= 0) {
                     if (i === (otherplayer.charAmount - 1)) {
                         console.log('No characters are alive anymore so we end the game.');
-                        func.statusEnd();
-                        func.gameEnd(player, otherplayer);
+                        func.statusEnd(client);
+                        func.gameEnd(player, otherplayer, client);
                         break;
                     } else {
                         console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
@@ -579,7 +579,7 @@ const func = {
     },
 
     // function for cd iteration
-    cd_iteration: pl => {
+    cd_iteration: (pl, client) => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
             if (pl.char[i].magcd > 0 && pl.char[i].magcdmax >= pl.char[i].magcd) {
@@ -597,14 +597,14 @@ const func = {
                     pl.char[i].skill_timer = 0;
                 }
                 if (pl.char[i].skill_timer === 0 && pl.char[i].has_active_skill === true) {
-                    func.remove_active_effect(pl);
+                    func.remove_active_effect(pl, client);
                 }
             }
         }
     },
 
     // function for action phase
-    actionphase: (firstplayer, secondplayer) => {
+    actionphase: (firstplayer, secondplayer, client) => {
         if (gv.actionAmount === 2) {
             func.whoIsActive(gv.player1);
             func.whoIsActive(gv.player2);
@@ -615,11 +615,11 @@ const func = {
                 }
                 if (firstplayer.action === 'attack') {
                     func.attack(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                    func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                    func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                 }
                 if (firstplayer.action === 'magic') {
-                    func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                    func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                    func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active], client);
+                    func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                 }
                 if (firstplayer.action === 'skill') {
                     func.active(gv.player1, gv.player2);
@@ -629,11 +629,11 @@ const func = {
                 }
                 if (secondplayer.action === 'attack') {
                     func.attack(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                    func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                    func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                 }
                 if (secondplayer.action === 'magic') {
-                    func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                    func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                    func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active], client);
+                    func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                 }
                 if (secondplayer.action === 'skill') {
                     func.active(gv.player2, gv.player1);
@@ -642,18 +642,18 @@ const func = {
                 gv.player2.choseAction = false;
                 gv.turnPhase = false;
                 gv.actionAmount = 0;
-                func.addTurn();
+                func.addTurn(client);
             } else if (firstplayer.char[firstplayer.active].spd < secondplayer.char[secondplayer.active].spd) {
                 if (secondplayer.action === 'changechar') {
                     func.changechar(gv.player2, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
                 }
                 if (secondplayer.action === 'attack') {
                     func.attack(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                    func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                    func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                 }
                 if (secondplayer.action === 'magic') {
-                    func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                    func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                    func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active], client);
+                    func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                 }
                 if (secondplayer.action === 'skill') {
                     func.active(gv.player2, gv.player1);
@@ -663,11 +663,11 @@ const func = {
                 }
                 if (firstplayer.action === 'attack') {
                     func.attack(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                    func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                    func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                 }
                 if (firstplayer.action === 'magic') {
-                    func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                    func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                    func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active], client);
+                    func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                 }
                 if (firstplayer.action === 'skill') {
                     func.active(gv.player1, gv.player2);
@@ -676,7 +676,7 @@ const func = {
                 gv.player2.choseAction = false;
                 gv.turnPhase = false;
                 gv.actionAmount = 0;
-                func.addTurn();
+                func.addTurn(client);
             } else if (firstplayer.char[firstplayer.active].spd === secondplayer.char[secondplayer.active].spd) {
                 if (Math.floor(Math.random() * 2) >= 1) {
                     console.log('succesfully reached speed detection');
@@ -685,11 +685,11 @@ const func = {
                     }
                     if (firstplayer.action === 'attack') {
                         func.attack(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                        func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                        func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                     }
                     if (firstplayer.action === 'magic') {
-                        func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                        func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                        func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active], client);
+                        func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                     }
                     if (firstplayer.action === 'skill') {
                         func.active(gv.player1, gv.player2);
@@ -699,11 +699,11 @@ const func = {
                     }
                     if (secondplayer.action === 'attack') {
                         func.attack(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                        func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                        func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                     }
                     if (secondplayer.action === 'magic') {
-                        func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                        func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                        func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active], client);
+                        func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                     }
                     if (secondplayer.action === 'skill') {
                         func.active(gv.player2, gv.player1);
@@ -712,18 +712,18 @@ const func = {
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    func.addTurn();
+                    func.addTurn(client);
                 } else {
                     if (secondplayer.action === 'changechar') {
                         func.changechar(gv.player2, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
                     }
                     if (secondplayer.action === 'attack') {
                         func.attack(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                        func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                        func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                     }
                     if (secondplayer.action === 'magic') {
-                        func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active]);
-                        func.IsGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active]);
+                        func.magic(gv.player2, gv.player1, gv.player2.char[gv.player2.active], gv.player1.char[gv.player1.active], client);
+                        func.isGameOver(gv.player2, gv.player1, gv.player1.char[gv.player1.active], client);
                     }
                     if (secondplayer.action === 'skill') {
                         func.active(gv.player2, gv.player1);
@@ -733,11 +733,11 @@ const func = {
                     }
                     if (firstplayer.action === 'attack') {
                         func.attack(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                        func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                        func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                     }
                     if (firstplayer.action === 'magic') {
-                        func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active]);
-                        func.IsGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active]);
+                        func.magic(gv.player1, gv.player2, gv.player1.char[gv.player1.active], gv.player2.char[gv.player2.active], client);
+                        func.isGameOver(gv.player1, gv.player2, gv.player2.char[gv.player2.active], client);
                     }
                     if (firstplayer.action === 'skill') {
                         func.active(gv.player1, gv.player2);
@@ -746,7 +746,7 @@ const func = {
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    func.addTurn();
+                    func.addTurn(client);
                 }
             }
         } else {
@@ -768,22 +768,22 @@ const func = {
     NewTurnPhase: client => {
         // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
-            func.eachPlayerCharList(gv.player1, gv.player2);
+            func.eachPlayerCharList(gv.player1, gv.player2, client);
             if (gv.p1CharDied) {
-                func.omgHeDead(gv.player1);
+                func.omgHeDead(gv.player1, client);
                 gv.p1CharDied = false;
             }
             if (gv.p2CharDied) {
-                func.omgHeDead(gv.player2);
+                func.omgHeDead(gv.player2, client);
                 gv.p2CharDied = false;
             }
             func.regen(gv.player1);
             func.regen(gv.player2);
-            func.cd_iteration(gv.player1);
-            func.cd_iteration(gv.player2);
-            func.passive(gv.player1, gv.player2);
-            func.passive(gv.player2, gv.player1);
-            func.status();
+            func.cd_iteration(gv.player1, client);
+            func.cd_iteration(gv.player2, client);
+            func.passive(gv.player1, gv.player2, client);
+            func.passive(gv.player2, gv.player1, client);
+            func.status(client);
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
             gv.player1.message_block = ' ';
