@@ -1,4 +1,4 @@
-const globalVariable = {
+module.exports = {
     actionAmount: 0,
     turn: 1,
     gamePhase: false,
@@ -46,7 +46,4 @@ const globalVariable = {
         message_dodge: ' ',
         message_block: ' ',
     },
-    char: require('./characters.json'),
-    // char: require('./charactersBulk.json'),
 };
-module.exports = { globalVariable };

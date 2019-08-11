@@ -1039,9 +1039,8 @@ client.on('message', msg => {
             await char.push(custChar);
         };
         creation();
-    }
-    // character selection
-    if (gv.gameStarting === true) {
+    } else if (gv.gameStarting === true) {
+        // character selection
         let i;
         for (i = 0; i < char.length; i++) {
             const name = char[i].name.toLowerCase().trim();
