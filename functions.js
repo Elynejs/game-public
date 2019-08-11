@@ -501,7 +501,6 @@ const func = {
         gv.gamePhase = false;
         gv.turnPhase = false;
         gv.playerCount = 0;
-        gv.char_amount = 1;
         gv.actionAmount = 0;
         gv.p1CharDied = false;
         gv.p2CharDied = false;
@@ -841,9 +840,8 @@ const func = {
         }
     },
 
-    // function for char_amount
+    // function for char amount
     charAmount: (amount, client) => {
-        gv.char_amount = amount;
         gv.player1.charAmount = amount;
         gv.player2.charAmount = amount;
         client.channel.send(`Please choose ${amount} characters each.\nChoose your characters by typing "!*character_name*".\nYou can type !list to see the list of characters.`);
