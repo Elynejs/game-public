@@ -976,7 +976,7 @@ client.on('message', msg => {
         // starting the game
         if (gv.playerCount !== 2) {
             msg.channel.send('Not enough player registered yet. Please type !register.');
-        } else if (args.length !== 0) {
+        } else if (!args.length) {
             if (args[0] >= 5) {
                 args[0] = 5;
             }
