@@ -981,48 +981,17 @@ client.on('message', msg => {
         // action command
         msg.reply('https://i.imgur.com/nuZbg4x.jpg');
     } else if (command === 'customchar') {
-        const Tiers = ['S', 'A', 'B', 'C', 'H'];
         const custChar = new Object();
         const creation = async () => {
             // const filter = () => true;
-            const firstMsg = await msg.author.send('__**Welcome to the character creation screen**__\n' +
+            await msg.author.send('__**Welcome to the character creation screen**__\n' +
 			'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
 			'If you type anything other than the asked value then the creation will break\n' +
 			'Also note that you only have 10 minutes to type your response or the bot will consider that you somehow got transported into a wormhole and cancel the creation.');
             await msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
-		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*')
-                .then(() => {
-                    firstMsg.channel.awaitMessages(response1 => Tiers.includes(response1), {
-                        max: 1,
-                        time: 60000000,
-                        errors: ['time'],
-                    })
-                        .then((collected1) => {
-                            custChar.tier = collected1;
-                            msg.author.send(`Your character is of tier ${collected1}`);
-                            console.log(custChar);
-                        })
-                        .catch(() => {
-                            msg.author.send('The 10 minutes time limit has passed.');
-                        });
-                });
+		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*');
             await msg.author.send('What\'s the name of your character ?\n' +
-		'*Note that you can only use alphanumerical characters, space and \'*')
-                .then(() => {
-                    firstMsg.channel.awaitMessages(response2 => typeof response2 === String, {
-                        max: 1,
-                        time: 60000000,
-                        errors: ['time'],
-                    })
-                        .then((collected2) => {
-                            custChar.name = collected2;
-                            msg.author.send(`Your character's name is ${collected2}`);
-                            console.log(custChar);
-                        })
-                        .catch(() => {
-                            msg.author.send('The 10 minutes time limit has passed.');
-                        });
-                });
+		'*Note that you can only use alphanumerical characters, space and \'*');
             await char.push(custChar);
         };
         creation();
@@ -1127,6 +1096,7 @@ client.on('message', msg => {
     if (gv.gamePhase === true && gv.turnPhase === true) {
         switch (command) {
         case 'switch':
+            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 const c = args[0];
                 if (args.length < 1) {
@@ -1148,6 +1118,7 @@ client.on('message', msg => {
                                 gv.player1.choseAction = true;
                                 gv.player1.action = 'changechar';
                                 gv.actionAmount += 1;
+                                msg.reply(` you switched ${gv.player1.char[gv.player1.active].name} to ${gv.player1.char[i].name}.`);
                                 if (gv.actionAmount === 2) {
                                     fc.actionphase(gv.player1, gv.player2, msg);
                                 } else {
@@ -1182,6 +1153,7 @@ client.on('message', msg => {
                                 gv.player2.choseAction = true;
                                 gv.player2.action = 'changechar';
                                 gv.actionAmount += 1;
+                                msg.reply(` you switched ${gv.player2.char[gv.player2.active].name} to ${gv.player2.char[i].name}.`);
                                 if (gv.actionAmount === 2) {
                                     fc.actionphase(gv.player2, gv.player2, msg);
                                 } else {
@@ -1200,10 +1172,12 @@ client.on('message', msg => {
             }
             break;
         case 'attack':
+            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 gv.player1.choseAction = true;
                 gv.player1.action = 'attack';
                 gv.actionAmount += 1;
+                msg.reply(' you chose an action that has been anonymized.');
                 if (gv.actionAmount === 2) {
                     fc.actionphase(gv.player1, gv.player2, msg);
                 } else {
@@ -1214,6 +1188,7 @@ client.on('message', msg => {
                 gv.player2.choseAction = true;
                 gv.player2.action = 'attack';
                 gv.actionAmount += 1;
+                msg.reply(' you chose an action that has been anonymized.');
                 if (gv.actionAmount === 2) {
                     fc.actionphase(gv.player1, gv.player2, msg);
                 } else {
@@ -1225,11 +1200,13 @@ client.on('message', msg => {
             }
             break;
         case 'defense':
+            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false && gv.player2.choseAction === true) {
                 if (gv.player2.action === 'attack') {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'defense';
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1244,6 +1221,7 @@ client.on('message', msg => {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'defense';
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1258,14 +1236,15 @@ client.on('message', msg => {
             }
             break;
         case 'magic':
+            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 if (gv.player1.char[gv.player1.active].mag === 0) {
                     msg.channel.send(`${gv.player1.char[gv.player1.active].name} can't cast magic. Please chose another action.`);
                 } else if (gv.player1.char[gv.player1.active].magcd === 0) {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'magic';
-                    msg.reply(`${gv.player1.username} chose to use magic this turn.`);
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1282,6 +1261,7 @@ client.on('message', msg => {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'magic';
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1296,11 +1276,13 @@ client.on('message', msg => {
             }
             break;
         case 'skill':
+            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 if (gv.player1.char[gv.player1.active].has_active_skill === true) {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'skill';
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1315,6 +1297,7 @@ client.on('message', msg => {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'skill';
                     gv.actionAmount += 1;
+                    msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
                         fc.actionphase(gv.player1, gv.player2, msg);
                     } else {
@@ -1331,11 +1314,3 @@ client.on('message', msg => {
         }
     }
 });
-
-/* client.on('disconnect', () => {
-	const fs = require('fs');
-	fs.writeFile('characters.json', JSON.stringify(char, undefined, 2), (err) => {
-		if (err) throw err;
-		console.log('Characters has successfully been saved');
-	});
-});*/
