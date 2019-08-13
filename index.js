@@ -9,7 +9,7 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const token = require('./token.json');
 const fc = require('./functions.js');
-const gv = require('./globalVariable');
+const gv = require('./globalVariable.js');
 const char = require('./characters.json');
 client.login(token.token);
 // Defining bot activity
