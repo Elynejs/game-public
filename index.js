@@ -1096,8 +1096,8 @@ client.on('message', msg => {
     if (gv.gamePhase === true && gv.turnPhase === true) {
         switch (command) {
         case 'switch':
-            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
+                msg.channel.delete();
                 const c = args[0];
                 if (args.length < 1) {
                     msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
@@ -1133,6 +1133,7 @@ client.on('message', msg => {
                     }
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
+                msg.channel.delete();
                 const c = args[0];
                 if (args.length < 1) {
                     msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
@@ -1168,12 +1169,12 @@ client.on('message', msg => {
                     }
                 }
             } else {
-                msg.reply(' you have already choosen an action or are an unregistered player.');
+                msg.reply(' you have already chosen an action or are an unregistered player.');
             }
             break;
         case 'attack':
-            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
+                msg.channel.delete();
                 gv.player1.choseAction = true;
                 gv.player1.action = 'attack';
                 gv.actionAmount += 1;
@@ -1185,6 +1186,7 @@ client.on('message', msg => {
                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
+                msg.channel.delete();
                 gv.player2.choseAction = true;
                 gv.player2.action = 'attack';
                 gv.actionAmount += 1;
@@ -1200,8 +1202,8 @@ client.on('message', msg => {
             }
             break;
         case 'defense':
-            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false && gv.player2.choseAction === true) {
+                msg.channel.delete();
                 if (gv.player2.action === 'attack') {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'defense';
@@ -1217,6 +1219,7 @@ client.on('message', msg => {
                     msg.channel.send(`${gv.player2.username} did not choose a defendable action. Choose another action to take this turn.`);
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false && gv.player1.choseAction === true) {
+                msg.channel.delete();
                 if (gv.player1.action === 'attack') {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'defense';
@@ -1236,8 +1239,8 @@ client.on('message', msg => {
             }
             break;
         case 'magic':
-            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
+                msg.channel.delete();
                 if (gv.player1.char[gv.player1.active].mag === 0) {
                     msg.channel.send(`${gv.player1.char[gv.player1.active].name} can't cast magic. Please chose another action.`);
                 } else if (gv.player1.char[gv.player1.active].magcd === 0) {
@@ -1255,6 +1258,7 @@ client.on('message', msg => {
                     msg.reply(' can\'t use magic because it is still under cooldown.');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
+                msg.channel.delete();
                 if (gv.player2.char[gv.player2.active].mag === 0) {
                     msg.channel.send(`${gv.player2.char[gv.player2.active].name} can't cast magic. Please chose another action.`);
                 } else if (gv.player2.char[gv.player2.active].magcd === 0) {
@@ -1276,8 +1280,8 @@ client.on('message', msg => {
             }
             break;
         case 'skill':
-            msg.channel.delete();
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
+                msg.channel.delete();
                 if (gv.player1.char[gv.player1.active].has_active_skill === true) {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'skill';
@@ -1293,6 +1297,7 @@ client.on('message', msg => {
                     msg.channel.send('Your character doesn\'t have a special skill. Choose another action.');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
+                msg.channel.delete();
                 if (gv.player2.char[gv.player2.active].has_active_skill === true) {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'skill';
