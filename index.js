@@ -3,7 +3,6 @@
 // It particularly shows when you look at older part of the code
 // This could be easily done in way less lines and time it took me to do it and I know it
 // But nevertheless I'm rather proud of the level I was able to aquire in this short amount of time
-// importing librarie
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
@@ -13,18 +12,11 @@ const gv = require('./globalVariable.js');
 const char = require('./characters.json');
 client.login(token.token);
 // Defining bot activity
+// to the necessary command a user has to type to start a game.
 client.on('ready', () => {
     client.user.setActivity('Type !register to start a game.');
     console.log('Bot has been launched without issues!');
 });
-
-/*
---------------------------------------------
---------------------------------------------
-BEGINING OF MESSAGE EVENT HANDLER
---------------------------------------------
---------------------------------------------
-*/
 
 // commands
 client.on('message', msg => {
@@ -54,13 +46,16 @@ client.on('message', msg => {
         }
     }
     if (command === 'ad') {
+        // check if user inputted command starts with 'ad' (for admin)
+        // and if so then checks the args of the input to see if it matches with one of the coded admin commands
         if (msg.member.id === config.ownerID || config.adminID) {
-            // leave a specific guild
+            // command that displays an embedd command that shows every admin
+            // commands and how to use them as well as what they do
             if (args[0] === 'help') {
                 msg.channel.send({
                     embed: {
                         color: 16286691,
-                        description: '__**List of all admin commands**__',
+                        title: '__**List of all admin commands**__',
                         fields: [{
                             name: '**Leave guild**',
                             value: '```!ad gleave [Guild ID] => Makes the bot leave a guild specified by it\'s ID```',
@@ -105,172 +100,72 @@ client.on('message', msg => {
                 // I warned you
                 let i;
                 const S = {
-                    hp: 0,
-                    hpMin: 0,
-                    hpMax: 0,
-                    atk: 0,
-                    atkMin: 0,
-                    atkMax: 0,
-                    critMulti: 0,
-                    critMultiMin: 0,
-                    critMultiMax: 0,
-                    critChance: 0,
-                    critChanceMin: 0,
-                    critChanceMax: 0,
-                    def: 0,
-                    defMin: 0,
-                    defMax: 0,
-                    spd: 0,
-                    spdMin: 0,
-                    spdMax: 0,
-                    agi: 0,
-                    agiMin: 0,
-                    agiMax: 0,
-                    acr: 0,
-                    acrMin: 0,
-                    acrMax: 0,
-                    mag: 0,
-                    magMin: 0,
-                    magMax: 0,
-                    rgn: 0,
-                    rgnMin: 0,
-                    rgnMax: 0,
+                    hp: 0, hpMin: 0, hpMax: 0,
+                    atk: 0, atkMin: 0, atkMax: 0,
+                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
+                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
+                    def: 0, defMin: 0, defMax: 0,
+                    spd: 0, spdMin: 0, spdMax: 0,
+                    agi: 0, agiMin: 0, agiMax: 0,
+                    acr: 0, acrMin: 0, acrMax: 0,
+                    mag: 0, magMin: 0, magMax: 0,
+                    rgn: 0, rgnMin: 0, rgnMax: 0,
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const A = {
-                    hp: 0,
-                    hpMin: 0,
-                    hpMax: 0,
-                    atk: 0,
-                    atkMin: 0,
-                    atkMax: 0,
-                    critMulti: 0,
-                    critMultiMin: 0,
-                    critMultiMax: 0,
-                    critChance: 0,
-                    critChanceMin: 0,
-                    critChanceMax: 0,
-                    def: 0,
-                    defMin: 0,
-                    defMax: 0,
-                    spd: 0,
-                    spdMin: 0,
-                    spdMax: 0,
-                    agi: 0,
-                    agiMin: 0,
-                    agiMax: 0,
-                    acr: 0,
-                    acrMin: 0,
-                    acrMax: 0,
-                    mag: 0,
-                    magMin: 0,
-                    magMax: 0,
-                    rgn: 0,
-                    rgnMin: 0,
-                    rgnMax: 0,
+                    hp: 0, hpMin: 0, hpMax: 0,
+                    atk: 0, atkMin: 0, atkMax: 0,
+                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
+                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
+                    def: 0, defMin: 0, defMax: 0,
+                    spd: 0, spdMin: 0, spdMax: 0,
+                    agi: 0, agiMin: 0, agiMax: 0,
+                    acr: 0, acrMin: 0, acrMax: 0,
+                    mag: 0, magMin: 0, magMax: 0,
+                    rgn: 0, rgnMin: 0, rgnMax: 0,
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const B = {
-                    hp: 0,
-                    hpMin: 0,
-                    hpMax: 0,
-                    atk: 0,
-                    atkMin: 0,
-                    atkMax: 0,
-                    critMulti: 0,
-                    critMultiMin: 0,
-                    critMultiMax: 0,
-                    critChance: 0,
-                    critChanceMin: 0,
-                    critChanceMax: 0,
-                    def: 0,
-                    defMin: 0,
-                    defMax: 0,
-                    spd: 0,
-                    spdMin: 0,
-                    spdMax: 0,
-                    agi: 0,
-                    agiMin: 0,
-                    agiMax: 0,
-                    acr: 0,
-                    acrMin: 0,
-                    acrMax: 0,
-                    mag: 0,
-                    magMin: 0,
-                    magMax: 0,
-                    rgn: 0,
-                    rgnMin: 0,
-                    rgnMax: 0,
+                    hp: 0, hpMin: 0, hpMax: 0,
+                    atk: 0, atkMin: 0, atkMax: 0,
+                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
+                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
+                    def: 0, defMin: 0, defMax: 0,
+                    spd: 0, spdMin: 0, spdMax: 0,
+                    agi: 0, agiMin: 0, agiMax: 0,
+                    acr: 0, acrMin: 0, acrMax: 0,
+                    mag: 0, magMin: 0, magMax: 0,
+                    rgn: 0, rgnMin: 0, rgnMax: 0,
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const C = {
-                    hp: 0,
-                    hpMin: 0,
-                    hpMax: 0,
-                    atk: 0,
-                    atkMin: 0,
-                    atkMax: 0,
-                    critMulti: 0,
-                    critMultiMin: 0,
-                    critMultiMax: 0,
-                    critChance: 0,
-                    critChanceMin: 0,
-                    critChanceMax: 0,
-                    def: 0,
-                    defMin: 0,
-                    defMax: 0,
-                    spd: 0,
-                    spdMin: 0,
-                    spdMax: 0,
-                    agi: 0,
-                    agiMin: 0,
-                    agiMax: 0,
-                    acr: 0,
-                    acrMin: 0,
-                    acrMax: 0,
-                    mag: 0,
-                    magMin: 0,
-                    magMax: 0,
-                    rgn: 0,
-                    rgnMin: 0,
-                    rgnMax: 0,
+                    hp: 0, hpMin: 0, hpMax: 0,
+                    atk: 0, atkMin: 0, atkMax: 0,
+                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
+                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
+                    def: 0, defMin: 0, defMax: 0,
+                    spd: 0, spdMin: 0, spdMax: 0,
+                    agi: 0, agiMin: 0, agiMax: 0,
+                    acr: 0, acrMin: 0, acrMax: 0,
+                    mag: 0, magMin: 0, magMax: 0,
+                    rgn: 0, rgnMin: 0, rgnMax: 0,
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const H = {
-                    hp: 0,
-                    hpMin: 0,
-                    hpMax: 0,
-                    atk: 0,
-                    atkMin: 0,
-                    atkMax: 0,
-                    critMulti: 0,
-                    critMultiMin: 0,
-                    critMultiMax: 0,
-                    critChance: 0,
-                    critChanceMin: 0,
-                    critChanceMax: 0,
-                    def: 0,
-                    defMin: 0,
-                    defMax: 0,
-                    spd: 0,
-                    spdMin: 0,
-                    spdMax: 0,
-                    agi: 0,
-                    agiMin: 0,
-                    agiMax: 0,
-                    acr: 0,
-                    acrMin: 0,
-                    acrMax: 0,
-                    mag: 0,
-                    magMin: 0,
-                    magMax: 0,
-                    rgn: 0,
-                    rgnMin: 0,
-                    rgnMax: 0,
+                    hp: 0, hpMin: 0, hpMax: 0,
+                    atk: 0, atkMin: 0, atkMax: 0,
+                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
+                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
+                    def: 0, defMin: 0, defMax: 0,
+                    spd: 0, spdMin: 0, spdMax: 0,
+                    agi: 0, agiMin: 0, agiMax: 0,
+                    acr: 0, acrMin: 0, acrMax: 0,
+                    mag: 0, magMin: 0, magMax: 0,
+                    rgn: 0, rgnMin: 0, rgnMax: 0,
                     charCount: 0,
                     noMagChar: 0,
                 };
