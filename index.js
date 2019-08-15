@@ -69,10 +69,6 @@ client.on('message', msg => {
                             value: '```!ad editchar [name][stat][value][player] => Allows you to edit the stats of a character, type !ad editchar help for more information```',
                         },
                         {
-                            name: '**Debug start**',
-                            value: '```!ad start => Makes the bot start a game with default players and characters (set in config.json) !!!DEBUG ONLY!!!```',
-                        },
-                        {
                             name: '**Game reset**',
                             value: '```!ad reset => Makes the bot reset the current game```',
                         },
@@ -100,215 +96,149 @@ client.on('message', msg => {
                 // I warned you
                 let i;
                 const S = {
-                    hp: 0, hpMin: 0, hpMax: 0,
-                    atk: 0, atkMin: 0, atkMax: 0,
-                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
-                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
-                    def: 0, defMin: 0, defMax: 0,
-                    spd: 0, spdMin: 0, spdMax: 0,
-                    agi: 0, agiMin: 0, agiMax: 0,
-                    acr: 0, acrMin: 0, acrMax: 0,
-                    mag: 0, magMin: 0, magMax: 0,
-                    rgn: 0, rgnMin: 0, rgnMax: 0,
+                    hp: [],
+                    atk: [],
+                    critMulti: [],
+                    critChance: [],
+                    def: [],
+                    spd: [],
+                    agi: [],
+                    acr: [],
+                    mag: [],
+                    rgn: [],
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const A = {
-                    hp: 0, hpMin: 0, hpMax: 0,
-                    atk: 0, atkMin: 0, atkMax: 0,
-                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
-                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
-                    def: 0, defMin: 0, defMax: 0,
-                    spd: 0, spdMin: 0, spdMax: 0,
-                    agi: 0, agiMin: 0, agiMax: 0,
-                    acr: 0, acrMin: 0, acrMax: 0,
-                    mag: 0, magMin: 0, magMax: 0,
-                    rgn: 0, rgnMin: 0, rgnMax: 0,
+                    hp: [],
+                    atk: [],
+                    critMulti: [],
+                    critChance: [],
+                    def: [],
+                    spd: [],
+                    agi: [],
+                    acr: [],
+                    mag: [],
+                    rgn: [],
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const B = {
-                    hp: 0, hpMin: 0, hpMax: 0,
-                    atk: 0, atkMin: 0, atkMax: 0,
-                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
-                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
-                    def: 0, defMin: 0, defMax: 0,
-                    spd: 0, spdMin: 0, spdMax: 0,
-                    agi: 0, agiMin: 0, agiMax: 0,
-                    acr: 0, acrMin: 0, acrMax: 0,
-                    mag: 0, magMin: 0, magMax: 0,
-                    rgn: 0, rgnMin: 0, rgnMax: 0,
+                    hp: [],
+                    atk: [],
+                    critMulti: [],
+                    critChance: [],
+                    def: [],
+                    spd: [],
+                    agi: [],
+                    acr: [],
+                    mag: [],
+                    rgn: [],
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const C = {
-                    hp: 0, hpMin: 0, hpMax: 0,
-                    atk: 0, atkMin: 0, atkMax: 0,
-                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
-                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
-                    def: 0, defMin: 0, defMax: 0,
-                    spd: 0, spdMin: 0, spdMax: 0,
-                    agi: 0, agiMin: 0, agiMax: 0,
-                    acr: 0, acrMin: 0, acrMax: 0,
-                    mag: 0, magMin: 0, magMax: 0,
-                    rgn: 0, rgnMin: 0, rgnMax: 0,
+                    hp: [],
+                    atk: [],
+                    critMulti: [],
+                    critChance: [],
+                    def: [],
+                    spd: [],
+                    agi: [],
+                    acr: [],
+                    mag: [],
+                    rgn: [],
                     charCount: 0,
                     noMagChar: 0,
                 };
                 const H = {
-                    hp: 0, hpMin: 0, hpMax: 0,
-                    atk: 0, atkMin: 0, atkMax: 0,
-                    critMulti: 0, critMultiMin: 0, critMultiMax: 0,
-                    critChance: 0, critChanceMin: 0, critChanceMax: 0,
-                    def: 0, defMin: 0, defMax: 0,
-                    spd: 0, spdMin: 0, spdMax: 0,
-                    agi: 0, agiMin: 0, agiMax: 0,
-                    acr: 0, acrMin: 0, acrMax: 0,
-                    mag: 0, magMin: 0, magMax: 0,
-                    rgn: 0, rgnMin: 0, rgnMax: 0,
+                    hp: [],
+                    atk: [],
+                    critMulti: [],
+                    critChance: [],
+                    def: [],
+                    spd: [],
+                    agi: [],
+                    acr: [],
+                    mag: [],
+                    rgn: [],
                     charCount: 0,
                     noMagChar: 0,
                 };
                 for (i = 0; i < char.length; i++) {
                     if (char[i]['tier'] === 'S') {
-                        fc.math(S, i);
+                        fc.math(S, i, char);
                     } else if (char[i]['tier'] === 'A') {
-                        fc.math(A, i);
+                        fc.math(A, i, char);
                     } else if (char[i]['tier'] === 'B') {
-                        fc.math(B, i);
+                        fc.math(B, i, char);
                     } else if (char[i]['tier'] === 'C') {
-                        fc.math(C, i);
+                        fc.math(C, i, char);
                     } else if (char[i]['tier'] === 'H') {
-                        fc.math(H, i);
+                        fc.math(H, i, char);
                     } else {
                         console.log('Iterated character had an undefined tier, most likely test1 or test2');
                     }
                 }
-                const Stats = [
-                    {
-                        // This is stats for S tier characters
-                        hpAvg: fc.round((S.hp / S.charCount)), hpMin: fc.round(S.hpMin), hpMax: fc.round(S.hpMax),
-                        atkAvg: fc.round((S.atk / S.charCount)), atkMin: fc.round(S.atkMin), atkMax: fc.round(S.atkMax),
-                        critMultiAvg: fc.round((S.critMulti / S.charCount)), critMultiMin: fc.round(S.critMultiMin), critMultiMax: fc.round(S.critMultiMax),
-                        critChanceAvg: fc.round((S.critChance / S.charCount)), critChanceMin: fc.round(S.critChanceMin), critChanceMax: fc.round(S.critChanceMax),
-                        defAvg: fc.round((S.def / S.charCount)), defMin: fc.round(S.defMin), defMax: fc.round(S.defMax),
-                        spdAvg: fc.round((S.spd / S.charCount)), spdMin: fc.round(S.spdMin), spdMax: fc.round(S.spdMax),
-                        agiAvg: fc.round((S.agi / S.charCount)), agiMin: fc.round(S.agiMin), agiMax: fc.round(S.agiMax),
-                        acrAvg: fc.round((S.acr / S.charCount)), acrMin: fc.round(S.acrMin), acrMax: fc.round(S.acrMax),
-                        rgnAvg: fc.round((S.rgn / S.charCount)), rgnMin: fc.round(S.rgnMin), rgnMax: fc.round(S.rgnMax),
-                        magAvg: fc.round((S.mag / (S.charCount - S.noMagChar))) || 0, magMin: fc.round(S.magMin), magMax: fc.round(S.magMax),
-                    },
-                    {
-                        // Stats for A tier characters
-                        hpAvg: fc.round((A.hp / A.charCount)), hpMin: fc.round(A.hpMin), hpMax: fc.round(A.hpMax),
-                        atkAvg: fc.round((A.atk / A.charCount)), atkMin: fc.round(A.atkMin), atkMax: fc.round(A.atkMax),
-                        critMultiAvg: fc.round((A.critMulti / A.charCount)), critMultiMin: fc.round(A.critMultiMin), critMultiMax: fc.round(A.critMultiMax),
-                        critChanceAvg: fc.round((A.critChance / A.charCount)), critChanceMin: fc.round(A.critChanceMin), critChanceMax: fc.round(A.critChanceMax),
-                        defAvg: fc.round((A.def / A.charCount)), defMin: fc.round(A.defMin), defMax: fc.round(A.defMax),
-                        spdAvg: fc.round((A.spd / A.charCount)), spdMin: fc.round(A.spdMin), spdMax: fc.round(A.spdMax),
-                        agiAvg: fc.round((A.agi / A.charCount)), agiMin: fc.round(A.agiMin), agiMax: fc.round(A.agiMax),
-                        acrAvg: fc.round((A.acr / A.charCount)), acrMin: fc.round(A.acrMin), acrMax: fc.round(A.acrMax),
-                        rgnAvg: fc.round((A.rgn / A.charCount)), rgnMin: fc.round(A.rgnMin), rgnMax: fc.round(A.rgnMax),
-                        magAvg: fc.round((A.mag / (A.charCount - A.noMagChar))) || 0, magMin: fc.round(A.magMin), magMax: fc.round(A.magMax),
-                    },
-                    {
-                        // Stats for B tier characters
-                        hpAvg: fc.round((B.hp / B.charCount)), hpMin: fc.round(B.hpMin), hpMax: fc.round(B.hpMax),
-                        atkAvg: fc.round((B.atk / B.charCount)), atkMin: fc.round(B.atkMin), atkMax: fc.round(B.atkMax),
-                        critMultiAvg: fc.round((B.critMulti / B.charCount)), critMultiMin: fc.round(B.critMultiMin), critMultiMax: fc.round(B.critMultiMax),
-                        critChanceAvg: fc.round((B.critChance / B.charCount)), critChanceMin: fc.round(B.critChanceMin), critChanceMax: fc.round(B.critChanceMax),
-                        defAvg: fc.round((B.def / B.charCount)), defMin: fc.round(B.defMin), defMax: fc.round(B.defMax),
-                        spdAvg: fc.round((B.spd / B.charCount)), spdMin: fc.round(B.spdMin), spdMax: fc.round(B.spdMax),
-                        agiAvg: fc.round((B.agi / B.charCount)), agiMin: fc.round(B.agiMin), agiMax: fc.round(B.agiMax),
-                        acrAvg: fc.round((B.acr / B.charCount)), acrMin: fc.round(B.acrMin), acrMax: fc.round(B.acrMax),
-                        rgnAvg: fc.round((B.rgn / B.charCount)), rgnMin: fc.round(B.rgnMin), rgnMax: fc.round(B.rgnMax),
-                        magAvg: fc.round((B.mag / (B.charCount - B.noMagChar))) || 0, magMin: fc.round(B.magMin), magMax: fc.round(B.magMax),
-                    },
-                    {
-                        // Stats for C tier characters
-                        hpAvg: fc.round((C.hp / C.charCount)), hpMin: fc.round(C.hpMin), hpMax: fc.round(C.hpMax),
-                        atkAvg: fc.round((C.atk / C.charCount)), atkMin: fc.round(C.atkMin), atkMax: fc.round(C.atkMax),
-                        critMultiAvg: fc.round((C.critMulti / C.charCount)), critMultiMin: fc.round(C.critMultiMin), critMultiMax: fc.round(C.critMultiMax),
-                        critChanceAvg: fc.round((C.critChance / C.charCount)), critChanceMin: fc.round(C.critChanceMin), critChanceMax: fc.round(C.critChanceMax),
-                        defAvg: fc.round((C.def / C.charCount)), defMin: fc.round(C.defMin), defMax: fc.round(C.defMax),
-                        spdAvg: fc.round((C.spd / C.charCount)), spdMin: fc.round(C.spdMin), spdMax: fc.round(C.spdMax),
-                        agiAvg: fc.round((C.agi / C.charCount)), agiMin: fc.round(C.agiMin), agiMax: fc.round(C.agiMax),
-                        acrAvg: fc.round((C.acr / C.charCount)), acrMin: fc.round(C.acrMin), acrMax: fc.round(C.acrMax),
-                        rgnAvg: fc.round((C.rgn / C.charCount)), rgnMin: fc.round(C.rgnMin), rgnMax: fc.round(C.rgnMax),
-                        magAvg: fc.round((C.mag / (C.charCount - C.noMagChar))) || 0, magMin: fc.round(C.magMin), magMax: fc.round(C.magMax),
-                    },
-                    {
-                        // Stats for H tier characters
-                        hpAvg: fc.round((H.hp / H.charCount)), hpMin: fc.round(H.hpMin), hpMax: fc.round(H.hpMax),
-                        atkAvg: fc.round((H.atk / H.charCount)), atkMin: fc.round(H.atkMin), atkMax: fc.round(H.atkMax),
-                        critMultiAvg: fc.round((H.critMulti / H.charCount)), critMultiMin: fc.round(H.critMultiMin), critMultiMax: fc.round(H.critMultiMax),
-                        critChanceAvg: fc.round((H.critChance / H.charCount)), critChanceMin: fc.round(H.critChanceMin), critChanceMax: fc.round(H.critChanceMax),
-                        defAvg: fc.round((H.def / H.charCount)), defMin: fc.round(H.defMin), defMax: fc.round(H.defMax),
-                        spdAvg: fc.round((H.spd / H.charCount)), spdMin: fc.round(H.spdMin), spdMax: fc.round(H.spdMax),
-                        agiAvg: fc.round((H.agi / H.charCount)), agiMin: fc.round(H.agiMin), agiMax: fc.round(H.agiMax),
-                        acrAvg: fc.round((H.acr / H.charCount)), acrMin: fc.round(H.acrMin), acrMax: fc.round(H.acrMax),
-                        rgnAvg: fc.round((H.rgn / H.charCount)), rgnMin: fc.round(H.rgnMin), rgnMax: fc.round(H.rgnMax),
-                        magAvg: fc.round((H.mag / (H.charCount - H.noMagChar))) || 0, magMin: fc.round(H.magMin), magMax: fc.round(H.magMax),
-                    }];
                 msg.channel.send(`__**Stats for Tier S :**__ *${S.charCount} characters iterated*\n` + '```python\n' +
-'Average HP              : ' + Stats[0].hpAvg + '	' + 'Min HP : ' + Stats[0].hpMin + '	' + 'Max HP : ' + Stats[0].hpMax + '\n' +
-'Average Attack          : ' + Stats[0].atkAvg + '	' + 'Min Attack : ' + Stats[0].atkMin + '	' + 'Max Attack : ' + Stats[0].atkMax + '\n' +
-'Average Crit Multi      : ' + Stats[0].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[0].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[0].critMultiMax + '\n' +
-'Average Crit Chance     : ' + Stats[0].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[0].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[0].critChanceMax + '\n' +
-'Average Defense         : ' + Stats[0].defAvg + '	' + 'Min Defense : ' + Stats[0].defMin + '	' + 'Max Defense : ' + Stats[0].defMax + '\n' +
-'Average Speed           : ' + Stats[0].spdAvg + '	' + 'Min Speed : ' + Stats[0].spdMin + '	' + 'Max Speed : ' + Stats[0].spdMax + '\n' +
-'Average Agility         : ' + Stats[0].agiAvg + '	' + 'Min Agility : ' + Stats[0].agiMin + '	' + 'Max Agility : ' + Stats[0].agiMax + '\n' +
-'Average Accuracy        : ' + Stats[0].acrAvg + '	' + 'Min Accuracy : ' + Stats[0].acrMin + '	' + 'Max Accuracy : ' + Stats[0].acrMax + '\n' +
-'Average HP Regen        : ' + Stats[0].rgnAvg + '	' + 'Min HP Regen : ' + Stats[0].rgnMin + '	' + 'Max HP Regen : ' + Stats[0].rgnMax + '\n' +
-'Average Magic           : ' + Stats[0].magAvg + '	' + 'Min Magic : ' + Stats[0].magMin + '	' + 'Max Magic : ' + Stats[0].magMax + '\n' +
+'Average HP              : ' + fc.average(S.hp) + '	' + 'Min HP : ' + Math.min(...S.hp) + '	' + 'Max HP : ' + Math.max(...S.hp) + '\n' +
+'Average Attack          : ' + fc.average(S.atk) + '	' + 'Min Attack : ' + Math.min(...S.atk) + '	' + 'Max Attack : ' + Math.max(...S.atk) + '\n' +
+'Average Crit Multi      : ' + fc.average(S.critMulti) + '	' + 'Min Crit Multi : ' + Math.min(...S.critMulti) + '	' + 'Max Crit Multi : ' + Math.max(...S.critMulti) + '\n' +
+'Average Crit Chance     : ' + fc.average(S.critChance) + '	' + 'Min Crit Chance : ' + Math.min(...S.critChance) + '	' + 'Max Crit Chance : ' + Math.max(...S.critChance) + '\n' +
+'Average Defense         : ' + fc.average(S.def) + '	' + 'Min Defense : ' + Math.min(...S.def) + '	' + 'Max Defense : ' + Math.max(...S.def) + '\n' +
+'Average Speed           : ' + fc.average(S.spd) + '	' + 'Min Speed : ' + Math.min(...S.spd) + '	' + 'Max Speed : ' + Math.max(...S.spd) + '\n' +
+'Average Agility         : ' + fc.average(S.agi) + '	' + 'Min Agility : ' + Math.min(...S.agi) + '	' + 'Max Agility : ' + Math.max(...S.agi) + '\n' +
+'Average Accuracy        : ' + fc.average(S.acr) + '	' + 'Min Accuracy : ' + Math.min(...S.acr) + '	' + 'Max Accuracy : ' + Math.max(...S.acr) + '\n' +
+'Average HP Regen        : ' + fc.average(S.rgn) + '	' + 'Min HP Regen : ' + Math.min(...S.rgn) + '	' + 'Max HP Regen : ' + Math.max(...S.rgn) + '\n' +
+'Average Magic           : ' + fc.averageMag(S.mag, S.noMagChar) + '	' + 'Min Magic : ' + Math.min(...S.mag) + '	' + 'Max Magic : ' + Math.max(...S.mag) + '\n' +
 '```' + `\n*Note that ${S.noMagChar} out of ${S.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier A :**__ *${A.charCount} characters iterated*\n` + '```python\n' +
-'Average HP              : ' + Stats[1].hpAvg + '	' + 'Min HP : ' + Stats[1].hpMin + '	' + 'Max HP : ' + Stats[1].hpMax + '\n' +
-'Average Attack          : ' + Stats[1].atkAvg + '	' + 'Min Attack : ' + Stats[1].atkMin + '	' + 'Max Attack : ' + Stats[1].atkMax + '\n' +
-'Average Crit Multi      : ' + Stats[1].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[1].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[1].critMultiMax + '\n' +
-'Average Crit Chance     : ' + Stats[1].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[1].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[1].critChanceMax + '\n' +
-'Average Defense         : ' + Stats[1].defAvg + '	' + 'Min Defense : ' + Stats[1].defMin + '	' + 'Max Defense : ' + Stats[1].defMax + '\n' +
-'Average Speed           : ' + Stats[1].spdAvg + '	' + 'Min Speed : ' + Stats[1].spdMin + '	' + 'Max Speed : ' + Stats[1].spdMax + '\n' +
-'Average Agility         : ' + Stats[1].agiAvg + '	' + 'Min Agility : ' + Stats[1].agiMin + '	' + 'Max Agility : ' + Stats[1].agiMax + '\n' +
-'Average Accuracy        : ' + Stats[1].acrAvg + '	' + 'Min Accuracy : ' + Stats[1].acrMin + '	' + 'Max Accuracy : ' + Stats[1].acrMax + '\n' +
-'Average HP Regen        : ' + Stats[1].rgnAvg + '	' + 'Min HP Regen : ' + Stats[1].rgnMin + '	' + 'Max HP Regen : ' + Stats[1].rgnMax + '\n' +
-'Average Magic           : ' + Stats[1].magAvg + '	' + 'Min Magic : ' + Stats[1].magMin + '	' + 'Max Magic : ' + Stats[1].magMax + '\n' +
+'Average HP              : ' + fc.average(A.hp) + '	' + 'Min HP : ' + Math.min(...A.hp) + '	' + 'Max HP : ' + Math.max(...A.hp) + '\n' +
+'Average Attack          : ' + fc.average(A.atk) + '	' + 'Min Attack : ' + Math.min(...A.atk) + '	' + 'Max Attack : ' + Math.max(...A.atk) + '\n' +
+'Average Crit Multi      : ' + fc.average(A.critMulti) + '	' + 'Min Crit Multi : ' + Math.min(...A.critMulti) + '	' + 'Max Crit Multi : ' + Math.max(...A.critMulti) + '\n' +
+'Average Crit Chance     : ' + fc.average(A.critChance) + '	' + 'Min Crit Chance : ' + Math.min(...A.critChance) + '	' + 'Max Crit Chance : ' + Math.max(...A.critChance) + '\n' +
+'Average Defense         : ' + fc.average(A.def) + '	' + 'Min Defense : ' + Math.min(...A.def) + '	' + 'Max Defense : ' + Math.max(...A.def) + '\n' +
+'Average Speed           : ' + fc.average(A.spd) + '	' + 'Min Speed : ' + Math.min(...A.spd) + '	' + 'Max Speed : ' + Math.max(...A.spd) + '\n' +
+'Average Agility         : ' + fc.average(A.agi) + '	' + 'Min Agility : ' + Math.min(...A.agi) + '	' + 'Max Agility : ' + Math.max(...A.agi) + '\n' +
+'Average Accuracy        : ' + fc.average(A.acr) + '	' + 'Min Accuracy : ' + Math.min(...A.acr) + '	' + 'Max Accuracy : ' + Math.max(...A.acr) + '\n' +
+'Average HP Regen        : ' + fc.average(A.rgn) + '	' + 'Min HP Regen : ' + Math.min(...A.rgn) + '	' + 'Max HP Regen : ' + Math.max(...A.rgn) + '\n' +
+'Average Magic           : ' + fc.averageMag(A.mag, A.noMagChar) + '	' + 'Min Magic : ' + Math.min(...A.mag) + '	' + 'Max Magic : ' + Math.max(...A.mag) + '\n' +
 '```' + `\n*Note that ${A.noMagChar} out of ${A.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier B :**__ *${B.charCount} characters iterated*\n` + '```python\n' +
-'Average HP              : ' + Stats[2].hpAvg + '	' + 'Min HP : ' + Stats[2].hpMin + '	' + 'Max HP : ' + Stats[2].hpMax + '\n' +
-'Average Attack          : ' + Stats[2].atkAvg + '	' + 'Min Attack : ' + Stats[2].atkMin + '	' + 'Max Attack : ' + Stats[2].atkMax + '\n' +
-'Average Crit Multi      : ' + Stats[2].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[2].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[2].critMultiMax + '\n' +
-'Average Crit Chance     : ' + Stats[2].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[2].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[2].critChanceMax + '\n' +
-'Average Defense         : ' + Stats[2].defAvg + '	' + 'Min Defense : ' + Stats[2].defMin + '	' + 'Max Defense : ' + Stats[2].defMax + '\n' +
-'Average Speed           : ' + Stats[2].spdAvg + '	' + 'Min Speed : ' + Stats[2].spdMin + '	' + 'Max Speed : ' + Stats[2].spdMax + '\n' +
-'Average Agility         : ' + Stats[2].agiAvg + '	' + 'Min Agility : ' + Stats[2].agiMin + '	' + 'Max Agility : ' + Stats[2].agiMax + '\n' +
-'Average Accuracy        : ' + Stats[2].acrAvg + '	' + 'Min Accuracy : ' + Stats[2].acrMin + '	' + 'Max Accuracy : ' + Stats[2].acrMax + '\n' +
-'Average HP Regen        : ' + Stats[2].rgnAvg + '	' + 'Min HP Regen : ' + Stats[2].rgnMin + '	' + 'Max HP Regen : ' + Stats[2].rgnMax + '\n' +
-'Average Magic           : ' + Stats[2].magAvg + '	' + 'Min Magic : ' + Stats[2].magMin + '	' + 'Max Magic : ' + Stats[2].magMax + '\n' +
+'Average HP              : ' + fc.average(B.hp) + '	' + 'Min HP : ' + Math.min(...B.hp) + '	' + 'Max HP : ' + Math.max(...B.hp) + '\n' +
+'Average Attack          : ' + fc.average(B.atk) + '	' + 'Min Attack : ' + Math.min(...B.atk) + '	' + 'Max Attack : ' + Math.max(...B.atk) + '\n' +
+'Average Crit Multi      : ' + fc.average(B.critMulti) + '	' + 'Min Crit Multi : ' + Math.min(...B.critMulti) + '	' + 'Max Crit Multi : ' + Math.max(...B.critMulti) + '\n' +
+'Average Crit Chance     : ' + fc.average(B.critChance) + '	' + 'Min Crit Chance : ' + Math.min(...B.critChance) + '	' + 'Max Crit Chance : ' + Math.max(...B.critChance) + '\n' +
+'Average Defense         : ' + fc.average(B.def) + '	' + 'Min Defense : ' + Math.min(...B.def) + '	' + 'Max Defense : ' + Math.max(...B.def) + '\n' +
+'Average Speed           : ' + fc.average(B.spd) + '	' + 'Min Speed : ' + Math.min(...B.spd) + '	' + 'Max Speed : ' + Math.max(...B.spd) + '\n' +
+'Average Agility         : ' + fc.average(B.agi) + '	' + 'Min Agility : ' + Math.min(...B.agi) + '	' + 'Max Agility : ' + Math.max(...B.agi) + '\n' +
+'Average Accuracy        : ' + fc.average(B.acr) + '	' + 'Min Accuracy : ' + Math.min(...B.acr) + '	' + 'Max Accuracy : ' + Math.max(...B.acr) + '\n' +
+'Average HP Regen        : ' + fc.average(B.rgn) + '	' + 'Min HP Regen : ' + Math.min(...B.rgn) + '	' + 'Max HP Regen : ' + Math.max(...B.rgn) + '\n' +
+'Average Magic           : ' + fc.averageMag(B.mag, B.noMagChar) + '	' + 'Min Magic : ' + Math.min(...B.mag) + '	' + 'Max Magic : ' + Math.max(...B.mag) + '\n' +
 '```' + `\n*Note that ${B.noMagChar} out of ${B.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier C :**__ *${C.charCount} characters iterated*\n` + '```python\n' +
-'Average HP              : ' + Stats[3].hpAvg + '	' + 'Min HP : ' + Stats[3].hpMin + '	' + 'Max HP : ' + Stats[3].hpMax + '\n' +
-'Average Attack          : ' + Stats[3].atkAvg + '	' + 'Min Attack : ' + Stats[3].atkMin + '	' + 'Max Attack : ' + Stats[3].atkMax + '\n' +
-'Average Crit Multi      : ' + Stats[3].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[3].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[3].critMultiMax + '\n' +
-'Average Crit Chance     : ' + Stats[3].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[3].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[3].critChanceMax + '\n' +
-'Average Defense         : ' + Stats[3].defAvg + '	' + 'Min Defense : ' + Stats[3].defMin + '	' + 'Max Defense : ' + Stats[3].defMax + '\n' +
-'Average Speed           : ' + Stats[3].spdAvg + '	' + 'Min Speed : ' + Stats[3].spdMin + '	' + 'Max Speed : ' + Stats[3].spdMax + '\n' +
-'Average Agility         : ' + Stats[3].agiAvg + '	' + 'Min Agility : ' + Stats[3].agiMin + '	' + 'Max Agility : ' + Stats[3].agiMax + '\n' +
-'Average Accuracy        : ' + Stats[3].acrAvg + '	' + 'Min Accuracy : ' + Stats[3].acrMin + '	' + 'Max Accuracy : ' + Stats[3].acrMax + '\n' +
-'Average HP Regen        : ' + Stats[3].rgnAvg + '	' + 'Min HP Regen : ' + Stats[3].rgnMin + '	' + 'Max HP Regen : ' + Stats[3].rgnMax + '\n' +
-'Average Magic           : ' + Stats[3].magAvg + '	' + 'Min Magic : ' + Stats[3].magMin + '	' + 'Max Magic : ' + Stats[3].magMax + '\n' +
+'Average HP              : ' + fc.average(C.hp) + '	' + 'Min HP : ' + Math.min(...C.hp) + '	' + 'Max HP : ' + Math.max(...C.hp) + '\n' +
+'Average Attack          : ' + fc.average(C.atk) + '	' + 'Min Attack : ' + Math.min(...C.atk) + '	' + 'Max Attack : ' + Math.max(...C.atk) + '\n' +
+'Average Crit Multi      : ' + fc.average(C.critMulti) + '	' + 'Min Crit Multi : ' + Math.min(...C.critMulti) + '	' + 'Max Crit Multi : ' + Math.max(...C.critMulti) + '\n' +
+'Average Crit Chance     : ' + fc.average(C.critChance) + '	' + 'Min Crit Chance : ' + Math.min(...C.critChance) + '	' + 'Max Crit Chance : ' + Math.max(...C.critChance) + '\n' +
+'Average Defense         : ' + fc.average(C.def) + '	' + 'Min Defense : ' + Math.min(...C.def) + '	' + 'Max Defense : ' + Math.max(...C.def) + '\n' +
+'Average Speed           : ' + fc.average(C.spd) + '	' + 'Min Speed : ' + Math.min(...C.spd) + '	' + 'Max Speed : ' + Math.max(...C.spd) + '\n' +
+'Average Agility         : ' + fc.average(C.agi) + '	' + 'Min Agility : ' + Math.min(...C.agi) + '	' + 'Max Agility : ' + Math.max(...C.agi) + '\n' +
+'Average Accuracy        : ' + fc.average(C.acr) + '	' + 'Min Accuracy : ' + Math.min(...C.acr) + '	' + 'Max Accuracy : ' + Math.max(...C.acr) + '\n' +
+'Average HP Regen        : ' + fc.average(C.rgn) + '	' + 'Min HP Regen : ' + Math.min(...C.rgn) + '	' + 'Max HP Regen : ' + Math.max(...C.rgn) + '\n' +
+'Average Magic           : ' + fc.averageMag(C.mag, C.noMagChar) + '	' + 'Min Magic : ' + Math.min(...C.mag) + '	' + 'Max Magic : ' + Math.max(...C.mag) + '\n' +
 '```' + `\n*Note that ${C.noMagChar} out of ${C.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier H :**__ *${H.charCount} characters iterated*\n` + '```python\n' +
-'Average HP              : ' + Stats[4].hpAvg + '	' + 'Min HP : ' + Stats[4].hpMin + '	' + 'Max HP : ' + Stats[4].hpMax + '\n' +
-'Average Attack          : ' + Stats[4].atkAvg + '	' + 'Min Attack : ' + Stats[4].atkMin + '	' + 'Max Attack : ' + Stats[4].atkMax + '\n' +
-'Average Crit Multi      : ' + Stats[4].critMultiAvg + '	' + 'Min Crit Multi : ' + Stats[4].critMultiMin + '	' + 'Max Crit Multi : ' + Stats[4].critMultiMax + '\n' +
-'Average Crit Chance     : ' + Stats[4].critChanceAvg + '	' + 'Min Crit Chance : ' + Stats[4].critChanceMin + '	' + 'Max Crit Chance : ' + Stats[4].critChanceMax + '\n' +
-'Average Defense         : ' + Stats[4].defAvg + '	' + 'Min Defense : ' + Stats[4].defMin + '	' + 'Max Defense : ' + Stats[4].defMax + '\n' +
-'Average Speed           : ' + Stats[4].spdAvg + '	' + 'Min Speed : ' + Stats[4].spdMin + '	' + 'Max Speed : ' + Stats[4].spdMax + '\n' +
-'Average Agility         : ' + Stats[4].agiAvg + '	' + 'Min Agility : ' + Stats[4].agiMin + '	' + 'Max Agility : ' + Stats[4].agiMax + '\n' +
-'Average Accuracy        : ' + Stats[4].acrAvg + '	' + 'Min Accuracy : ' + Stats[4].acrMin + '	' + 'Max Accuracy : ' + Stats[4].acrMax + '\n' +
-'Average HP Regen        : ' + Stats[4].rgnAvg + '	' + 'Min HP Regen : ' + Stats[4].rgnMin + '	' + 'Max HP Regen : ' + Stats[4].rgnMax + '\n' +
-'Average Magic           : ' + Stats[4].magAvg + '	' + 'Min Magic : ' + Stats[4].magMin + '	' + 'Max Magic : ' + Stats[4].magMax + '\n' +
+'Average HP              : ' + fc.average(H.hp) + '	' + 'Min HP : ' + Math.min(...H.hp) + '	' + 'Max HP : ' + Math.max(...H.hp) + '\n' +
+'Average Attack          : ' + fc.average(H.atk) + '	' + 'Min Attack : ' + Math.min(...H.atk) + '	' + 'Max Attack : ' + Math.max(...H.atk) + '\n' +
+'Average Crit Multi      : ' + fc.average(H.critMulti) + '	' + 'Min Crit Multi : ' + Math.min(...H.critMulti) + '	' + 'Max Crit Multi : ' + Math.max(...H.critMulti) + '\n' +
+'Average Crit Chance     : ' + fc.average(H.critChance) + '	' + 'Min Crit Chance : ' + Math.min(...H.critChance) + '	' + 'Max Crit Chance : ' + Math.max(...H.critChance) + '\n' +
+'Average Defense         : ' + fc.average(H.def) + '	' + 'Min Defense : ' + Math.min(...H.def) + '	' + 'Max Defense : ' + Math.max(...H.def) + '\n' +
+'Average Speed           : ' + fc.average(H.spd) + '	' + 'Min Speed : ' + Math.min(...H.spd) + '	' + 'Max Speed : ' + Math.max(...H.spd) + '\n' +
+'Average Agility         : ' + fc.average(H.agi) + '	' + 'Min Agility : ' + Math.min(...H.agi) + '	' + 'Max Agility : ' + Math.max(...H.agi) + '\n' +
+'Average Accuracy        : ' + fc.average(H.acr) + '	' + 'Min Accuracy : ' + Math.min(...H.acr) + '	' + 'Max Accuracy : ' + Math.max(...H.acr) + '\n' +
+'Average HP Regen        : ' + fc.average(H.rgn) + '	' + 'Min HP Regen : ' + Math.min(...H.rgn) + '	' + 'Max HP Regen : ' + Math.max(...H.rgn) + '\n' +
+'Average Magic           : ' + fc.averageMag(H.mag, H.noMagChar) + '	' + 'Min Magic : ' + Math.min(...H.mag) + '	' + 'Max Magic : ' + Math.max(...H.mag) + '\n' +
 '```' + `\n*Note that ${H.noMagChar} out of ${H.charCount} characters had no magic and where left out of the average calculation.*`);
             } else if (args[0] === 'gleave') {
                 if (msg.guild.id == args[1]) {

@@ -851,94 +851,38 @@ const func = {
 
     // please do ignore this function
     // it's at the bottom for a reason
-    math: (tier, i) => {
-        tier.hp += char[i].hp;
-        tier.atk += char[i].atk;
-        tier.critMulti += char[i].critMulti;
-        tier.critChance += char[i].critChance;
-        tier.def += char[i].def;
-        tier.spd += char[i].spd;
-        tier.agi += char[i].agi;
-        tier.acr += char[i].acr;
-        tier.rgn += char[i].rgn;
-        if (char[i].mag !== 0) {
-            tier.mag += char[i].mag;
-        } else {
-            tier.noMagChar++;
-        }
-        if (tier.charCount === 0) {
-            tier.hpMax = char[i].hp;
-            tier.hpMin = char[i].hp;
-            tier.atkMin = char[i].atk;
-            tier.atkMax = char[i].atk;
-            tier.critMultiMax = char[i].critMulti;
-            tier.critMultiMin = char[i].critMulti;
-            tier.critChanceMin = char[i].critChance;
-            tier.critChanceMax = char[i].critChance;
-            tier.defMin = char[i].def;
-            tier.defMax = char[i].def;
-            tier.spdMin = char[i].spd;
-            tier.spdMax = char[i].spd;
-            tier.agiMin = char[i].agi;
-            tier.agiMax = char[i].agi;
-            tier.acrMin = char[i].acr;
-            tier.acrMax = char[i].acr;
-            tier.rgnMin = char[i].rgn;
-            tier.rgnMax = char[i].rgn;
-        }
-        if (tier.charCount > 0) {
-            if (char[i].hp > tier.hpMax) {
-                tier.hpMax = char[i].hp;
-            } else if (char[i].hp < tier.hpMin) {
-                tier.hpMin = char[i].hp;
-            }
-            if (char[i].atk > tier.atkMax) {
-                tier.atkMax = char[i].atk;
-            } else if (char[i].atk < tier.atkMin) {
-                tier.atkMin = char[i].atk;
-            }
-            if (char[i].critMulti > tier.critMultiMax) {
-                tier.critMultiMax = char[i].critMulti;
-            } else if (char[i].critMulti < tier.critMultiMin) {
-                tier.critMultiMin = char[i].critMulti;
-            }
-            if (char[i].critChance > tier.critChanceMax) {
-                tier.critChanceMax = char[i].critChance;
-            } else if (char[i].critChance < tier.critChanceMin) {
-                tier.critChanceMin = char[i].critChance;
-            }
-            if (char[i].def > tier.defMax) {
-                tier.defMax = char[i].def;
-            } else if (char[i].def < tier.defMin) {
-                tier.defMin = char[i].def;
-            }
-            if (char[i].spd > tier.spdMax) {
-                tier.spdMax = char[i].spd;
-            } else if (char[i].spd < tier.spdMin) {
-                tier.spdMin = char[i].spd;
-            }
-            if (char[i].agi > tier.agiMax) {
-                tier.agiMax = char[i].agi;
-            } else if (char[i].agi < tier.agiMin) {
-                tier.agiMin = char[i].agi;
-            }
-            if (char[i].acr > tier.acrMax) {
-                tier.acrMax = char[i].acr;
-            } else if (char[i].acr < tier.acrMin) {
-                tier.acrMin = char[i].acr;
-            }
-            if (char[i].rgn > tier.rgnMax) {
-                tier.rgnMax = char[i].rgn;
-            } else if (char[i].rgn < tier.rgnMin) {
-                tier.rgnMin = char[i].rgn;
-            }
-            if (char[i].mag > tier.magMax) {
-                tier.magMax = char[i].mag;
-            } else if (char[i].mag < tier.magMin) {
-                tier.magMin = char[i].mag;
-            }
-        }
+    math: (tier, i, c) => {
+        tier.hp.push(c[i].hp);
+        tier.atk.push(c[i].atk);
+        tier.critMulti.push(c[i].critMulti);
+        tier.critChance.push(c[i].critChance);
+        tier.def.push(c[i].def);
+        tier.spd.push(c[i].spd);
+        tier.agi.push(c[i].agi);
+        tier.acr.push(c[i].acr);
+        tier.rgn.push(c[i].rgn);
+        c[i].mag ? tier.mag.push(c[i].mag) : tier.noMagChar++;
         tier.charCount++;
+    },
+
+    average: tier => {
+        if (tier.length) {
+            const sum = tier.reduce((previous, current) => current += previous);
+            const avg = sum / tier.length;
+            return func.round(avg);
+        } else {
+            return 0;
+        }
+    },
+
+    averageMag: (tier, muscleBrainAmout) => {
+        if (tier.length) {
+            const sum = tier.reduce((previous, current) => current += previous);
+            const avg = sum / (tier.length - muscleBrainAmout);
+            return func.round(avg);
+        } else {
+            return 0;
+        }
     },
 };
 
