@@ -171,449 +171,15 @@ client.on('message', msg => {
                 };
                 for (i = 0; i < char.length; i++) {
                     if (char[i]['tier'] === 'S') {
-                        S.hp += char[i].hp;
-                        S.atk += char[i].atk;
-                        S.critMulti += char[i].critMulti;
-                        S.critChance += char[i].critChance;
-                        S.def += char[i].def;
-                        S.spd += char[i].spd;
-                        S.agi += char[i].agi;
-                        S.acr += char[i].acr;
-                        S.rgn += char[i].rgn;
-                        if (char[i].mag !== 0) {
-                            S.mag += char[i].mag;
-                        } else {
-                            S.noMagChar++;
-                        }
-                        if (S.charCount === 0) {
-                            S.hpMax = char[i].hp;
-                            S.hpMin = char[i].hp;
-                            S.atkMin = char[i].atk;
-                            S.atkMax = char[i].atk;
-                            S.critMultiMax = char[i].critMulti;
-                            S.critMultiMin = char[i].critMulti;
-                            S.critChanceMin = char[i].critChance;
-                            S.critChanceMax = char[i].critChance;
-                            S.defMin = char[i].def;
-                            S.defMax = char[i].def;
-                            S.spdMin = char[i].spd;
-                            S.spdMax = char[i].spd;
-                            S.agiMin = char[i].agi;
-                            S.agiMax = char[i].agi;
-                            S.acrMin = char[i].acr;
-                            S.acrMax = char[i].acr;
-                            S.rgnMin = char[i].rgn;
-                            S.rgnMax = char[i].rgn;
-                        }
-                        if (S.charCount > 0) {
-                            if (char[i].hp > S.hpMax) {
-                                S.hpMax = char[i].hp;
-                            } else if (char[i].hp < S.hpMin) {
-                                S.hpMin = char[i].hp;
-                            }
-                            if (char[i].atk > S.atkMax) {
-                                S.atkMax = char[i].atk;
-                            } else if (char[i].atk < S.atkMin) {
-                                S.atkMin = char[i].atk;
-                            }
-                            if (char[i].critMulti > S.critMultiMax) {
-                                S.critMultiMax = char[i].critMulti;
-                            } else if (char[i].critMulti < S.critMultiMin) {
-                                S.critMultiMin = char[i].critMulti;
-                            }
-                            if (char[i].critChance > S.critChanceMax) {
-                                S.critChanceMax = char[i].critChance;
-                            } else if (char[i].critChance < S.critChanceMin) {
-                                S.critChanceMin = char[i].critChance;
-                            }
-                            if (char[i].def > S.defMax) {
-                                S.defMax = char[i].def;
-                            } else if (char[i].def < S.defMin) {
-                                S.defMin = char[i].def;
-                            }
-                            if (char[i].spd > S.spdMax) {
-                                S.spdMax = char[i].spd;
-                            } else if (char[i].spd < S.spdMin) {
-                                S.spdMin = char[i].spd;
-                            }
-                            if (char[i].agi > S.agiMax) {
-                                S.agiMax = char[i].agi;
-                            } else if (char[i].agi < S.agiMin) {
-                                S.agiMin = char[i].agi;
-                            }
-                            if (char[i].acr > S.acrMax) {
-                                S.acrMax = char[i].acr;
-                            } else if (char[i].acr < S.acrMin) {
-                                S.acrMin = char[i].acr;
-                            }
-                            if (char[i].rgn > S.rgnMax) {
-                                S.rgnMax = char[i].rgn;
-                            } else if (char[i].rgn < S.rgnMin) {
-                                S.rgnMin = char[i].rgn;
-                            }
-                            if (char[i].mag > S.magMax) {
-                                S.magMax = char[i].mag;
-                            } else if (char[i].mag < S.magMin) {
-                                S.magMin = char[i].mag;
-                            }
-                        }
-                        S.charCount++;
+                        fc.math(S, i);
                     } else if (char[i]['tier'] === 'A') {
-                        A.hp += char[i].hp;
-                        A.atk += char[i].atk;
-                        A.critMulti += char[i].critMulti;
-                        A.critChance += char[i].critChance;
-                        A.def += char[i].def;
-                        A.spd += char[i].spd;
-                        A.agi += char[i].agi;
-                        A.acr += char[i].acr;
-                        A.rgn += char[i].rgn;
-                        if (char[i].mag !== 0) {
-                            A.mag += char[i].mag;
-                        } else {
-                            A.noMagChar++;
-                        }
-                        if (A.charCount === 0) {
-                            A.hpMax = char[i].hp;
-                            A.hpMin = char[i].hp;
-                            A.atkMin = char[i].atk;
-                            A.atkMax = char[i].atk;
-                            A.critMultiMax = char[i].critMulti;
-                            A.critMultiMin = char[i].critMulti;
-                            A.critChanceMin = char[i].critChance;
-                            A.critChanceMax = char[i].critChance;
-                            A.defMin = char[i].def;
-                            A.defMax = char[i].def;
-                            A.spdMin = char[i].spd;
-                            A.spdMax = char[i].spd;
-                            A.agiMin = char[i].agi;
-                            A.agiMax = char[i].agi;
-                            A.acrMin = char[i].acr;
-                            A.acrMax = char[i].acr;
-                            A.rgnMin = char[i].rgn;
-                            A.rgnMax = char[i].rgn;
-                        }
-                        if (A.charCount > 0) {
-                            if (char[i].hp > A.hpMax) {
-                                A.hpMax = char[i].hp;
-                            } else if (char[i].hp < A.hpMin) {
-                                A.hpMin = char[i].hp;
-                            }
-                            if (char[i].atk > A.atkMax) {
-                                A.atkMax = char[i].atk;
-                            } else if (char[i].atk < A.atkMin) {
-                                A.atkMin = char[i].atk;
-                            }
-                            if (char[i].critMulti > A.critMultiMax) {
-                                A.critMultiMax = char[i].critMulti;
-                            } else if (char[i].critMulti < A.critMultiMin) {
-                                A.critMultiMin = char[i].critMulti;
-                            }
-                            if (char[i].critChance > A.critChanceMax) {
-                                A.critChanceMax = char[i].critChance;
-                            } else if (char[i].critChance < A.critChanceMin) {
-                                A.critChanceMin = char[i].critChance;
-                            }
-                            if (char[i].def > A.defMax) {
-                                A.defMax = char[i].def;
-                            } else if (char[i].def < A.defMin) {
-                                A.defMin = char[i].def;
-                            }
-                            if (char[i].spd > A.spdMax) {
-                                A.spdMax = char[i].spd;
-                            } else if (char[i].spd < A.spdMin) {
-                                A.spdMin = char[i].spd;
-                            }
-                            if (char[i].agi > A.agiMax) {
-                                A.agiMax = char[i].agi;
-                            } else if (char[i].agi < A.agiMin) {
-                                A.agiMin = char[i].agi;
-                            }
-                            if (char[i].acr > A.acrMax) {
-                                A.acrMax = char[i].acr;
-                            } else if (char[i].acr < A.acrMin) {
-                                A.acrMin = char[i].acr;
-                            }
-                            if (char[i].rgn > A.rgnMax) {
-                                A.rgnMax = char[i].rgn;
-                            } else if (char[i].rgn < A.rgnMin) {
-                                A.rgnMin = char[i].rgn;
-                            }
-                            if (char[i].mag > A.magMax) {
-                                A.magMax = char[i].mag;
-                            } else if (char[i].mag < A.magMin) {
-                                A.magMin = char[i].mag;
-                            }
-                        }
-                        A.charCount++;
+                        fc.math(A, i);
                     } else if (char[i]['tier'] === 'B') {
-                        B.hp += char[i].hp;
-                        B.atk += char[i].atk;
-                        B.critMulti += char[i].critMulti;
-                        B.critChance += char[i].critChance;
-                        B.def += char[i].def;
-                        B.spd += char[i].spd;
-                        B.agi += char[i].agi;
-                        B.acr += char[i].acr;
-                        B.rgn += char[i].rgn;
-                        if (char[i].mag !== 0) {
-                            B.mag += char[i].mag;
-                        } else {
-                            B.noMagChar++;
-                        }
-                        if (B.charCount === 0) {
-                            B.hpMax = char[i].hp;
-                            B.hpMin = char[i].hp;
-                            B.atkMin = char[i].atk;
-                            B.atkMax = char[i].atk;
-                            B.critMultiMax = char[i].critMulti;
-                            B.critMultiMin = char[i].critMulti;
-                            B.critChanceMin = char[i].critChance;
-                            B.critChanceMax = char[i].critChance;
-                            B.defMin = char[i].def;
-                            B.defMax = char[i].def;
-                            B.spdMin = char[i].spd;
-                            B.spdMax = char[i].spd;
-                            B.agiMin = char[i].agi;
-                            B.agiMax = char[i].agi;
-                            B.acrMin = char[i].acr;
-                            B.acrMax = char[i].acr;
-                            B.rgnMin = char[i].rgn;
-                            B.rgnMax = char[i].rgn;
-                            B.magMin = char[i].mag;
-                            B.magMax = char[i].mag;
-                        }
-                        if (B.charCount > 0) {
-                            if (char[i].hp > B.hpMax) {
-                                B.hpMax = char[i].hp;
-                            } else if (char[i].hp < B.hpMin) {
-                                B.hpMin = char[i].hp;
-                            }
-                            if (char[i].atk > B.atkMax) {
-                                B.atkMax = char[i].atk;
-                            } else if (char[i].atk < B.atkMin) {
-                                B.atkMin = char[i].atk;
-                            }
-                            if (char[i].critMulti > B.critMultiMax) {
-                                B.critMultiMax = char[i].critMulti;
-                            } else if (char[i].critMulti < B.critMultiMin) {
-                                B.critMultiMin = char[i].critMulti;
-                            }
-                            if (char[i].critChance > B.critChanceMax) {
-                                B.critChanceMax = char[i].critChance;
-                            } else if (char[i].critChance < B.critChanceMin) {
-                                B.critChanceMin = char[i].critChance;
-                            }
-                            if (char[i].def > B.defMax) {
-                                B.defMax = char[i].def;
-                            } else if (char[i].def < B.defMin) {
-                                B.defMin = char[i].def;
-                            }
-                            if (char[i].spd > B.spdMax) {
-                                B.spdMax = char[i].spd;
-                            } else if (char[i].spd < B.spdMin) {
-                                B.spdMin = char[i].spd;
-                            }
-                            if (char[i].agi > B.agiMax) {
-                                B.agiMax = char[i].agi;
-                            } else if (char[i].agi < B.agiMin) {
-                                B.agiMin = char[i].agi;
-                            }
-                            if (char[i].acr > B.acrMax) {
-                                B.acrMax = char[i].acr;
-                            } else if (char[i].acr < B.acrMin) {
-                                B.acrMin = char[i].acr;
-                            }
-                            if (char[i].rgn > B.rgnMax) {
-                                B.rgnMax = char[i].rgn;
-                            } else if (char[i].rgn < B.rgnMin) {
-                                B.rgnMin = char[i].rgn;
-                            }
-                            if (char[i].mag > B.magMax) {
-                                B.magMax = char[i].mag;
-                            } else if (char[i].mag < B.magMin) {
-                                B.magMin = char[i].mag;
-                            }
-                        }
-                        B.charCount++;
+                        fc.math(B, i);
                     } else if (char[i]['tier'] === 'C') {
-                        C.hp += char[i].hp;
-                        C.atk += char[i].atk;
-                        C.critMulti += char[i].critMulti;
-                        C.critChance += char[i].critChance;
-                        C.def += char[i].def;
-                        C.spd += char[i].spd;
-                        C.agi += char[i].agi;
-                        C.acr += char[i].acr;
-                        C.rgn += char[i].rgn;
-                        if (char[i].mag !== 0) {
-                            C.mag += char[i].mag;
-                        } else {
-                            C.noMagChar++;
-                        }
-                        if (C.charCount === 0) {
-                            C.hpMax = char[i].hp;
-                            C.hpMin = char[i].hp;
-                            C.atkMin = char[i].atk;
-                            C.atkMax = char[i].atk;
-                            C.critMultiMax = char[i].critMulti;
-                            C.critMultiMin = char[i].critMulti;
-                            C.critChanceMin = char[i].critChance;
-                            C.critChanceMax = char[i].critChance;
-                            C.defMin = char[i].def;
-                            C.defMax = char[i].def;
-                            C.spdMin = char[i].spd;
-                            C.spdMax = char[i].spd;
-                            C.agiMin = char[i].agi;
-                            C.agiMax = char[i].agi;
-                            C.acrMin = char[i].acr;
-                            C.acrMax = char[i].acr;
-                            C.rgnMin = char[i].rgn;
-                            C.rgnMax = char[i].rgn;
-                            C.magMin = char[i].mag;
-                            C.magMax = char[i].mag;
-                        }
-                        if (C.charCount > 0) {
-                            if (char[i].hp > C.hpMax) {
-                                C.hpMax = char[i].hp;
-                            } else if (char[i].hp < C.hpMin) {
-                                C.hpMin = char[i].hp;
-                            }
-                            if (char[i].atk > C.atkMax) {
-                                C.atkMax = char[i].atk;
-                            } else if (char[i].atk < C.atkMin) {
-                                C.atkMin = char[i].atk;
-                            }
-                            if (char[i].critMulti > C.critMultiMax) {
-                                C.critMultiMax = char[i].critMulti;
-                            } else if (char[i].critMulti < C.critMultiMin) {
-                                C.critMultiMin = char[i].critMulti;
-                            }
-                            if (char[i].critChance > C.critChanceMax) {
-                                C.critChanceMax = char[i].critChance;
-                            } else if (char[i].critChance < C.critChanceMin) {
-                                C.critChanceMin = char[i].critChance;
-                            }
-                            if (char[i].def > C.defMax) {
-                                C.defMax = char[i].def;
-                            } else if (char[i].def < C.defMin) {
-                                C.defMin = char[i].def;
-                            }
-                            if (char[i].spd > C.spdMax) {
-                                C.spdMax = char[i].spd;
-                            } else if (char[i].spd < C.spdMin) {
-                                C.spdMin = char[i].spd;
-                            }
-                            if (char[i].agi > C.agiMax) {
-                                C.agiMax = char[i].agi;
-                            } else if (char[i].agi < C.agiMin) {
-                                C.agiMin = char[i].agi;
-                            }
-                            if (char[i].acr > C.acrMax) {
-                                C.acrMax = char[i].acr;
-                            } else if (char[i].acr < C.acrMin) {
-                                C.acrMin = char[i].acr;
-                            }
-                            if (char[i].rgn > C.rgnMax) {
-                                C.rgnMax = char[i].rgn;
-                            } else if (char[i].rgn < C.rgnMin) {
-                                C.rgnMin = char[i].rgn;
-                            }
-                            if (char[i].mag > C.magMax) {
-                                C.magMax = char[i].mag;
-                            } else if (char[i].mag < C.magMin) {
-                                C.magMin = char[i].mag;
-                            }
-                        }
-                        C.charCount++;
+                        fc.math(C, i);
                     } else if (char[i]['tier'] === 'H') {
-                        H.hp += char[i].hp;
-                        H.atk += char[i].atk;
-                        H.critMulti += char[i].critMulti;
-                        H.critChance += char[i].critChance;
-                        H.def += char[i].def;
-                        H.spd += char[i].spd;
-                        H.agi += char[i].agi;
-                        H.acr += char[i].acr;
-                        H.rgn += char[i].rgn;
-                        if (char[i].mag !== 0) {
-                            H.mag += char[i].mag;
-                        } else {
-                            H.noMagChar++;
-                        }
-                        if (H.charCount === 0) {
-                            H.hpMax = char[i].hp;
-                            H.hpMin = char[i].hp;
-                            H.atkMin = char[i].atk;
-                            H.atkMax = char[i].atk;
-                            H.critMultiMax = char[i].critMulti;
-                            H.critMultiMin = char[i].critMulti;
-                            H.critChanceMin = char[i].critChance;
-                            H.critChanceMax = char[i].critChance;
-                            H.defMin = char[i].def;
-                            H.defMax = char[i].def;
-                            H.spdMin = char[i].spd;
-                            H.spdMax = char[i].spd;
-                            H.agiMin = char[i].agi;
-                            H.agiMax = char[i].agi;
-                            H.acrMin = char[i].acr;
-                            H.acrMax = char[i].acr;
-                            H.rgnMin = char[i].rgn;
-                            H.rgnMax = char[i].rgn;
-                        }
-                        if (H.charCount > 0) {
-                            if (char[i].hp > H.hpMax) {
-                                H.hpMax = char[i].hp;
-                            } else if (char[i].hp < H.hpMin) {
-                                H.hpMin = char[i].hp;
-                            }
-                            if (char[i].atk > H.atkMax) {
-                                H.atkMax = char[i].atk;
-                            } else if (char[i].atk < H.atkMin) {
-                                H.atkMin = char[i].atk;
-                            }
-                            if (char[i].critMulti > H.critMultiMax) {
-                                H.critMultiMax = char[i].critMulti;
-                            } else if (char[i].critMulti < H.critMultiMin) {
-                                H.critMultiMin = char[i].critMulti;
-                            }
-                            if (char[i].critChance > H.critChanceMax) {
-                                H.critChanceMax = char[i].critChance;
-                            } else if (char[i].critChance < H.critChanceMin) {
-                                H.critChanceMin = char[i].critChance;
-                            }
-                            if (char[i].def > H.defMax) {
-                                H.defMax = char[i].def;
-                            } else if (char[i].def < H.defMin) {
-                                H.defMin = char[i].def;
-                            }
-                            if (char[i].spd > H.spdMax) {
-                                H.spdMax = char[i].spd;
-                            } else if (char[i].spd < H.spdMin) {
-                                H.spdMin = char[i].spd;
-                            }
-                            if (char[i].agi > H.agiMax) {
-                                H.agiMax = char[i].agi;
-                            } else if (char[i].agi < H.agiMin) {
-                                H.agiMin = char[i].agi;
-                            }
-                            if (char[i].acr > H.acrMax) {
-                                H.acrMax = char[i].acr;
-                            } else if (char[i].acr < H.acrMin) {
-                                H.acrMin = char[i].acr;
-                            }
-                            if (char[i].rgn > H.rgnMax) {
-                                H.rgnMax = char[i].rgn;
-                            } else if (char[i].rgn < H.rgnMin) {
-                                H.rgnMin = char[i].rgn;
-                            }
-                            if (char[i].mag > H.magMax) {
-                                H.magMax = char[i].mag;
-                            } else if (char[i].mag < H.magMin) {
-                                H.magMin = char[i].mag;
-                            }
-                        }
-                        H.charCount++;
+                        fc.math(H, i);
                     } else {
                         console.log('Iterated character had an undefined tier, most likely test1 or test2');
                     }
@@ -785,35 +351,17 @@ client.on('message', msg => {
                         if (args[1] === p.char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
                             console.log(`value found : ${p.char[a].name}`);
                             const char_value = parseInt(args[3]);
-                            char[a][args[2]] = char_value;
-                            msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${args[2]} to ${args[3]}`);
-                            console.log(char[a]);
+                            p.char[a][args[2]] = char_value;
+                            msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${p.char[a][args[2]]} to ${char_value}`);
+                            console.log(p.char[a]);
                         }
                     }
                 } else {
                     msg.channel.send('Syntaxe Error, type !ad editchar help for more information.');
                 }
-            } else if (args[0] === 'start') {
-                // autostart a game with two predetermined discord account e.g. see config.json
-                gv.player1.id = config.testID1;
-                gv.player1.username = config.usernameID1;
-                gv.player2.id = config.testID2;
-                gv.player2.username = config.usernameID2;
-                gv.playerCount = 2;
-                gv.gameStarting = true;
-                gv.player1.charAmount = 2;
-                gv.player1.char.push(char[0]);
-                gv.player1.char.push(char[1]);
-                gv.player1.choseChar = true;
-                gv.player2.charAmount = 2;
-                gv.player2.char.push(char[0]);
-                gv.player2.char.push(char[1]);
-                gv.player2.choseChar = true;
-                msg.channel.send('Fast started the game.');
             } else if (args[0] === 'reset') {
                 fc.gameEnd(gv.player1, gv.player2, msg);
-                console.log(gv.player1);
-                console.log(gv.player2);
+                console.log(gv);
             } else {
                 msg.channel.send('It seems no command matches your input, please type "!ad help" to see the list of admin commands.');
             }
@@ -845,15 +393,6 @@ client.on('message', msg => {
             msg.reply('there is already two registered players.');
             // failsafe in case someone tries to register when a game is in session
         }
-    } else if (command === 'surrender') {
-        // surrender command
-        if (msg.member.id === gv.player1.id) {
-            fc.gameEnd(gv.player2, gv.player1, msg);
-        } else if (msg.member.id === gv.player2.id) {
-            fc.gameEnd(gv.player1, gv.player2, msg);
-        } else {
-            msg.reply(' you can\'t surrender since you are not a registered player');
-        }
     } else if (command === 'start') {
         // starting the game
         if (gv.playerCount !== 2) {
@@ -877,19 +416,16 @@ client.on('message', msg => {
         msg.reply('https://i.imgur.com/nuZbg4x.jpg');
     } else if (command === 'customchar') {
         const custChar = new Object();
-        const creation = async () => {
-            // const filter = () => true;
-            await msg.author.send('__**Welcome to the character creation screen**__\n' +
+        // const filter = () => true;
+        msg.author.send('__**Welcome to the character creation screen**__\n' +
 			'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
 			'If you type anything other than the asked value then the creation will break\n' +
 			'Also note that you only have 10 minutes to type your response or the bot will consider that you somehow got transported into a wormhole and cancel the creation.');
-            await msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
+        msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
 		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*');
-            await msg.author.send('What\'s the name of your character ?\n' +
+        msg.author.send('What\'s the name of your character ?\n' +
 		'*Note that you can only use alphanumerical characters, space and \'*');
-            await char.push(custChar);
-        };
-        creation();
+        char.push(custChar);
     } else if (gv.gameStarting === true) {
         // character selection
         let i;
@@ -932,7 +468,7 @@ client.on('message', msg => {
         }
     }
 
-    // defining turnPhase value
+    // initializing turnPhase value
     if (gv.player1.choseChar === true && gv.player2.choseChar === true && gv.gameStarting === true) {
         gv.gameStarting = false;
         gv.gamePhase = true;
@@ -990,6 +526,17 @@ client.on('message', msg => {
     // turn phase of the combat phase
     if (gv.gamePhase === true && gv.turnPhase === true) {
         switch (command) {
+        case'surrender':
+            // triggers the function that ends the game for the
+            // player that type the command !surrender
+            if (msg.member.id === gv.player1.id) {
+                fc.gameEnd(gv.player2, gv.player1, msg);
+            } else if (msg.member.id === gv.player2.id) {
+                fc.gameEnd(gv.player1, gv.player2, msg);
+            } else {
+                msg.reply(' you can\'t surrender since you are not a registered player');
+            }
+            break;
         case 'switch':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 msg.channel.delete();
