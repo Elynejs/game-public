@@ -782,7 +782,7 @@ const func = {
         tier.agi.push(c[i].agi);
         tier.acr.push(c[i].acr);
         tier.rgn.push(c[i].rgn);
-        c[i].mag ? tier.mag.push(c[i].mag) : tier.noMagChar++;
+        !tier.mag.length ? tier.mag[0] = c[i].mag : c[i].mag ? tier.mag.push(c[i].mag) : tier.noMagChar++;
         tier.charCount++;
     },
 
