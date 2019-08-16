@@ -190,7 +190,7 @@ client.on('message', msg => {
 'Average Agility         : ' + fc.average(S.agi) + '	' + 'Min Agility : ' + Math.min(...S.agi) + '	' + 'Max Agility : ' + Math.max(...S.agi) + '\n' +
 'Average Accuracy        : ' + fc.average(S.acr) + '	' + 'Min Accuracy : ' + Math.min(...S.acr) + '	' + 'Max Accuracy : ' + Math.max(...S.acr) + '\n' +
 'Average HP Regen        : ' + fc.average(S.rgn) + '	' + 'Min HP Regen : ' + Math.min(...S.rgn) + '	' + 'Max HP Regen : ' + Math.max(...S.rgn) + '\n' +
-'Average Magic           : ' + fc.averageMag(S.mag, S.noMagChar) + '	' + 'Min Magic : ' + Math.min(...S.mag) + '	' + 'Max Magic : ' + Math.max(...S.mag) + '\n' +
+'Average Magic           : ' + fc.average(S.mag) + '	' + 'Min Magic : ' + Math.min(...S.mag) + '	' + 'Max Magic : ' + Math.max(...S.mag) + '\n' +
 '```' + `\n*Note that ${S.noMagChar} out of ${S.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier A :**__ *${A.charCount} characters iterated*\n` + '```python\n' +
 'Average HP              : ' + fc.average(A.hp) + '	' + 'Min HP : ' + Math.min(...A.hp) + '	' + 'Max HP : ' + Math.max(...A.hp) + '\n' +
@@ -202,7 +202,7 @@ client.on('message', msg => {
 'Average Agility         : ' + fc.average(A.agi) + '	' + 'Min Agility : ' + Math.min(...A.agi) + '	' + 'Max Agility : ' + Math.max(...A.agi) + '\n' +
 'Average Accuracy        : ' + fc.average(A.acr) + '	' + 'Min Accuracy : ' + Math.min(...A.acr) + '	' + 'Max Accuracy : ' + Math.max(...A.acr) + '\n' +
 'Average HP Regen        : ' + fc.average(A.rgn) + '	' + 'Min HP Regen : ' + Math.min(...A.rgn) + '	' + 'Max HP Regen : ' + Math.max(...A.rgn) + '\n' +
-'Average Magic           : ' + fc.averageMag(A.mag, A.noMagChar) + '	' + 'Min Magic : ' + Math.min(...A.mag) + '	' + 'Max Magic : ' + Math.max(...A.mag) + '\n' +
+'Average Magic           : ' + fc.average(A.mag) + '	' + 'Min Magic : ' + Math.min(...A.mag) + '	' + 'Max Magic : ' + Math.max(...A.mag) + '\n' +
 '```' + `\n*Note that ${A.noMagChar} out of ${A.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier B :**__ *${B.charCount} characters iterated*\n` + '```python\n' +
 'Average HP              : ' + fc.average(B.hp) + '	' + 'Min HP : ' + Math.min(...B.hp) + '	' + 'Max HP : ' + Math.max(...B.hp) + '\n' +
@@ -214,7 +214,7 @@ client.on('message', msg => {
 'Average Agility         : ' + fc.average(B.agi) + '	' + 'Min Agility : ' + Math.min(...B.agi) + '	' + 'Max Agility : ' + Math.max(...B.agi) + '\n' +
 'Average Accuracy        : ' + fc.average(B.acr) + '	' + 'Min Accuracy : ' + Math.min(...B.acr) + '	' + 'Max Accuracy : ' + Math.max(...B.acr) + '\n' +
 'Average HP Regen        : ' + fc.average(B.rgn) + '	' + 'Min HP Regen : ' + Math.min(...B.rgn) + '	' + 'Max HP Regen : ' + Math.max(...B.rgn) + '\n' +
-'Average Magic           : ' + fc.averageMag(B.mag, B.noMagChar) + '	' + 'Min Magic : ' + Math.min(...B.mag) + '	' + 'Max Magic : ' + Math.max(...B.mag) + '\n' +
+'Average Magic           : ' + fc.average(B.mag) + '	' + 'Min Magic : ' + Math.min(...B.mag) + '	' + 'Max Magic : ' + Math.max(...B.mag) + '\n' +
 '```' + `\n*Note that ${B.noMagChar} out of ${B.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier C :**__ *${C.charCount} characters iterated*\n` + '```python\n' +
 'Average HP              : ' + fc.average(C.hp) + '	' + 'Min HP : ' + Math.min(...C.hp) + '	' + 'Max HP : ' + Math.max(...C.hp) + '\n' +
@@ -226,7 +226,7 @@ client.on('message', msg => {
 'Average Agility         : ' + fc.average(C.agi) + '	' + 'Min Agility : ' + Math.min(...C.agi) + '	' + 'Max Agility : ' + Math.max(...C.agi) + '\n' +
 'Average Accuracy        : ' + fc.average(C.acr) + '	' + 'Min Accuracy : ' + Math.min(...C.acr) + '	' + 'Max Accuracy : ' + Math.max(...C.acr) + '\n' +
 'Average HP Regen        : ' + fc.average(C.rgn) + '	' + 'Min HP Regen : ' + Math.min(...C.rgn) + '	' + 'Max HP Regen : ' + Math.max(...C.rgn) + '\n' +
-'Average Magic           : ' + fc.averageMag(C.mag, C.noMagChar) + '	' + 'Min Magic : ' + Math.min(...C.mag) + '	' + 'Max Magic : ' + Math.max(...C.mag) + '\n' +
+'Average Magic           : ' + fc.average(C.mag) + '	' + 'Min Magic : ' + Math.min(...C.mag) + '	' + 'Max Magic : ' + Math.max(...C.mag) + '\n' +
 '```' + `\n*Note that ${C.noMagChar} out of ${C.charCount} characters had no magic and where left out of the average calculation.*`);
                 msg.channel.send(`__**Stats for Tier H :**__ *${H.charCount} characters iterated*\n` + '```python\n' +
 'Average HP              : ' + fc.average(H.hp) + '	' + 'Min HP : ' + Math.min(...H.hp) + '	' + 'Max HP : ' + Math.max(...H.hp) + '\n' +
@@ -238,7 +238,7 @@ client.on('message', msg => {
 'Average Agility         : ' + fc.average(H.agi) + '	' + 'Min Agility : ' + Math.min(...H.agi) + '	' + 'Max Agility : ' + Math.max(...H.agi) + '\n' +
 'Average Accuracy        : ' + fc.average(H.acr) + '	' + 'Min Accuracy : ' + Math.min(...H.acr) + '	' + 'Max Accuracy : ' + Math.max(...H.acr) + '\n' +
 'Average HP Regen        : ' + fc.average(H.rgn) + '	' + 'Min HP Regen : ' + Math.min(...H.rgn) + '	' + 'Max HP Regen : ' + Math.max(...H.rgn) + '\n' +
-'Average Magic           : ' + fc.averageMag(H.mag, H.noMagChar) + '	' + 'Min Magic : ' + Math.min(...H.mag) + '	' + 'Max Magic : ' + Math.max(...H.mag) + '\n' +
+'Average Magic           : ' + fc.average(H.mag) + '	' + 'Min Magic : ' + Math.min(...H.mag) + '	' + 'Max Magic : ' + Math.max(...H.mag) + '\n' +
 '```' + `\n*Note that ${H.noMagChar} out of ${H.charCount} characters had no magic and where left out of the average calculation.*`);
             } else if (args[0] === 'gleave') {
                 if (msg.guild.id == args[1]) {

@@ -874,16 +874,6 @@ const func = {
             return 0;
         }
     },
-
-    averageMag: (tier, muscleBrainAmout) => {
-        if (tier.length) {
-            const sum = tier.reduce((previous, current) => current += previous);
-            const avg = sum / (tier.length - muscleBrainAmout);
-            return func.round(avg);
-        } else {
-            return 0;
-        }
-    },
 };
 
 module.exports = func;
