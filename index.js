@@ -362,7 +362,7 @@ client.on('message', msg => {
         for (i = 0; i < char.length; i++) {
             const name = char[i].name.toLowerCase().trim();
             if (command === name.replace(/\s+/g, '')) {
-                if (msg.member.id == gv.player1.id) {
+                if (msg.member.id === gv.player1.id) {
                     if (!gv.player1.choseChar) {
                         gv.player1.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);
@@ -376,7 +376,7 @@ client.on('message', msg => {
                     } else {
                         msg.reply(' already has enough characters.');
                     }
-                } else if (msg.member.id == gv.player2.id) {
+                } else if (msg.member.id === gv.player2.id) {
                     if (!gv.player2.choseChar) {
                         gv.player2.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);

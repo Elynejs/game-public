@@ -25,7 +25,7 @@ const func = {
         if (Math.floor(Math.random() * 2) >= 1) {
             client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
         } else {
-            client.channels.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
+            client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
         }
     },
 
@@ -102,19 +102,19 @@ const func = {
     // function for passing from one turn to another
     addTurn: client => {
         gv.turn += 1;
-        this.NewTurnPhase(client);
+        func.NewTurnPhase(client);
     },
 
     // function for special abilities
     passive: (player_1, player_2, client) => {
         if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-            this.all_or_nothing(player_1.char[player_1.active]);
+            func.all_or_nothing(player_1.char[player_1.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
-            this.crushing_strength(player_2.char[player_2.active]);
+            func.crushing_strength(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
-            this.black_poison(player_2.char[player_2.active]);
+            func.black_poison(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-            this.care_taker(player_1, client);
+            func.care_taker(player_1, client);
         } else {
             console.log('No passive ability detected.');
         }
@@ -122,15 +122,15 @@ const func = {
 
     active: (player_1, player_2) => {
         if (player_1.char[player_1.active].name.toLowerCase() === 'snipefox') {
-            this.snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
+            func.snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
-            this.rage(player_1.char[player_1.active], player_1);
+            func.rage(player_1.char[player_1.active], player_1);
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'pinky') {
-            this.explosion(player_1.char[player_1.active], player_2, player_1);
+            func.explosion(player_1.char[player_1.active], player_2, player_1);
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
-            this.pill(player_1.char[player_1.active], player_1);
+            func.pill(player_1.char[player_1.active], player_1);
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'kairen') {
-            this.ressurection(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
+            func.ressurection(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
         } else {
             console.log('I fucked up\nA character without active skill managed to activate the function for active selection');
         }
@@ -353,7 +353,7 @@ const func = {
 
     // function for when a characters dies during a turn
     omgHeDead: (player, client) => {
-        this.react_KO(player, client);
+        func.react_KO(player, client);
         client.channel.send({
             embed: {
                 color: 16286691,
@@ -408,11 +408,11 @@ const func = {
                 console.log(player.dmg);
                 player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
             }
-            this.dodge(player, otherplayer, char2, char1);
+            func.dodge(player, otherplayer, char2, char1);
             char2.hp -= Math.floor(player.dmg);
         } else {
-            this.defense(player, otherplayer, char1, char2);
-            player.message_block = (`${char2.name} multiplicated their defense for this turn by ${gv.round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
+            func.defense(player, otherplayer, char1, char2);
+            player.message_block = (`${char2.name} multiplicated their defense for func. turn by ${gv.round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
@@ -461,14 +461,14 @@ const func = {
                 if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
                     player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti) * 5;
                     player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
-                    this.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
                     player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-                    this.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
@@ -477,14 +477,14 @@ const func = {
                 if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
                     player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti;
                     player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
-                    this.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = char1.mag * (1 - (char2.magdef / 100));
                     player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-                    this.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
@@ -496,8 +496,8 @@ const func = {
     },
 
     gameEnd: (winner, looser, client) => {
-        this.react_KO(looser, client);
-        this.react_victory(winner, client);
+        func.react_KO(looser, client);
+        func.react_victory(winner, client);
         client.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
         gv.gamePhase = false;
         gv.turnPhase = false;
@@ -555,8 +555,8 @@ const func = {
                 } else if (otherplayer.char[i].hp <= 0) {
                     if (i === (otherplayer.charAmount - 1)) {
                         console.log('No characters are alive anymore so we end the game.');
-                        this.statusEnd(client);
-                        this.gameEnd(player, otherplayer, client);
+                        func.statusEnd(client);
+                        func.gameEnd(player, otherplayer, client);
                         break;
                     } else {
                         console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
@@ -597,7 +597,7 @@ const func = {
                     pl.char[i].skill_timer = 0;
                 }
                 if (pl.char[i].skill_timer === 0 && pl.char[i].has_active_skill === true) {
-                    this.remove_active_effect(pl, client);
+                    func.remove_active_effect(pl, client);
                 }
             }
         }
@@ -605,73 +605,73 @@ const func = {
 
     actionPhaseActions: (p, t, client) => {
         if (p.action === 'changechar') {
-            this.changechar(p, p.char[p.active], p.char[p.active]);
+            func.changechar(p, p.char[p.active], p.char[p.active]);
         } else if (p.action === 'attack') {
-            this.attack(p, t, p.char[p.active], t.char[t.active]);
-            this.isGameOver(p, t, t.char[t.active], client);
+            func.attack(p, t, p.char[p.active], t.char[t.active]);
+            func.isGameOver(p, t, t.char[t.active], client);
         } else if (p.action === 'magic') {
-            this.magic(p, t, p.char[p.active], t.char[t.active], client);
-            this.isGameOver(p, t, t.char[t.active], client);
+            func.magic(p, t, p.char[p.active], t.char[t.active], client);
+            func.isGameOver(p, t, t.char[t.active], client);
         } else if (p.action === 'skill') {
-            this.active(p, t);
+            func.active(p, t);
         }
     },
 
     // function for action phase
     actionphase: (firstplayer, secondplayer, client) => {
         if (gv.actionAmount === 2) {
-            this.whoIsActive(gv.player1);
-            this.whoIsActive(gv.player2);
+            func.whoIsActive(gv.player1);
+            func.whoIsActive(gv.player2);
             if (firstplayer.char[firstplayer.active].spd > secondplayer.char[secondplayer.active].spd) {
                 // player1.char is faster than player2.char so it's attack is done before
                 const phase = async () => {
-                    await this.actionPhaseActions(firstplayer, secondplayer, client);
-                    await this.actionPhaseActions(secondplayer, firstplayer, client);
+                    await func.actionPhaseActions(firstplayer, secondplayer, client);
+                    await func.actionPhaseActions(secondplayer, firstplayer, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    await this.addTurn(client);
+                    await func.addTurn(client);
                 };
                 phase();
             } else if (firstplayer.char[firstplayer.active].spd < secondplayer.char[secondplayer.active].spd) {
                 const phase = async () => {
-                    await this.actionPhaseActions(secondplayer, firstplayer, client);
-                    await this.actionPhaseActions(firstplayer, secondplayer, client);
+                    await func.actionPhaseActions(secondplayer, firstplayer, client);
+                    await func.actionPhaseActions(firstplayer, secondplayer, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    await this.addTurn(client);
+                    await func.addTurn(client);
                 };
                 phase();
             } else if (firstplayer.char[firstplayer.active].spd === secondplayer.char[secondplayer.active].spd) {
                 if (Math.floor(Math.random() * 2) >= 1) {
                     const phase = async () => {
-                        await this.actionPhaseActions(firstplayer, secondplayer, client);
-                        await this.actionPhaseActions(secondplayer, firstplayer, client);
+                        await func.actionPhaseActions(firstplayer, secondplayer, client);
+                        await func.actionPhaseActions(secondplayer, firstplayer, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
                         gv.actionAmount = 0;
-                        await this.addTurn(client);
+                        await func.addTurn(client);
                     };
                     phase();
                 } else {
                     const phase = async () => {
-                        await this.actionPhaseActions(secondplayer, firstplayer, client);
-                        await this.actionPhaseActions(firstplayer, secondplayer, client);
+                        await func.actionPhaseActions(secondplayer, firstplayer, client);
+                        await func.actionPhaseActions(firstplayer, secondplayer, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
                         gv.actionAmount = 0;
-                        await this.addTurn(client);
+                        await func.addTurn(client);
                     };
                     phase();
                 }
             }
         } else {
-            console.log('If I see this then I fucked up.');
+            console.log('If I see func. then I fucked up.');
         }
     },
 
@@ -689,22 +689,22 @@ const func = {
     NewTurnPhase: client => {
         // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
-            this.eachPlayerCharList(gv.player1, gv.player2, client);
+            func.eachPlayerCharList(gv.player1, gv.player2, client);
             if (gv.p1CharDied) {
-                this.omgHeDead(gv.player1, client);
+                func.omgHeDead(gv.player1, client);
                 gv.p1CharDied = false;
             }
             if (gv.p2CharDied) {
-                this.omgHeDead(gv.player2, client);
+                func.omgHeDead(gv.player2, client);
                 gv.p2CharDied = false;
             }
-            this.regen(gv.player1);
-            this.regen(gv.player2);
-            this.cd_iteration(gv.player1, client);
-            this.cd_iteration(gv.player2, client);
-            this.passive(gv.player1, gv.player2, client);
-            this.passive(gv.player2, gv.player1, client);
-            this.status(client);
+            func.regen(gv.player1);
+            func.regen(gv.player2);
+            func.cd_iteration(gv.player1, client);
+            func.cd_iteration(gv.player2, client);
+            func.passive(gv.player1, gv.player2, client);
+            func.passive(gv.player2, gv.player1, client);
+            func.status(client);
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
             gv.player1.message_block = ' ';
@@ -715,8 +715,8 @@ const func = {
             gv.player2.message_dodge = ' ';
             gv.player1.defense_stack += 1;
             gv.player2.defense_stack += 1;
-            this.IsDefenseStackReset(gv.player1);
-            this.IsDefenseStackReset(gv.player2);
+            func.IsDefenseStackReset(gv.player1);
+            func.IsDefenseStackReset(gv.player2);
             client.channel.send(`\`\`\`diff\nTurn ${gv.turn} has started. Chose your character's action.\`\`\``);
             gv.turnPhase = true;
             client.channel.send({
@@ -764,13 +764,13 @@ const func = {
 
     // function for char amount
     charAmount: (amount, client) => {
-        gv.player1.charAmount = amount;
-        gv.player2.charAmount = amount;
+        gv.player1.charAmount = parseInt(amount);
+        gv.player2.charAmount = parseInt(amount);
         client.channel.send(`Please choose ${amount} characters each.\nChoose your characters by typing "!*character_name*".\nYou can type !list to see the list of characters.`);
         gv.gameStarting = true;
     },
 
-    // please do ignore this function
+    // please do ignore func. function
     // it's at the bottom for a reason
     math: (tier, i, c) => {
         tier.hp.push(c[i].hp);
@@ -790,7 +790,7 @@ const func = {
         if (tier.length) {
             const sum = tier.reduce((previous, current) => current += previous);
             const avg = sum / tier.length;
-            return this.round(avg);
+            return func.round(avg);
         } else {
             return 0;
         }
