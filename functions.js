@@ -3,34 +3,34 @@ const char = require('./characters.json');
 
 const func = {
     // functions for displaying characters gimmicks on selection of character
-    react_selection: (selected_char, client) => {
+    react_selection: (selected_char, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            client.channel.send(`${selected_char.emoji} ${selected_char.react_selection1}`);
+            event.channel.send(`${selected_char.emoji} ${selected_char.react_selection1}`);
         } else {
-            client.channel.send(`${selected_char.emoji} ${selected_char.react_selection2}`);
+            event.channel.send(`${selected_char.emoji} ${selected_char.react_selection2}`);
         }
     },
 
     // function for displaying character gimmick on death of character
-    react_KO: (p, client) => {
+    react_KO: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO1}`);
         } else {
-            client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO2}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO2}`);
         }
     },
 
     // function for displaying character gimmick on character victory
-    react_victory: (p, client) => {
+    react_victory: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
         } else {
-            client.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
         }
     },
 
     // function for status display of how many characters each players still has
-    eachPlayerCharList: (p1, p2, client) => {
+    eachPlayerCharList: (p1, p2, event, client) => {
         let i;
         const p1emote = [' ', ' ', ' ', ' ', ' '];
         for (i = 0; i < p1.char.length; i++) {
@@ -40,7 +40,7 @@ const func = {
         for (i = 0; i < p2.char.length; i++) {
             p2emote[i] = p2.char[i].isAlive ? p2.char[i].emoji : p2.char[i].emoji_ko;
         }
-        client.channel.send({
+        event.channel.send({
             embed: {
                 color: 16286691,
                 author: {
@@ -100,13 +100,13 @@ const func = {
     },
 
     // function for passing from one turn to another
-    addTurn: client => {
+    addTurn: (event, client) => {
         gv.turn += 1;
-        func.NewTurnPhase(client);
+        func.NewTurnPhase(event, client);
     },
 
     // function for special abilities
-    passive: (player_1, player_2, client) => {
+    passive: (player_1, player_2, event) => {
         if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
             func.all_or_nothing(player_1.char[player_1.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
@@ -114,7 +114,7 @@ const func = {
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
             func.black_poison(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-            func.care_taker(player_1, client);
+            func.care_taker(player_1, event);
         } else {
             console.log('No passive ability detected.');
         }
@@ -136,12 +136,12 @@ const func = {
         }
     },
 
-    remove_active_effect: (player_1, client) => {
+    remove_active_effect: (player_1, event) => {
         if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
             player_1.char[player_1.active].atk = char[12].atk;
             player_1.char[player_1.active].def = char[12].def;
             player_1.char[player_1.active].rgn = char[12].rgn;
-            client.channel.send({
+            event.channel.send({
                 embed: {
                     color: 16286691,
                     fields: [{
@@ -152,7 +152,7 @@ const func = {
             });
         } else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
             player_1.char[player_1.active].atk = char[15].atk;
-            client.channel.send({
+            event.channel.send({
                 embed: {
                     color: 16286691,
                     fields: [{
@@ -250,14 +250,14 @@ const func = {
     },
 
     // passive for dyakko
-    care_taker: (player, client) => {
+    care_taker: (player, event) => {
         // care taker => heal 10% of HP to every character in his team every turn while the character is alive and fighting
         let i;
         for (i = 0; i < player.char.length; i++) {
             player.char[i].hp *= (1 + (10 / 100));
             console.log(`Dyakko regenerated 10% of the maximum HP of ${player.char[i].name}`);
         }
-        client.channel.send('Dyakko regenerated 10% of the maximum HP of all their team.');
+        event.channel.send('Dyakko regenerated 10% of the maximum HP of all their team.');
     },
 
     // active for kairen
@@ -271,8 +271,8 @@ const func = {
     },
 
     // function for status display
-    status: client => {
-        client.channel.send({
+    status: (event, client) => {
+        event.channel.send({
             embed: {
                 color: 16286691,
                 author: {
@@ -310,8 +310,8 @@ const func = {
     },
 
     // function for status display when a character dies
-    statusEnd: client => {
-        client.channel.send({
+    statusEnd: (event, client) => {
+        event.channel.send({
             embed: {
                 color: 16286691,
                 author: {
@@ -352,9 +352,9 @@ const func = {
     },
 
     // function for when a characters dies during a turn
-    omgHeDead: (player, client) => {
-        func.react_KO(player, client);
-        client.channel.send({
+    omgHeDead: (player, event) => {
+        func.react_KO(player, event);
+        event.channel.send({
             embed: {
                 color: 16286691,
                 fields: [{
@@ -455,7 +455,7 @@ const func = {
         }
     },
 
-    magic: (player, otherplayer, char1, char2, client) => {
+    magic: (player, otherplayer, char1, char2, event) => {
         if (char1.magcd === 0) {
             if (char2.tier === 'H') {
                 if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
@@ -491,14 +491,14 @@ const func = {
                 }
             }
         } else {
-            client.channel.send(`${char1.name} got his cd activated and can't use magic.`);
+            event.channel.send(`${char1.name} got his cd activated and can't use magic.`);
         }
     },
 
-    gameEnd: (winner, looser, client) => {
-        func.react_KO(looser, client);
-        func.react_victory(winner, client);
-        client.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
+    gameEnd: (winner, looser, event) => {
+        func.react_KO(looser, event);
+        func.react_victory(winner, event);
+        event.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
         gv.gamePhase = false;
         gv.turnPhase = false;
         gv.playerCount = 0;
@@ -533,7 +533,7 @@ const func = {
     },
 
     // function for gameend
-    isGameOver: (player, otherplayer, char1, client) => {
+    isGameOver: (player, otherplayer, char1, event, client) => {
         if (char1.hp <= 0) {
             char1.hp = 0;
             char1.isAlive = false;
@@ -555,8 +555,8 @@ const func = {
                 } else if (otherplayer.char[i].hp <= 0) {
                     if (i === (otherplayer.charAmount - 1)) {
                         console.log('No characters are alive anymore so we end the game.');
-                        func.statusEnd(client);
-                        func.gameEnd(player, otherplayer, client);
+                        func.statusEnd(event, client);
+                        func.gameEnd(player, otherplayer, event);
                         break;
                     } else {
                         console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
@@ -579,7 +579,7 @@ const func = {
     },
 
     // function for cd iteration
-    cd_iteration: (pl, client) => {
+    cd_iteration: (pl, event) => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
             if (pl.char[i].magcd > 0 && pl.char[i].magcdmax >= pl.char[i].magcd) {
@@ -597,75 +597,75 @@ const func = {
                     pl.char[i].skill_timer = 0;
                 }
                 if (pl.char[i].skill_timer === 0 && pl.char[i].has_active_skill === true) {
-                    func.remove_active_effect(pl, client);
+                    func.remove_active_effect(pl, event);
                 }
             }
         }
     },
 
-    actionPhaseActions: (p, t, client) => {
+    actionPhaseActions: (p, t, event, client) => {
         if (p.action === 'changechar') {
             func.changechar(p, p.char[p.active], p.char[p.active]);
         } else if (p.action === 'attack') {
             func.attack(p, t, p.char[p.active], t.char[t.active]);
-            func.isGameOver(p, t, t.char[t.active], client);
+            func.isGameOver(p, t, t.char[t.active], event, client);
         } else if (p.action === 'magic') {
-            func.magic(p, t, p.char[p.active], t.char[t.active], client);
-            func.isGameOver(p, t, t.char[t.active], client);
+            func.magic(p, t, p.char[p.active], t.char[t.active], event);
+            func.isGameOver(p, t, t.char[t.active], event, client);
         } else if (p.action === 'skill') {
             func.active(p, t);
         }
     },
 
     // function for action phase
-    actionphase: (firstplayer, secondplayer, client) => {
+    actionphase: (firstplayer, secondplayer, event, client) => {
         if (gv.actionAmount === 2) {
             func.whoIsActive(gv.player1);
             func.whoIsActive(gv.player2);
             if (firstplayer.char[firstplayer.active].spd > secondplayer.char[secondplayer.active].spd) {
                 // player1.char is faster than player2.char so it's attack is done before
                 const phase = async () => {
-                    await func.actionPhaseActions(firstplayer, secondplayer, client);
-                    await func.actionPhaseActions(secondplayer, firstplayer, client);
+                    await func.actionPhaseActions(firstplayer, secondplayer, event, client);
+                    await func.actionPhaseActions(secondplayer, firstplayer, event, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    await func.addTurn(client);
+                    await func.addTurn(event, client);
                 };
                 phase();
             } else if (firstplayer.char[firstplayer.active].spd < secondplayer.char[secondplayer.active].spd) {
                 const phase = async () => {
-                    await func.actionPhaseActions(secondplayer, firstplayer, client);
-                    await func.actionPhaseActions(firstplayer, secondplayer, client);
+                    await func.actionPhaseActions(secondplayer, firstplayer, event, client);
+                    await func.actionPhaseActions(firstplayer, secondplayer, event, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
                     gv.actionAmount = 0;
-                    await func.addTurn(client);
+                    await func.addTurn(event, client);
                 };
                 phase();
             } else if (firstplayer.char[firstplayer.active].spd === secondplayer.char[secondplayer.active].spd) {
                 if (Math.floor(Math.random() * 2) >= 1) {
                     const phase = async () => {
-                        await func.actionPhaseActions(firstplayer, secondplayer, client);
-                        await func.actionPhaseActions(secondplayer, firstplayer, client);
+                        await func.actionPhaseActions(firstplayer, secondplayer, event, client);
+                        await func.actionPhaseActions(secondplayer, firstplayer, event, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
                         gv.actionAmount = 0;
-                        await func.addTurn(client);
+                        await func.addTurn(event, client);
                     };
                     phase();
                 } else {
                     const phase = async () => {
-                        await func.actionPhaseActions(secondplayer, firstplayer, client);
-                        await func.actionPhaseActions(firstplayer, secondplayer, client);
+                        await func.actionPhaseActions(secondplayer, firstplayer, event, client);
+                        await func.actionPhaseActions(firstplayer, secondplayer, event, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
                         gv.actionAmount = 0;
-                        await func.addTurn(client);
+                        await func.addTurn(event, client);
                     };
                     phase();
                 }
@@ -686,25 +686,25 @@ const func = {
     },
 
     // function for resetting turn phase
-    NewTurnPhase: client => {
+    NewTurnPhase: (event, client) => {
         // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
-            func.eachPlayerCharList(gv.player1, gv.player2, client);
+            func.eachPlayerCharList(gv.player1, gv.player2, event, client);
             if (gv.p1CharDied) {
-                func.omgHeDead(gv.player1, client);
+                func.omgHeDead(gv.player1, event);
                 gv.p1CharDied = false;
             }
             if (gv.p2CharDied) {
-                func.omgHeDead(gv.player2, client);
+                func.omgHeDead(gv.player2, event);
                 gv.p2CharDied = false;
             }
             func.regen(gv.player1);
             func.regen(gv.player2);
-            func.cd_iteration(gv.player1, client);
-            func.cd_iteration(gv.player2, client);
-            func.passive(gv.player1, gv.player2, client);
-            func.passive(gv.player2, gv.player1, client);
-            func.status(client);
+            func.cd_iteration(gv.player1, event);
+            func.cd_iteration(gv.player2, event);
+            func.passive(gv.player1, gv.player2, event);
+            func.passive(gv.player2, gv.player1, event);
+            func.status(event, client);
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
             gv.player1.message_block = ' ';
@@ -717,9 +717,9 @@ const func = {
             gv.player2.defense_stack += 1;
             func.IsDefenseStackReset(gv.player1);
             func.IsDefenseStackReset(gv.player2);
-            client.channel.send(`\`\`\`diff\nTurn ${gv.turn} has started. Chose your character's action.\`\`\``);
+            event.channel.send(`\`\`\`diff\nTurn ${gv.turn} has started. Chose your character's action.\`\`\``);
             gv.turnPhase = true;
-            client.channel.send({
+            event.channel.send({
                 embed: {
                     color: 16286691,
                     author: {
@@ -734,12 +734,12 @@ const func = {
                         value: '*Choose by typing one of the commands below*',
                     }],
                     image: {
-                        url: 'https: //i.imgur.com/nuZbg4x.jpg',
+                        url: 'https://i.imgur.com/nuZbg4x.jpg',
                     },
                     timestamp: new Date(),
                 },
             });
-            client.channel.send({
+            event.channel.send({
                 embed: {
                     color: 16286691,
                     author: {
@@ -754,7 +754,7 @@ const func = {
                         value: '*Choose by typing one of the commands below*',
                     }],
                     image: {
-                        url: 'https: //i.imgur.com/nuZbg4x.jpg',
+                        url: 'https://i.imgur.com/nuZbg4x.jpg',
                     },
                     timestamp: new Date(),
                 },
@@ -763,10 +763,10 @@ const func = {
     },
 
     // function for char amount
-    charAmount: (amount, client) => {
+    charAmount: (amount, event) => {
         gv.player1.charAmount = parseInt(amount);
         gv.player2.charAmount = parseInt(amount);
-        client.channel.send(`Please choose ${amount} characters each.\nChoose your characters by typing "!*character_name*".\nYou can type !list to see the list of characters.`);
+        event.channel.send(`Please choose ${amount} characters each.\nChoose your characters by typing "!*character_name*".\nYou can type !list to see the list of characters.`);
         gv.gameStarting = true;
     },
 

@@ -407,7 +407,7 @@ client.on('message', msg => {
         fc.reset_cd(gv.player2);
         fc.passive(gv.player1, gv.player2, msg);
         fc.passive(gv.player2, gv.player1, msg);
-        fc.eachPlayerCharList(gv.player1, gv.player2, msg);
+        fc.eachPlayerCharList(gv.player1, gv.player2, msg, client);
         gv.player1.char[0].isActive = true;
         gv.player2.char[0].isActive = true;
         msg.channel.send(`Turn ${gv.turn} has started. Chose your character's action.`);
@@ -426,7 +426,7 @@ client.on('message', msg => {
                     value: '*Choose by typing one of the commands below*',
                 }],
                 image: {
-                    url: 'https: //i.imgur.com/nuZbg4x.jpg',
+                    url: 'https://i.imgur.com/nuZbg4x.jpg',
                 },
                 timestamp: new Date(),
             },
@@ -446,7 +446,7 @@ client.on('message', msg => {
                     value: '*Choose by typing one of the commands below*',
                 }],
                 image: {
-                    url: 'https: //i.imgur.com/nuZbg4x.jpg',
+                    url: 'https://i.imgur.com/nuZbg4x.jpg',
                 },
                 timestamp: new Date(),
             },
@@ -469,7 +469,7 @@ client.on('message', msg => {
             break;
         case 'switch':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 const c = args[0];
                 if (args.length < 1) {
                     msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
@@ -492,7 +492,7 @@ client.on('message', msg => {
                                 gv.actionAmount += 1;
                                 msg.reply(` you switched ${gv.player1.char[gv.player1.active].name} to ${gv.player1.char[i].name}.`);
                                 if (gv.actionAmount === 2) {
-                                    fc.actionphase(gv.player1, gv.player2, msg);
+                                    fc.actionphase(gv.player1, gv.player2, msg, client);
                                 } else {
                                     console.log(`actionAmount : ${gv.actionAmount}`);
                                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -505,7 +505,7 @@ client.on('message', msg => {
                     }
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 const c = args[0];
                 if (args.length < 1) {
                     msg.channel.send('Syntaxe error. Please specify which character you would like to switch with your current character\n`example: \'!switch lyzan\'`');
@@ -528,7 +528,7 @@ client.on('message', msg => {
                                 gv.actionAmount += 1;
                                 msg.reply(` you switched ${gv.player2.char[gv.player2.active].name} to ${gv.player2.char[i].name}.`);
                                 if (gv.actionAmount === 2) {
-                                    fc.actionphase(gv.player2, gv.player2, msg);
+                                    fc.actionphase(gv.player2, gv.player2, msg, client);
                                 } else {
                                     console.log(`actionAmount : ${gv.actionAmount}`);
                                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -546,25 +546,25 @@ client.on('message', msg => {
             break;
         case 'attack':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 gv.player1.choseAction = true;
                 gv.player1.action = 'attack';
                 gv.actionAmount += 1;
                 msg.reply(' you chose an action that has been anonymized.');
                 if (gv.actionAmount === 2) {
-                    fc.actionphase(gv.player1, gv.player2, msg);
+                    fc.actionphase(gv.player1, gv.player2, msg, client);
                 } else {
                     console.log(`actionAmount : ${gv.actionAmount}`);
                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 gv.player2.choseAction = true;
                 gv.player2.action = 'attack';
                 gv.actionAmount += 1;
                 msg.reply(' you chose an action that has been anonymized.');
                 if (gv.actionAmount === 2) {
-                    fc.actionphase(gv.player1, gv.player2, msg);
+                    fc.actionphase(gv.player1, gv.player2, msg, client);
                 } else {
                     console.log(`actionAmount : ${gv.actionAmount}`);
                     console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -575,14 +575,14 @@ client.on('message', msg => {
             break;
         case 'defense':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false && gv.player2.choseAction === true) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player2.action === 'attack') {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'defense';
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -591,14 +591,14 @@ client.on('message', msg => {
                     msg.channel.send(`${gv.player2.username} did not choose a defendable action. Choose another action to take this turn.`);
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false && gv.player1.choseAction === true) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player1.action === 'attack') {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'defense';
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -612,7 +612,7 @@ client.on('message', msg => {
             break;
         case 'magic':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player1.char[gv.player1.active].mag === 0) {
                     msg.channel.send(`${gv.player1.char[gv.player1.active].name} can't cast magic. Please chose another action.`);
                 } else if (gv.player1.char[gv.player1.active].magcd === 0) {
@@ -621,7 +621,7 @@ client.on('message', msg => {
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then I\'m done');
@@ -630,7 +630,7 @@ client.on('message', msg => {
                     msg.reply(' can\'t use magic because it is still under cooldown.');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player2.char[gv.player2.active].mag === 0) {
                     msg.channel.send(`${gv.player2.char[gv.player2.active].name} can't cast magic. Please chose another action.`);
                 } else if (gv.player2.char[gv.player2.active].magcd === 0) {
@@ -639,7 +639,7 @@ client.on('message', msg => {
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -653,14 +653,14 @@ client.on('message', msg => {
             break;
         case 'skill':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player1.char[gv.player1.active].has_active_skill === true) {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'skill';
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
@@ -669,14 +669,14 @@ client.on('message', msg => {
                     msg.channel.send('Your character doesn\'t have a special skill. Choose another action.');
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
-                msg.channel.delete();
+                msg.delete();
                 if (gv.player2.char[gv.player2.active].has_active_skill === true) {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'skill';
                     gv.actionAmount += 1;
                     msg.reply(' you chose an action that has been anonymized.');
                     if (gv.actionAmount === 2) {
-                        fc.actionphase(gv.player1, gv.player2, msg);
+                        fc.actionphase(gv.player1, gv.player2, msg, client);
                     } else {
                         console.log(`actionAmount : ${gv.actionAmount}`);
                         console.log('If actionAmount is lower than 2, then this message is normal, if it is egal or higher than 2 then i done fucked up');
