@@ -1,4 +1,4 @@
-const gv = require('./globalVariable.js');
+const gv = require('./variables.js');
 const char = require('./characters.json');
 
 const func = {
