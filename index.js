@@ -320,7 +320,7 @@ client.on('message', msg => {
                 console.log(gv.player2.id);
             }
         } else {
-            msg.reply('there is already two registered players.');
+            msg.reply(' there is already two registered players.');
             // failsafe in case someone tries to register when a game is in session
         }
     } else if (command === 'start') {
@@ -348,9 +348,8 @@ client.on('message', msg => {
         const custChar = new Object();
         // const filter = () => true;
         msg.author.send('__**Welcome to the character creation screen**__\n' +
-			'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
-			'If you type anything other than the asked value then the creation will break\n' +
-			'Also note that you only have 10 minutes to type your response or the bot will consider that you somehow got transported into a wormhole and cancel the creation.');
+		'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
+		'If you type anything other than the asked value then the creation will break\n');
         msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
 		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*');
         msg.author.send('What\'s the name of your character ?\n' +
@@ -408,6 +407,7 @@ client.on('message', msg => {
         fc.reset_cd(gv.player2);
         fc.passive(gv.player1, gv.player2, msg);
         fc.passive(gv.player2, gv.player1, msg);
+        fc.eachPlayerCharList(gv.player1, gv.player2, msg);
         gv.player1.char[0].isActive = true;
         gv.player2.char[0].isActive = true;
         msg.channel.send(`Turn ${gv.turn} has started. Chose your character's action.`);

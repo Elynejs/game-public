@@ -67,7 +67,7 @@ module.exports = function(amount) {
             generatedChar.rgn = randInt(0, 20);
             generatedChar.mag = randInt(0, 0);
         } else {
-            console.log('nope, fucked it up');
+            console.log('tier is invalid');
         }
         char.push(generatedChar);
     }
