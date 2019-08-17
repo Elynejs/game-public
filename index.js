@@ -277,7 +277,7 @@ client.on('message', msg => {
                     msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value] [player]');
                 } else if (args.length > 3) {
                     let a;
-                    for (a = 0; a < p.char.length; a++) {
+                    for (a = 0; a < char.length; a++) {
                         if (args[1] === p.char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
                             console.log(`value found : ${p.char[a].name}`);
                             const char_value = parseInt(args[3]);

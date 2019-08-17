@@ -353,7 +353,6 @@ const func = {
 
     // function for when a characters dies during a turn
     omgHeDead: (player, event) => {
-        func.react_KO(player, event);
         event.channel.send({
             embed: {
                 color: 16286691,
@@ -364,6 +363,7 @@ const func = {
                 timestamp: new Date(),
             },
         });
+        func.react_KO(player, event);
         player.active = player.futurChar;
     },
 
@@ -689,6 +689,13 @@ const func = {
     NewTurnPhase: (event, client) => {
         // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
+            func.regen(gv.player1);
+            func.regen(gv.player2);
+            func.cd_iteration(gv.player1, event);
+            func.cd_iteration(gv.player2, event);
+            func.passive(gv.player1, gv.player2, event);
+            func.passive(gv.player2, gv.player1, event);
+            func.status(event, client);
             func.eachPlayerCharList(gv.player1, gv.player2, event, client);
             if (gv.p1CharDied) {
                 func.omgHeDead(gv.player1, event);
@@ -698,13 +705,6 @@ const func = {
                 func.omgHeDead(gv.player2, event);
                 gv.p2CharDied = false;
             }
-            func.regen(gv.player1);
-            func.regen(gv.player2);
-            func.cd_iteration(gv.player1, event);
-            func.cd_iteration(gv.player2, event);
-            func.passive(gv.player1, gv.player2, event);
-            func.passive(gv.player2, gv.player1, event);
-            func.status(event, client);
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
             gv.player1.message_block = ' ';
