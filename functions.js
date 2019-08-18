@@ -1,5 +1,6 @@
 const gv = require('./variables.js');
 const char = require('./characters.json');
+const pastPlayers = require('./players.json');
 
 const func = {
     // functions for displaying characters gimmicks on selection of character
@@ -793,6 +794,15 @@ const func = {
             return func.round(avg);
         } else {
             return 0;
+        }
+    },
+
+    isPlayerKnown: event => {
+        let i;
+        for(i = 0; i < pastPlayers.length; i++) {
+            if (pastPlayers[i]['id'] === event.member.id) {
+                return i;
+            }
         }
     },
 };

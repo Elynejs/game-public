@@ -9,7 +9,9 @@ const config = require('./config.json');
 const token = require('./token.json');
 const fc = require('./functions.js');
 const gv = require('./variables.js');
+const Player = require('./class.js');
 const char = require('./characters.json');
+const pastPlayers = require('./players.json');
 client.login(token.token);
 // Defining bot activity
 // to the necessary command a user has to type to start a game.
@@ -305,8 +307,7 @@ client.on('message', msg => {
         if (gv.playerCount === 0) {
             msg.reply('is registered as player 1! Waiting for another player...');
             gv.playerCount = 1;
-            gv.player1.username = msg.author.username;
-            gv.player1.id = msg.member.id;
+            !fc.isPlayerKnown(msg) ? gv.player1 = new Player(msg.member.id, msg.author.username) : gv.player1 = pastPlayers[fc.isPlayerKnown(msg)];
             console.log(gv.player1.id);
         } else if (gv.playerCount === 1) {
             if (msg.member.id === gv.player1.id) {
