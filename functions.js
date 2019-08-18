@@ -543,6 +543,17 @@ const func = {
         winner.gamesWon += 1;
         gv.player2.gamesPlayed += 1;
         looser.gamesLost += 1;
+        let i;
+        for (i = 0; i <= pastPlayers.length; i++) {
+            if (gv.player1.id === pastPlayers[i].id) {
+                pastPlayers[i] = gv.player1;
+            } else if (gv.player2.id === pastPlayers[i].id) {
+                pastPlayers[i] = gv.player2;
+            } else {
+                console.log('An unregistered player accessed this part which is supposed to be impossible.');
+            }
+        }
+        event.channel.send('Game has been successfully reset and all your stats saved.');
     },
 
     // function for gameend
@@ -821,8 +832,15 @@ const func = {
         let i;
         for(i = 0; i <= pastPlayers.length; i++) {
             if (pastPlayers.length) {
-                if (pastPlayers[i].id === event.member.id) {
-                    console.log('fuck');
+                if (!pastPlayers[i]) {
+                    const p = Object.assign(new Player(event.member.id, event.author.username));
+                    pastPlayers.push(p);
+                    fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
+                        if (err) throw err;
+                        console.log('Players has successfully been saved');
+                    });
+                    break;
+                } else if (pastPlayers[i].id === event.member.id) {
                     break;
                 } else if (pastPlayers.length === i) {
                     const p = Object.assign(new Player(event.member.id, event.author.username));
