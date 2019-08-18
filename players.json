@@ -15,6 +15,15 @@
     "defense_multiplier": 2,
     "message_damage": " ",
     "message_dodge": " ",
-    "message_block": " "
+    "message_block": " ",
+    "gamesPlayed": 0,
+    "gamesWon": 0,
+    "totalDamages": 0,
+    "totalTurn": 0,
+    "totalAttack": 0,
+    "totalDefense": 0,
+    "totalSkill": 0,
+    "totalMagic": 0,
+    "totalDodge": 0
   }
 ]

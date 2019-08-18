@@ -16,5 +16,15 @@ module.exports = class Player {
         this.message_damage = ' ';
         this.message_dodge = ' ';
         this.message_block = ' ';
+        this.gamesPlayed = 0;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.totalDamages = 0;
+        this.totalTurns = 0;
+        this.totalAttacks = 0;
+        this.totalDefenses = 0;
+        this.totalSkills = 0;
+        this.totalMagics = 0;
+        this.totalDodges = 0;
     }
 };

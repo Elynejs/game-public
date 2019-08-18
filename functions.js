@@ -221,13 +221,13 @@ const func = {
     },
 
     // active for pinky
-    explosion: (player_1, target, player) => {
+    explosion: (char1, target, player) => {
         // explosion => MAG*2; cost 300HP
         console.log('explosion working');
-        player_1.hp -= 300;
-        player.dmg = player_1.mag * 2;
+        char1.hp -= 300;
+        player.dmg = char1.mag * 2;
         target.hp -= player.dmg;
-        player.message_damage = `\`\`\`diff\n+ ${player_1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
+        player.message_damage = `\`\`\`diff\n+ ${char1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
     },
 
     // passive for pinky
@@ -431,6 +431,7 @@ const func = {
                 const diceroll = Math.floor(Math.random() * 10);
                 if (diceroll <= 9) {
                     if (dodgeValue >= diceroll) {
+                        otherplayer.totalDodges += 1;
                         player.dmg = 0;
                         char_1.dodgecd = gv.dodgecdMax;
                         player.message_damage = ' ';
@@ -439,6 +440,7 @@ const func = {
                         console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
                     }
                 } else if (diceroll === 10) {
+                    otherplayer.totalDodges += 1;
                     player.dmg = 0;
                     char_1.dodgecd = gv.dodgecdMax;
                     player.message_damage = ' ';
@@ -528,11 +530,19 @@ const func = {
         gv.player2.id = 0;
         gv.player1.username = '';
         gv.player2.username = '';
+        gv.player1.totalDamages += gv.player1.dmg;
+        gv.player2.totalDamages += gv.player2.dmg;
         gv.player1.dmg = 0;
         gv.player2.dmg = 0;
         gv.player1.action = '';
         gv.player2.action = '';
+        gv.player1.totalTurns += gv.turn;
+        gv.player2.totalTurns += gv.turn;
         gv.turn = 1;
+        gv.player1.gamesPlayed += 1;
+        winner.gamesWon += 1;
+        gv.player2.gamesPlayed += 1;
+        looser.gamesLost += 1;
     },
 
     // function for gameend
@@ -610,13 +620,19 @@ const func = {
         if (p.action === 'changechar') {
             func.changechar(p, p.char[p.active], p.char[p.active]);
         } else if (p.action === 'attack') {
+            p.totalAttacks += 1;
             func.attack(p, t, p.char[p.active], t.char[t.active]);
             func.isGameOver(p, t, t.char[t.active], event, client);
         } else if (p.action === 'magic') {
+            p.totalMagics += 1;
             func.magic(p, t, p.char[p.active], t.char[t.active], event);
             func.isGameOver(p, t, t.char[t.active], event, client);
         } else if (p.action === 'skill') {
+            p.totalSkills += 1;
             func.active(p, t);
+        } else if (p.action === 'defense') {
+            p.totalDefenses += 1;
+            func.defense(p, t, p.char[p.active], t.char[t.active]);
         }
     },
 
@@ -708,6 +724,8 @@ const func = {
                 func.omgHeDead(gv.player2, event);
                 gv.p2CharDied = false;
             }
+            gv.player1.totalDamages += gv.player1.dmg;
+            gv.player2.totalDamages += gv.player2.dmg;
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
             gv.player1.message_block = ' ';
