@@ -9,7 +9,6 @@ const config = require('./config.json');
 const token = require('./token.json');
 const fc = require('./functions.js');
 const gv = require('./variables.js');
-const Player = require('./class.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
 client.login(token.token);
@@ -307,8 +306,9 @@ client.on('message', msg => {
         if (gv.playerCount === 0) {
             msg.reply('is registered as player 1! Waiting for another player...');
             gv.playerCount = 1;
-            !fc.isPlayerKnown(msg) ? gv.player1 = new Player(msg.member.id, msg.author.username) : gv.player1 = pastPlayers[fc.isPlayerKnown(msg)];
+            gv.player1 = fc.isPlayerKnown(msg);
             console.log(gv.player1.id);
+            console.log(pastPlayers);
         } else if (gv.playerCount === 1) {
             if (msg.member.id === gv.player1.id) {
                 msg.reply('is already registered.');
@@ -316,8 +316,7 @@ client.on('message', msg => {
                 msg.reply('is registered as player 2!');
                 msg.channel.send('Type !start to start the game!\nYou can add a number after !start to customize how many character each player can choose. The default number is`1`');
                 gv.playerCount = 2;
-                gv.player2.username = msg.author.username;
-                gv.player2.id = msg.member.id;
+                gv.player2 = fc.isPlayerKnown(msg);
                 console.log(gv.player2.id);
             }
         } else {

@@ -1,6 +1,8 @@
 const gv = require('./variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
+const fs = require('fs');
+const Player = require('./class.js');
 
 const func = {
     // functions for displaying characters gimmicks on selection of character
@@ -799,11 +801,34 @@ const func = {
 
     isPlayerKnown: event => {
         let i;
-        for(i = 0; i < pastPlayers.length; i++) {
-            if (pastPlayers[i]['id'] === event.member.id) {
-                return i;
+        for(i = 0; i <= pastPlayers.length; i++) {
+            if (pastPlayers.length) {
+                console.log('array not empty');
+                if (pastPlayers[i].id === event.member.id) {
+                    console.log('fuck');
+                    break;
+                } else if (pastPlayers.length === i) {
+                    console.log('iterated at the size of array');
+                    const p = Object.assign(new Player(event.member.id, event.author.username));
+                    pastPlayers.push(p);
+                    fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
+                        if (err) throw err;
+                        console.log('Players has successfully been saved');
+                    });
+                    break;
+                }
+            } else {
+                console.log('array was empty');
+                const p = Object.assign(new Player(event.member.id, event.author.username));
+                pastPlayers.push(p);
+                fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
+                    if (err) throw err;
+                    console.log('Players has successfully been saved');
+                });
+                break;
             }
         }
+        return pastPlayers[i];
     },
 };
 

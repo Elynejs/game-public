@@ -1,4 +1,20 @@
 [
-    {
-    }
+  {
+    "id": "219476484316856320",
+    "username": "Elyne",
+    "active": 0,
+    "futurChar": 0,
+    "lastAliveChar": 0,
+    "charAmount": 1,
+    "choseChar": false,
+    "choseAction": false,
+    "dmg": 0,
+    "char": [],
+    "action": "",
+    "defense_stack": 2,
+    "defense_multiplier": 2,
+    "message_damage": " ",
+    "message_dodge": " ",
+    "message_block": " "
+  }
 ]
