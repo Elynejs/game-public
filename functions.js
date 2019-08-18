@@ -833,7 +833,7 @@ const func = {
         for(i = 0; i <= pastPlayers.length; i++) {
             if (pastPlayers.length) {
                 if (!pastPlayers[i]) {
-                    const p = Object.assign(new Player(event.member.id, event.author.username));
+                    const p = new Player(event.member.id, event.author.username);
                     pastPlayers.push(p);
                     fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
                         if (err) throw err;
@@ -843,7 +843,7 @@ const func = {
                 } else if (pastPlayers[i].id === event.member.id) {
                     break;
                 } else if (pastPlayers.length === i) {
-                    const p = Object.assign(new Player(event.member.id, event.author.username));
+                    const p = new Player(event.member.id, event.author.username);
                     pastPlayers.push(p);
                     fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
                         if (err) throw err;
@@ -852,7 +852,7 @@ const func = {
                     break;
                 }
             } else {
-                const p = Object.assign(new Player(event.member.id, event.author.username));
+                const p = new Player(event.member.id, event.author.username);
                 pastPlayers.push(p);
                 fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
                     if (err) throw err;
