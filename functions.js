@@ -803,12 +803,10 @@ const func = {
         let i;
         for(i = 0; i <= pastPlayers.length; i++) {
             if (pastPlayers.length) {
-                console.log('array not empty');
                 if (pastPlayers[i].id === event.member.id) {
                     console.log('fuck');
                     break;
                 } else if (pastPlayers.length === i) {
-                    console.log('iterated at the size of array');
                     const p = Object.assign(new Player(event.member.id, event.author.username));
                     pastPlayers.push(p);
                     fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
@@ -818,7 +816,6 @@ const func = {
                     break;
                 }
             } else {
-                console.log('array was empty');
                 const p = Object.assign(new Player(event.member.id, event.author.username));
                 pastPlayers.push(p);
                 fs.writeFile('players.json', JSON.stringify(pastPlayers, undefined, 2), (err) => {
