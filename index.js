@@ -365,7 +365,7 @@ client.on('message', msg => {
                     if (!gv.player1.choseChar) {
                         gv.player1.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);
-                        fc.react_selection(gv.player1.char[gv.arp1], msg);
+                        fc.reactSelection(gv.player1.char[gv.arp1], msg);
                         gv.arp1 += 1;
                         if (gv.player1.char.length === gv.player1.charAmount) {
                             msg.channel.send(`${gv.player1.username} chose all of their characters.`);
@@ -379,7 +379,7 @@ client.on('message', msg => {
                     if (!gv.player2.choseChar) {
                         gv.player2.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);
-                        fc.react_selection(gv.player2.char[gv.arp2], msg);
+                        fc.reactSelection(gv.player2.char[gv.arp2], msg);
                         gv.arp2 += 1;
                         if (gv.player2.char.length === gv.player2.charAmount) {
                             msg.channel.send(`${gv.player2.username} chose all of their characters.`);
@@ -654,7 +654,7 @@ client.on('message', msg => {
         case 'skill':
             if (msg.member.id === gv.player1.id && gv.player1.choseAction === false) {
                 msg.delete();
-                if (gv.player1.char[gv.player1.active].has_active_skill === true) {
+                if (gv.player1.char[gv.player1.active].hasActiveSkill === true) {
                     gv.player1.choseAction = true;
                     gv.player1.action = 'skill';
                     gv.actionAmount += 1;
@@ -670,7 +670,7 @@ client.on('message', msg => {
                 }
             } else if (msg.member.id === gv.player2.id && gv.player2.choseAction === false) {
                 msg.delete();
-                if (gv.player2.char[gv.player2.active].has_active_skill === true) {
+                if (gv.player2.char[gv.player2.active].hasActiveSkill === true) {
                     gv.player2.choseAction = true;
                     gv.player2.action = 'skill';
                     gv.actionAmount += 1;

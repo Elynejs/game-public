@@ -5,29 +5,29 @@ const fs = require('fs');
 const Player = require('./src/player.js');
 const func = {
     // functions for displaying characters gimmicks on selection of character
-    react_selection: (selected_char, event) => {
+    reactSelection: (selected_char, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${selected_char.emoji} ${selected_char.react_selection1}`);
+            event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection1}`);
         } else {
-            event.channel.send(`${selected_char.emoji} ${selected_char.react_selection2}`);
+            event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection2}`);
         }
     },
 
     // function for displaying character gimmick on death of character
-    react_KO: (p, event) => {
+    reactKo: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo1}`);
         } else {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_KO2}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo2}`);
         }
     },
 
     // function for displaying character gimmick on character victory
-    react_victory: (p, event) => {
+    reactVictory: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactVictory1}`);
         } else {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].react_victory1}`);
+            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactVictory1}`);
         }
     },
 
@@ -36,11 +36,11 @@ const func = {
         let i;
         const p1emote = [' ', ' ', ' ', ' ', ' '];
         for (i = 0; i < p1.char.length; i++) {
-            p1emote[i] = p1.char[i].isAlive ? p1.char[i].emoji : p1.char[i].emoji_ko;
+            p1emote[i] = p1.char[i].isAlive ? p1.char[i].emoji : p1.char[i].emojiKo;
         }
         const p2emote = [' ', ' ', ' ', ' ', ' '];
         for (i = 0; i < p2.char.length; i++) {
-            p2emote[i] = p2.char[i].isAlive ? p2.char[i].emoji : p2.char[i].emoji_ko;
+            p2emote[i] = p2.char[i].isAlive ? p2.char[i].emoji : p2.char[i].emojiKo;
         }
         event.channel.send({
             embed: {
@@ -50,7 +50,7 @@ const func = {
                     icon_url: client.user.avatarURL,
                 },
                 fields: [{
-                    name: `__**${p1.username}'s list of characters :**__`,
+                    name: `__**${p1.username}'s list of characters :**__    `,
                     value: p1emote[0] + p1emote[1] + p1emote[2] + p1emote[3] + p1emote[4],
                     inline: true,
                 },
@@ -65,16 +65,15 @@ const func = {
         });
     },
 
-    // function for player.defense_stack
-    IsDefenseStackReset: player => {
-        if (player.defense_stack >= 2) {
-            player.defense_multiplier = 2;
+    // function for player.defenseStack
+    isDefenseStackReset: player => {
+        if (player.defenseStack >= 2) {
+            player.defenseMultiplier = 2;
         } else {
-            player.defense_multiplier -= (1 / 3);
-            if (player.defense_multiplier <= 1) {
-                player.defense_multiplier = 1;
+            player.defenseMultiplier -= (1 / 3);
+            if (player.defenseMultiplier <= 1) {
+                player.defenseMultiplier = 1;
             }
-            console.log(player.defense_multiplier);
         }
     },
 
@@ -203,8 +202,8 @@ const func = {
         // snipe => activate the CD of the opponent MAG (CD:5)
         console.log('snipe working');
         target.magcd = target.magcdmax;
-        player_1.skill_cd = player_1.skill_cd_max;
-        player.message_damage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
+        player_1.skillCd = player_1.skillCdMax;
+        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
     },
 
     // active for lyzan
@@ -214,9 +213,9 @@ const func = {
         player_1.atk *= 5;
         player_1.def *= 2;
         player_1.rgn *= 3;
-        player_1.skill_cd = player_1.skill_cd_max;
-        player_1.skill_timer = 3;
-        player.message_damage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
+        player_1.skillCd = player_1.skillCdMax;
+        player_1.skillTimer = 3;
+        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
     },
 
     // active for pinky
@@ -226,7 +225,7 @@ const func = {
         char1.hp -= 300;
         player.dmg = char1.mag * 2;
         target.hp -= player.dmg;
-        player.message_damage = `\`\`\`diff\n+ ${char1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
+        player.messageDamage = `\`\`\`diff\n+ ${char1.name} dealt double his magic power of damage at the cost of 300 HP !\`\`\``;
     },
 
     // passive for pinky
@@ -246,9 +245,9 @@ const func = {
         console.log('pill working');
         // pill => ATK*3 for 3 turn (CD:6)
         player_1.atk *= 3;
-        player_1.skill_cd = player_1.skill_cd_max;
-        player_1.skill_timer = 4;
-        player.message_damage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
+        player_1.skillCd = player_1.skillCdMax;
+        player_1.skillTimer = 4;
+        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
     },
 
     // passive for dyakko
@@ -268,8 +267,8 @@ const func = {
         console.log('ressurection working');
         target.hp = target.hpmax;
         target.isAlive = true;
-        player_1.skill_cd = player_1.skill_cd_max;
-        player.message_damage = `\`\`\`diff\n+ ${player.char[player.active].name} ressurected ${target.name} !\`\`\``;
+        player_1.skillCd = player_1.skillCdMax;
+        player.messageDamage = `\`\`\`diff\n+ ${player.char[player.active].name} ressurected ${target.name} !\`\`\``;
     },
 
     // function for status display
@@ -283,11 +282,11 @@ const func = {
                 },
                 fields: [{
                     name: `${gv.player1.char[gv.player1.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${gv.player2.char[gv.player2.active].emoji}`,
-                    value: `${gv.player2.message_block} ${gv.player1.message_damage} ${gv.player2.message_dodge}`,
+                    value: `${gv.player2.messageBlock} ${gv.player1.messageDamage} ${gv.player2.messageDodge}`,
                 },
                 {
                     name: `${gv.player2.char[gv.player2.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${gv.player1.char[gv.player1.active].emoji}`,
-                    value: `${gv.player1.message_block} ${gv.player2.message_damage} ${gv.player1.message_dodge}`,
+                    value: `${gv.player1.messageBlock} ${gv.player2.messageDamage} ${gv.player1.messageDodge}`,
                 },
                 {
                     name: '**REGENERATION**',
@@ -322,11 +321,11 @@ const func = {
                 },
                 fields: [{
                     name: `${gv.player1.char[gv.player1.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${gv.player2.char[gv.player2.active].emoji}`,
-                    value: `${gv.player2.message_block} ${gv.player1.message_damage} ${gv.player2.message_dodge}`,
+                    value: `${gv.player2.messageBlock} ${gv.player1.messageDamage} ${gv.player2.messageDodge}`,
                 },
                 {
                     name: `${gv.player2.char[gv.player2.active].emoji} :crossed_swords: **DAMAGE** :arrow_right: ${gv.player1.char[gv.player1.active].emoji}`,
-                    value: `${gv.player1.message_block} ${gv.player2.message_damage} ${gv.player1.message_dodge}`,
+                    value: `${gv.player1.messageBlock} ${gv.player2.messageDamage} ${gv.player1.messageDodge}`,
                 },
                 {
                     name: `${gv.player1.char[gv.player1.active].emoji} **STATUS**`,
@@ -350,7 +349,7 @@ const func = {
     changechar: (player, char2) => {
         const char1 = player.char[player.lastAliveChar];
         console.log(`${player.username} switched ${char1.name} with ${char2.name}`);
-        player.message_damage = `${player.username} switched ${char1.name} with ${char2.name}`;
+        player.messageDamage = `${player.username} switched ${char1.name} with ${char2.name}`;
     },
 
     // function for when a characters dies during a turn
@@ -365,7 +364,7 @@ const func = {
                 timestamp: new Date(),
             },
         });
-        func.react_KO(player, event);
+        func.reactKo(player, event);
         player.active = player.futurChar;
     },
 
@@ -376,21 +375,21 @@ const func = {
 
     defense: (player, otherplayer, char1, char2) => {
         if (char1.critChance > Math.floor(Math.random() * 100)) {
-            player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100))) * char1.critMulti;
+            player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defenseMultiplier) / 100))) * char1.critMulti;
             console.log(player.dmg);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
-            player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+            player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
         } else {
-            player.dmg = char1.atk * (1 - ((char2.def * otherplayer.defense_multiplier) / 100));
+            player.dmg = char1.atk * (1 - ((char2.def * otherplayer.defenseMultiplier) / 100));
             console.log(player.dmg);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
-            player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+            player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
         }
-        otherplayer.defense_stack = 0;
+        otherplayer.defenseStack = 0;
     },
 
     attack: (player, otherplayer, char1, char2) => {
@@ -401,20 +400,20 @@ const func = {
                     player.dmg = 0;
                 }
                 console.log(player.dmg);
-                player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+                player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
             } else {
                 player.dmg = char1.atk * (1 - (char2.def / 100));
                 if (player.dmg < 0) {
                     player.dmg = 0;
                 }
                 console.log(player.dmg);
-                player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+                player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
             }
             func.dodge(player, otherplayer, char2, char1);
             char2.hp -= Math.floor(player.dmg);
         } else {
             func.defense(player, otherplayer, char1, char2);
-            player.message_block = (`${char2.name} multiplicated their defense for this turn by ${gv.round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
+            player.messageBlock = (`${char2.name} multiplicated their defense for this turn by ${gv.round(otherplayer.defenseMultiplier)} and only took ${Math.floor(player.dmg)} damage.`);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
@@ -433,8 +432,8 @@ const func = {
                         otherplayer.totalDodges += 1;
                         player.dmg = 0;
                         char_1.dodgecd = gv.dodgecdMax;
-                        player.message_damage = ' ';
-                        otherplayer.message_dodge = (`**${char_1.name} dodged ${char_2.name}'s attack.**`);
+                        player.messageDamage = ' ';
+                        otherplayer.messageDodge = (`**${char_1.name} dodged ${char_2.name}'s attack.**`);
                     } else {
                         console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
                     }
@@ -442,17 +441,17 @@ const func = {
                     otherplayer.totalDodges += 1;
                     player.dmg = 0;
                     char_1.dodgecd = gv.dodgecdMax;
-                    player.message_damage = ' ';
-                    otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
+                    player.messageDamage = ' ';
+                    otherplayer.messageDodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
                 }
             } else {
                 console.log(`${char_1.name} tried to dodge but couldn't because it is still under cooldown.`);
             }
         } else if (player.action === 'magic') {
-            if (char_1.mag_dodgevalue > Math.floor(Math.random() * 100)) {
+            if (char_1.magDodgevalue > Math.floor(Math.random() * 100)) {
                 player.dmg = 0;
-                player.message_damage = ' ';
-                otherplayer.message_dodge = (`${char_1.name} dodged ${char_2.name}'s magic.`);
+                player.messageDamage = ' ';
+                otherplayer.messageDodge = (`${char_1.name} dodged ${char_2.name}'s magic.`);
             } else {
                 console.log(`${char_1.name} tried to dodge ${char_2.name}'s magic but failed.`);
             }
@@ -462,32 +461,32 @@ const func = {
     magic: (player, otherplayer, char1, char2, event) => {
         if (char1.magcd === 0) {
             if (char2.tier === 'H') {
-                if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
-                    player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti) * 5;
-                    player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+                if (char1.magCritChance > Math.floor(Math.random() * 100)) {
+                    player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.magCritMulti) * 5;
+                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
                     func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
-                    player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+                    player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
                     func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 }
             } else if (char2.tier !== 'H') {
-                if (char1.mag_critChance > Math.floor(Math.random() * 100)) {
-                    player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.mag_critMulti;
-                    player.message_damage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+                if (char1.magCritChance > Math.floor(Math.random() * 100)) {
+                    player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.magCritMulti;
+                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
                     func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = char1.mag * (1 - (char2.magdef / 100));
-                    player.message_damage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
+                    player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
                     func.dodge(player, otherplayer, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
@@ -500,8 +499,8 @@ const func = {
     },
 
     gameEnd: (winner, looser, event) => {
-        func.react_KO(looser, event);
-        func.react_victory(winner, event);
+        func.reactKo(looser, event);
+        func.reactVictory(winner, event);
         event.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
         gv.gamePhase = false;
         gv.turnPhase = false;
@@ -513,12 +512,12 @@ const func = {
         gv.arp2 = 0;
         gv.player1.charAmount = 1;
         gv.player2.charAmount = 1;
-        gv.player1.message_block = ' ';
-        gv.player2.message_block = ' ';
-        gv.player1.message_damage = ' ';
-        gv.player2.message_damage = ' ';
-        gv.player1.message_dodge = ' ';
-        gv.player2.message_dodge = ' ';
+        gv.player1.messageBlock = ' ';
+        gv.player2.messageBlock = ' ';
+        gv.player1.messageDamage = ' ';
+        gv.player2.messageDamage = ' ';
+        gv.player1.messageDodge = ' ';
+        gv.player2.messageDodge = ' ';
         gv.player1.choseChar = false;
         gv.player2.choseChar = false;
         gv.player1.choseAction = false;
@@ -595,7 +594,7 @@ const func = {
     reset_cd: pl => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
-            pl.char[i].skill_cd = 0;
+            pl.char[i].skillCd = 0;
             pl.char[i].magcd = 0;
             pl.char[i].dodgecd = 0;
         }
@@ -611,15 +610,15 @@ const func = {
             if (pl.char[i].dodgecd > 0 && gv.dodgecdMax >= pl.char[i].dodgecd) {
                 pl.char[i].dodgecd -= 1;
             }
-            if (pl.char[i].skill_cd > 0 && pl.char[i].skill_cd_max >= pl.char[i].skill_cd) {
-                pl.char[i].skill_cd -= 1;
+            if (pl.char[i].skillCd > 0 && pl.char[i].skillCdMax >= pl.char[i].skillCd) {
+                pl.char[i].skillCd -= 1;
             }
-            if (pl.char[i].skill_timer >= 0) {
-                pl.char[i].skill_timer -= 1;
-                if (pl.char[i].skill_timer < 0) {
-                    pl.char[i].skill_timer = 0;
+            if (pl.char[i].skillTimer >= 0) {
+                pl.char[i].skillTimer -= 1;
+                if (pl.char[i].skillTimer < 0) {
+                    pl.char[i].skillTimer = 0;
                 }
-                if (pl.char[i].skill_timer === 0 && pl.char[i].has_active_skill === true) {
+                if (pl.char[i].skillTimer === 0 && pl.char[i].hasActiveSkill === true) {
                     func.remove_active_effect(pl, event);
                 }
             }
@@ -738,16 +737,16 @@ const func = {
             gv.player2.totalDamages += gv.player2.dmg;
             gv.player1.dmg = 0;
             gv.player2.dmg = 0;
-            gv.player1.message_block = ' ';
-            gv.player2.message_block = ' ';
-            gv.player1.message_damage = ' ';
-            gv.player2.message_damage = ' ';
-            gv.player1.message_dodge = ' ';
-            gv.player2.message_dodge = ' ';
-            gv.player1.defense_stack += 1;
-            gv.player2.defense_stack += 1;
-            func.IsDefenseStackReset(gv.player1);
-            func.IsDefenseStackReset(gv.player2);
+            gv.player1.messageBlock = ' ';
+            gv.player2.messageBlock = ' ';
+            gv.player1.messageDamage = ' ';
+            gv.player2.messageDamage = ' ';
+            gv.player1.messageDodge = ' ';
+            gv.player2.messageDodge = ' ';
+            gv.player1.defenseStack += 1;
+            gv.player2.defenseStack += 1;
+            func.isDefenseStackReset(gv.player1);
+            func.isDefenseStackReset(gv.player2);
             event.channel.send(`\`\`\`diff\nTurn ${gv.turn} has started. Chose your character's action.\`\`\``);
             gv.turnPhase = true;
             event.channel.send({
@@ -801,8 +800,14 @@ const func = {
         gv.gameStarting = true;
     },
 
-    // please do ignore this function
-    // it's at the bottom for a reason
+    // this function is supposed to be used inside a loop (see !ad math command inside index.js)
+    // for each iteration 'i' this adds the values of the iterated charac0ter 'c'
+    // inside the tier array to the corresponding key and count how many
+    // characters were iterated.
+    // for the mag key, as it is the only one that can be 0, this checks if it is 0
+    // and if it is adds the current character value to the tier array else
+    // it checks if the current character has a mag value, if yes it adds it to
+    // the tier array, if not it increment the noMagChar value and breaks
     math: (tier, i, c) => {
         tier.hp.push(c[i].hp);
         tier.atk.push(c[i].atk);
