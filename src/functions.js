@@ -414,7 +414,7 @@ const func = {
             char2.hp -= Math.floor(player.dmg);
         } else {
             func.defense(player, otherplayer, char1, char2);
-            player.message_block = (`${char2.name} multiplicated their defense for func. turn by ${gv.round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
+            player.message_block = (`${char2.name} multiplicated their defense for this turn by ${gv.round(otherplayer.defense_multiplier)} and only took ${Math.floor(player.dmg)} damage.`);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
@@ -700,7 +700,7 @@ const func = {
                 }
             }
         } else {
-            console.log('If I see func. then I fucked up.');
+            console.log('If I see this then I fucked up.');
         }
     },
 
@@ -801,7 +801,7 @@ const func = {
         gv.gameStarting = true;
     },
 
-    // please do ignore func. function
+    // please do ignore this function
     // it's at the bottom for a reason
     math: (tier, i, c) => {
         tier.hp.push(c[i].hp);
@@ -817,6 +817,12 @@ const func = {
         tier.charCount++;
     },
 
+    // function that takes an array of number and returns their average
+    // by using the .reduce() method to create a value equal to the sum of
+    // all the value in the array
+    // (code from : https://stackoverflow.com/questions/10359907/how-to-compute-the-sum-and-average-of-elements-in-an-array)
+    // If the array is empty the function returns 0 to prevent it from being NaN
+    // as the average is directly displayed in the !ad math command
     average: tier => {
         if (tier.length) {
             const sum = tier.reduce((previous, current) => current += previous);
@@ -827,6 +833,13 @@ const func = {
         }
     },
 
+    // function that checks the discord ID of the event caller and checks if it is equal
+    // to the ID of a player registered in players.json
+    // If the ID is that of a registered player, it breaks the loop and returns the value
+    // of the player as it is registered in players.json
+    // If the loop is at it's last iteration and the ID is still not found inside players.json
+    // the function create a new Player object with the Player class with the event caller
+    // ID and username and adds it to players.json
     isPlayerKnown: event => {
         let i;
         for(i = 0; i <= pastPlayers.length; i++) {
