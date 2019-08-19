@@ -1,0 +1,43 @@
+module.exports = class Characters {
+    constructor(name, hp, atk, critMulti, critChance, def, spd, agi, acr, mag, magcd, rgn) {
+        this.tier = undefined;
+        this.name = name;
+        this.hpmax = hp;
+        this.hp = hp;
+        this.atk = atk;
+        this.critMulti = critMulti;
+        this.critChance = critChance;
+        this.def = def;
+        this.spd = spd;
+        this.agi = agi;
+        this.acr = acr;
+        this.int = 140;
+        this.mag = mag;
+        this.magcd = magcd;
+        this.magdef = 0;
+        this.mag_critChance = 0;
+        this.mag_critMulti = 1;
+        this.mag_dodgevalue = 0;
+        this.magcdmax = magcd;
+        this.dodgecd = 2;
+        this.rgn = rgn;
+        this.react_selection1 = 'undefined';
+        this.react_selection2 = 'undefined';
+        this.react_KO1 = 'undefined';
+        this.react_KO2 = 'undefined';
+        this.react_victory1 = 'undefined';
+        this.react_victory2 = 'undefined';
+        this.emoji = '<:undefined:597308733026205706>';
+        this.emoji_ko = '<:undefined_KO:605139762084315137>';
+        this.ico = 'https://i.imgur.com/7jVkvUT.png';
+        this.has_active_skill = false;
+        this.has_passive_skill = false;
+        this.skill_cd = 0;
+        this.skill_cd_max = 0;
+        this.skill_timer = 0;
+        this.isActive = false;
+        this.isAlive = true;
+        this.receivedPassiveFromGold = false;
+        this.receivedPassiveFromAyddan = false;
+    }
+};
