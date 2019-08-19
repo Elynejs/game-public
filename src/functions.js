@@ -2,8 +2,7 @@ const gv = require('./variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
 const fs = require('fs');
-const Player = require('./class.js');
-
+const Player = require('./src/player.js');
 const func = {
     // functions for displaying characters gimmicks on selection of character
     react_selection: (selected_char, event) => {

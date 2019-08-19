@@ -7,8 +7,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
 const token = require('./token.json');
-const fc = require('./functions.js');
-const gv = require('./variables.js');
+const fc = require('./src/functions.js');
+const gv = require('./src/variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
 client.login(token.token);
@@ -81,7 +81,7 @@ client.on('message', msg => {
                 }
                 );
             } else if (args[0] === 'generate') {
-                const generator = require('./characterBulkGenerator.js');
+                const generator = require('./src/characterBulkGenerator.js/index.js');
                 if (!args[1]) {
                     msg.channel.send('Please input an amount of character to generate');
                 } else {
