@@ -281,9 +281,9 @@ client.on('message', msg => {
                     for (a = 0; a < char.length; a++) {
                         if (args[1] === p.char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
                             console.log(`value found : ${p.char[a].name}`);
-                            const char_value = parseInt(args[3]);
-                            p.char[a][args[2]] = char_value;
-                            msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${p.char[a][args[2]]} to ${char_value}`);
+                            const charValue = parseInt(args[3]);
+                            p.char[a][args[2]] = charValue;
+                            msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${p.char[a][args[2]]} to ${charValue}`);
                             console.log(p.char[a]);
                         }
                     }
@@ -403,8 +403,8 @@ client.on('message', msg => {
         gv.gamePhase = true;
         gv.turnPhase = true;
         gv.turn = 1;
-        fc.reset_cd(gv.player1);
-        fc.reset_cd(gv.player2);
+        fc.resetCd(gv.player1);
+        fc.resetCd(gv.player2);
         fc.passive(gv.player1, gv.player2, msg);
         fc.passive(gv.player2, gv.player1, msg);
         fc.eachPlayerCharList(gv.player1, gv.player2, msg, client);

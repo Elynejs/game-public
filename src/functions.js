@@ -103,19 +103,19 @@ const func = {
     // function for passing from one turn to another
     addTurn: (event, client) => {
         gv.turn += 1;
-        func.NewTurnPhase(event, client);
+        func.newTurnPhase(event, client);
     },
 
     // function for special abilities
     passive: (player_1, player_2, event) => {
         if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-            func.all_or_nothing(player_1.char[player_1.active]);
+            func.allOrNothing(player_1.char[player_1.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
-            func.crushing_strength(player_2.char[player_2.active]);
+            func.crushingStrength(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
-            func.black_poison(player_2.char[player_2.active]);
+            func.blackPoison(player_2.char[player_2.active]);
         } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-            func.care_taker(player_1, event);
+            func.careTaker(player_1, event);
         } else {
             console.log('No passive ability detected.');
         }
@@ -137,7 +137,7 @@ const func = {
         }
     },
 
-    remove_active_effect: (player_1, event) => {
+    removeActiveEffect: (player_1, event) => {
         if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
             player_1.char[player_1.active].atk = char[12].atk;
             player_1.char[player_1.active].def = char[12].def;
@@ -166,7 +166,7 @@ const func = {
     },
 
     // passives for gold
-    black_poison: target => {
+    blackPoison: target => {
         // black poison => -50% to enemy RGN
         if (target.receivedPassiveFromGold === false) {
             if (target.receivedPassiveFromAyddan === true) {
@@ -182,8 +182,8 @@ const func = {
     },
 
     // passive for ayddan
-    crushing_strength: target => {
-        // crushing_strength => -25% to enemy DEF
+    crushingStrength: target => {
+        // crushingStrength => -25% to enemy DEF
         if (target.receivedPassiveFromAyddan == false) {
             if (target.receivedPassiveFromGold === true) {
                 target.rgn += (target.rgn * (50 / 100));
@@ -229,7 +229,7 @@ const func = {
     },
 
     // passive for pinky
-    all_or_nothing: char1 => {
+    allOrNothing: char1 => {
         // all or nothing => Atk*3 if hp < 30%
         if (char1.receivedPassive === false) {
             if (char1.hp < (char1.hpmax * (30 / 100))) {
@@ -251,7 +251,7 @@ const func = {
     },
 
     // passive for dyakko
-    care_taker: (player, event) => {
+    careTaker: (player, event) => {
         // care taker => heal 10% of HP to every character in his team every turn while the character is alive and fighting
         let i;
         for (i = 0; i < player.char.length; i++) {
@@ -591,7 +591,7 @@ const func = {
     },
 
     // function for cd reset
-    reset_cd: pl => {
+    resetCd: pl => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
             pl.char[i].skillCd = 0;
@@ -601,7 +601,7 @@ const func = {
     },
 
     // function for cd iteration
-    cd_iteration: (pl, event) => {
+    cdIteration: (pl, event) => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
             if (pl.char[i].magcd > 0 && pl.char[i].magcdmax >= pl.char[i].magcd) {
@@ -619,7 +619,7 @@ const func = {
                     pl.char[i].skillTimer = 0;
                 }
                 if (pl.char[i].skillTimer === 0 && pl.char[i].hasActiveSkill === true) {
-                    func.remove_active_effect(pl, event);
+                    func.removeActiveEffect(pl, event);
                 }
             }
         }
@@ -714,13 +714,13 @@ const func = {
     },
 
     // function for resetting turn phase
-    NewTurnPhase: (event, client) => {
+    newTurnPhase: (event, client) => {
         // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
             func.regen(gv.player1);
             func.regen(gv.player2);
-            func.cd_iteration(gv.player1, event);
-            func.cd_iteration(gv.player2, event);
+            func.cdIteration(gv.player1, event);
+            func.cdIteration(gv.player2, event);
             func.passive(gv.player1, gv.player2, event);
             func.passive(gv.player2, gv.player1, event);
             func.status(event, client);
