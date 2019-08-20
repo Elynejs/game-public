@@ -453,6 +453,11 @@ const func = {
         target.defenseStack = 0;
     },
 
+    // called inside actionPhaseActions() function
+    // checks each possibility where the attack function can be called
+    // for each of those possibility run a different formula for the dmg the character will inflict this turn
+    // also calls the dodge function after the damage has been calculated and before
+    // it has been inflicted
     attack: (player, target, char1, char2) => {
         if (target.action !== 'defense') {
             if (char1.critChance > Math.floor(Math.random() * 100)) {
@@ -482,6 +487,10 @@ const func = {
         }
     },
 
+    // called inside the attack() and magic() functions
+    // uses a formula and a bit of randomness to check if the character
+    // can dodge the incoming damage
+    // if the character can dodge and the cooldown is 0 then nullify the damage
     dodge: (player, target, char_1, char_2) => {
         if (player.action === 'attack') {
             if (char_1.dodgecd === 0) {
@@ -521,6 +530,8 @@ const func = {
         }
     },
 
+    // called inside actionPhaseActions() function
+    // run the formula for magic damage and inflicts the damage to the target
     magic: (player, target, char1, char2, event) => {
         if (char1.magcd === 0) {
             if (char2.tier === 'H') {
@@ -561,6 +572,9 @@ const func = {
         }
     },
 
+    // called once the game is over
+    // resets all the variables to their original values
+    // we also save the player stats to players.json
     gameEnd: (winner, looser, event) => {
         func.reactKo(looser, event);
         func.reactVictory(winner, event);
@@ -592,8 +606,8 @@ const func = {
         gv.player2.action = '';
         gv.player1.totalDamages += gv.player1.dmg;
         gv.player2.totalDamages += gv.player2.dmg;
-        gv.player1.dmg = 0;
-        gv.player2.dmg = 0;
+        gv.player1 = {};
+        gv.player2 = {};
         gv.player1.totalTurns += gv.turn;
         gv.player2.totalTurns += gv.turn;
         gv.player1.gamesPlayed += 1;
@@ -610,14 +624,16 @@ const func = {
                 console.log('An unregistered player accessed this part which is supposed to be impossible.');
             }
         }
-        gv.player1.id = 0;
-        gv.player2.id = 0;
-        gv.player1.username = '';
-        gv.player2.username = '';
         event.channel.send('Game has been successfully reset and all your stats saved.');
     },
 
-    // function for gameend
+    // called inside actionPhaseActions()
+    // checks wether or not the character that received damage this turn
+    // is dead or not, if it is, this checks if there is another
+    // character still alive for the player
+    // if yes, then it selects it for next turn (it does not directly switch it
+    // because we need to remember which character dies for the display of characterDied())
+    // if not then it ends the game by running the gameEnd() function
     isGameOver: (player, target, char1, event, client) => {
         if (char1.hp <= 0) {
             char1.hp = 0;
@@ -691,6 +707,11 @@ const func = {
         }
     },
 
+    // called inside the actionPhase() function
+    // checks the action of the character
+    // and runs the corresponding action function
+    // for each action that deals damage we run the isGameOver() function
+    // to make sure that we should continue the game or stop it
     actionPhaseActions: (p, t, event, client) => {
         if (p.action === 'changechar') {
             func.changechar(p, p.char[p.active], p.char[p.active]);
@@ -711,7 +732,11 @@ const func = {
         }
     },
 
-    // function for action phase
+    // called on the action selector inside index.js
+    // first checks who is the active character and then
+    // proceeds to asynchronously run the actionPhaseActions() function
+    // for the fastest character then the slowest character
+    // we run it asynchronously as we want the fastest character to always inflict the damage first
     actionphase: (p1, p2, event, client) => {
         if (gv.actionAmount === 2) {
             func.whoIsActive(gv.player1);
