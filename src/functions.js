@@ -4,7 +4,8 @@ const pastPlayers = require('./players.json');
 const fs = require('fs');
 const Player = require('./src/player.js');
 const func = {
-    // functions for displaying characters gimmicks on selection of character
+    // these three are placeholders, I plan on adding them as methods
+    // inside the characters class later
     reactSelection: (selected_char, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
             event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection1}`);
@@ -12,8 +13,6 @@ const func = {
             event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection2}`);
         }
     },
-
-    // function for displaying character gimmick on death of character
     reactKo: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
             event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo1}`);
@@ -21,8 +20,6 @@ const func = {
             event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo2}`);
         }
     },
-
-    // function for displaying character gimmick on character victory
     reactVictory: (p, event) => {
         if (Math.floor(Math.random() * 2) >= 1) {
             event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactVictory1}`);
@@ -32,6 +29,9 @@ const func = {
     },
 
     // function for status display of how many characters each players still has
+    // it uses array with space as values that we later fill with the corresponding emote
+    // we do that to prevent an error with the way embbed messages work
+    // where if the value of a field is empty and/or not a string it doesn't display
     eachPlayerCharList: (p1, p2, event, client) => {
         let i;
         const p1emote = [' ', ' ', ' ', ' ', ' '];
@@ -65,7 +65,15 @@ const func = {
         });
     },
 
-    // function for player.defenseStack
+    // the defenseStack value is incremented each turn and starts at 2
+    // so the only way for it to be inferior to 2 is if we set it to be
+    // which we only do when a character defends himself
+    // it is set to 2 so the defense multiplier returns to 2 only if we let
+    // the defenseStack value increment back for a turn without using the
+    // defense action.
+    // if a character still uses a defense action multiple times in a row
+    // it will work but will be 33% less effective (caping at 100%,
+    // meaning you can't take more damage than normal if you spam defense)
     isDefenseStackReset: player => {
         if (player.defenseStack >= 2) {
             player.defenseMultiplier = 2;
@@ -77,7 +85,12 @@ const func = {
         }
     },
 
-    // function for alive array char
+    // function that checks the value .isActive of each characters
+    // since their normally is only one character with the value set to true
+    // we set the active character to that value
+    // this is probably useless but I'm too afraid to change how it works now
+    // maybe later
+    // TODO : figure out why this is useless and removing it if it really is
     whoIsActive: pl => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
@@ -91,7 +104,8 @@ const func = {
         }
     },
 
-    // function for eval
+    // removes mentions in eval commands
+    // (code from : https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/examples/making-an-eval-command.md)
     clean: text => {
         if (typeof (text) === 'string') {
             return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
@@ -100,72 +114,91 @@ const func = {
         }
     },
 
-    // function for passing from one turn to another
+    // called after each actionPhase
+    // this increments the turn value
+    // and calls the newTurnPhase function
     addTurn: (event, client) => {
         gv.turn += 1;
         func.newTurnPhase(event, client);
     },
 
-    // function for special abilities
-    passive: (player_1, player_2, event) => {
-        if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
-            func.allOrNothing(player_1.char[player_1.active]);
-        } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
-            func.crushingStrength(player_2.char[player_2.active]);
-        } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
-            func.blackPoison(player_2.char[player_2.active]);
-        } else if (player_1.char[player_1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
-            func.careTaker(player_1, event);
+    // called at the beginning of a new turn
+    // this checks if the current active player is one of those (hard coded maybe I'll do a better job later)
+    // (who am I kidding I'm not paid for this) and runs the corresponding passive ability
+    passive: (p1, p2, event) => {
+        if (p1.char[p1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'pinky') {
+            func.allOrNothing(p1.char[p1.active]);
+        } else if (p1.char[p1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'ayddan') {
+            func.crushingStrength(p2.char[p2.active]);
+        } else if (p1.char[p1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'gold') {
+            func.blackPoison(p2.char[p2.active]);
+        } else if (p1.char[p1.active].name.toLowerCase().trim().replace(/\s+/g, '') === 'dyakko') {
+            func.careTaker(p1, event);
         } else {
             console.log('No passive ability detected.');
         }
     },
 
-    active: (player_1, player_2) => {
-        if (player_1.char[player_1.active].name.toLowerCase() === 'snipefox') {
-            func.snipe(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
-        } else if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
-            func.rage(player_1.char[player_1.active], player_1);
-        } else if (player_1.char[player_1.active].name.toLowerCase() === 'pinky') {
-            func.explosion(player_1.char[player_1.active], player_2, player_1);
-        } else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
-            func.pill(player_1.char[player_1.active], player_1);
-        } else if (player_1.char[player_1.active].name.toLowerCase() === 'kairen') {
-            func.ressurection(player_1.char[player_1.active], player_2.char[player_2.active], player_1);
+    // called after a skill action during actionPhase
+    // same as above, just checks the name and runs the function
+    active: (p1, p2) => {
+        if (p1.char[p1.active].name.toLowerCase() === 'snipefox') {
+            func.snipe(p1.char[p1.active], p2.char[p2.active], p1);
+        } else if (p1.char[p1.active].name.toLowerCase() === 'lyzan') {
+            func.rage(p1.char[p1.active], p1);
+        } else if (p1.char[p1.active].name.toLowerCase() === 'pinky') {
+            func.explosion(p1.char[p1.active], p2, p1);
+        } else if (p1.char[p1.active].name.toLowerCase() === 'may') {
+            func.pill(p1.char[p1.active], p1);
+        } else if (p1.char[p1.active].name.toLowerCase() === 'kairen') {
+            func.ressurection(p1.char[p1.active], p2.char[p2.active], p1);
         } else {
             console.log('I fucked up\nA character without active skill managed to activate the function for active selection');
         }
     },
 
-    removeActiveEffect: (player_1, event) => {
-        if (player_1.char[player_1.active].name.toLowerCase() === 'lyzan') {
-            player_1.char[player_1.active].atk = char[12].atk;
-            player_1.char[player_1.active].def = char[12].def;
-            player_1.char[player_1.active].rgn = char[12].rgn;
+    // called at the beginning of a new turn if the cdIteration function
+    // reached 0 for the skillTimer character value
+    // same as those above, it hard checks what character it is and gives it the
+    // base value of the characters.json file
+    // I couldn't be bothered to clone the value (don't know how to)
+    // or to create another value called 'baseAtk' or something for each buff skill
+    // so I just did this
+    removeActiveEffect: (p1, event) => {
+        if (p1.char[p1.active].name.toLowerCase() === 'lyzan') {
+            p1.char[p1.active].atk = char[12].atk;
+            p1.char[p1.active].def = char[12].def;
+            p1.char[p1.active].rgn = char[12].rgn;
             event.channel.send({
                 embed: {
                     color: 16286691,
                     fields: [{
-                        name: player_1.char[player_1.active].emote,
-                        value: '${player_1.char[player_1.active].name} lost the effects of rage.',
+                        name: p1.char[p1.active].emote,
+                        value: '${p1.char[p1.active].name} lost the effects of rage.',
                     }],
                 },
             });
-        } else if (player_1.char[player_1.active].name.toLowerCase() === 'may') {
-            player_1.char[player_1.active].atk = char[15].atk;
+        } else if (p1.char[p1.active].name.toLowerCase() === 'may') {
+            p1.char[p1.active].atk = char[15].atk;
             event.channel.send({
                 embed: {
                     color: 16286691,
                     fields: [{
-                        name: player_1.char[player_1.active].emote,
-                        value: '${player_1.char[player_1.active].name} lost the effects of pill.',
+                        name: p1.char[p1.active].emote,
+                        value: '${p1.char[p1.active].name} lost the effects of pill.',
                     }],
                 },
             });
         }
     },
 
-    // passives for gold
+    // passive ability for gold
+    // we check if the player has already received said passive
+    // to prevent it from procing each turn
+    // we also remove the predecessing passive abilities
+    // although since it percentage based we don't set it exactly
+    // as it was before but it's close enough
+    // TODO : Should change that to be exactly the same value later (using a for loop and char[i]['name'] maybe)
     blackPoison: target => {
         // black poison => -50% to enemy RGN
         if (target.receivedPassiveFromGold === false) {
@@ -182,6 +215,7 @@ const func = {
     },
 
     // passive for ayddan
+    // works exactly the same way as above
     crushingStrength: target => {
         // crushingStrength => -25% to enemy DEF
         if (target.receivedPassiveFromAyddan == false) {
@@ -198,24 +232,26 @@ const func = {
     },
 
     // active for snipefox
-    snipe: (player_1, target, player) => {
+    // called during actionPhase
+    // it just sets the current CD of the opponent to its cdMax
+    snipe: (character, target, player) => {
         // snipe => activate the CD of the opponent MAG (CD:5)
         console.log('snipe working');
         target.magcd = target.magcdmax;
-        player_1.skillCd = player_1.skillCdMax;
-        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} triggered ${target.name}'s magic cooldown!\`\`\``;
+        character.skillCd = character.skillCdMax;
+        player.messageDamage = `\`\`\`diff\n+ ${character.name} triggered ${target.name}'s magic cooldown!\`\`\``;
     },
 
     // active for lyzan
-    rage: (player_1, player) => {
+    rage: (character, player) => {
         // rage => ATK*5, DEF*2, RGN*3 for 2 turn (CD:10)
         console.log('rage working');
-        player_1.atk *= 5;
-        player_1.def *= 2;
-        player_1.rgn *= 3;
-        player_1.skillCd = player_1.skillCdMax;
-        player_1.skillTimer = 3;
-        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
+        character.atk *= 5;
+        character.def *= 2;
+        character.rgn *= 3;
+        character.skillCd = character.skillCdMax;
+        character.skillTimer = 3;
+        player.messageDamage = `\`\`\`diff\n+ ${character.name} entered rage mod ! His attack, defense and regeneration is buffed for 2 turns.\`\`\``;
     },
 
     // active for pinky
@@ -229,6 +265,9 @@ const func = {
     },
 
     // passive for pinky
+    // just realised that this receivedPassive value
+    // doesn't exist, and even if it did I forgot to change it afterwards
+    // TODO : either remove it and not care or add it to each character to make it work
     allOrNothing: char1 => {
         // all or nothing => Atk*3 if hp < 30%
         if (char1.receivedPassive === false) {
@@ -241,13 +280,13 @@ const func = {
     },
 
     // active for may
-    pill: (player_1, player) => {
+    pill: (character, player) => {
         console.log('pill working');
         // pill => ATK*3 for 3 turn (CD:6)
-        player_1.atk *= 3;
-        player_1.skillCd = player_1.skillCdMax;
-        player_1.skillTimer = 4;
-        player.messageDamage = `\`\`\`diff\n+ ${player_1.name} buffed her strength for 3 turns !\`\`\``;
+        character.atk *= 3;
+        character.skillCd = character.skillCdMax;
+        character.skillTimer = 4;
+        player.messageDamage = `\`\`\`diff\n+ ${character.name} buffed her strength for 3 turns !\`\`\``;
     },
 
     // passive for dyakko
@@ -262,16 +301,22 @@ const func = {
     },
 
     // active for kairen
-    ressurection: (player_1, target, player) => {
+    ressurection: (character, target, player) => {
         // ressurection => heal a character to 100% HP (even if he is ko'ed) (CD:15)
         console.log('ressurection working');
         target.hp = target.hpmax;
         target.isAlive = true;
-        player_1.skillCd = player_1.skillCdMax;
+        character.skillCd = character.skillCdMax;
         player.messageDamage = `\`\`\`diff\n+ ${player.char[player.active].name} ressurected ${target.name} !\`\`\``;
     },
 
-    // function for status display
+    // displays a resume of the events of a turn
+    // called at the end of each turn
+    // as this is an embbed message we have the same problem as with eachPlayerCharList()
+    // which is we can't have an empty field or a field with something other than a string
+    // so it uses message values that are either a blank space or the corresponding value
+    // depending of the events of the turn
+    // TODO : pretty sure messageBlock is useless
     status: (event, client) => {
         event.channel.send({
             embed: {
@@ -310,7 +355,8 @@ const func = {
         });
     },
 
-    // function for status display when a character dies
+    // called at the end of the game
+    // same utility as the status function but without the regeneration part
     statusEnd: (event, client) => {
         event.channel.send({
             embed: {
@@ -345,15 +391,18 @@ const func = {
         });
     },
 
-    // functions for turn actions
+    // switch actions
+    // called during actionPhase
+    // this takes a character name as a user input and makes it the active character
     changechar: (player, char2) => {
         const char1 = player.char[player.lastAliveChar];
-        console.log(`${player.username} switched ${char1.name} with ${char2.name}`);
         player.messageDamage = `${player.username} switched ${char1.name} with ${char2.name}`;
     },
 
-    // function for when a characters dies during a turn
-    omgHeDead: (player, event) => {
+    // called after each action function inside the actionPhase
+    // this prints the reactKo() message and set the value of the active character
+    // to that of the futurChar set by the isGameOver() function
+    characterDied: (player, event) => {
         event.channel.send({
             embed: {
                 color: 16286691,
@@ -368,39 +417,51 @@ const func = {
         player.active = player.futurChar;
     },
 
-    // function to round numbers to 2 decimals
+    // mostly used for the display of the defenseStack value and the !ad math command
+    // rounds the inputed value by using the Math.round() method
+    // that rounds to the nearest integer to our value times 10^2
+    // and then multiplying our value by 10^-2
+    // exemple: we input 58.651234958, we multiply by 10^2
+    // to get 5865.1234958, we use Math.round() to get 5865
+    // and then multiply by 10^-2 to get 58.65
+    // (code from : https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary)
     round: value => {
         return Number(Math.round(value + 'e2') + 'e-2');
     },
 
-    defense: (player, otherplayer, char1, char2) => {
+    // function for the defense action
+    // it is called after a defense check inside the attack function
+    // so we already know that the character is defending when calling it
+    // so we just have to check wether the damage defended from is critical or not
+    // for the end of turn status
+    // to nerf the effect of defense we decrease the defenseMultiplier of the character each time it is used in a row
+    // see isDefenseStackReset() function to know more about defenseStack
+    defense: (player, target, char1, char2) => {
         if (char1.critChance > Math.floor(Math.random() * 100)) {
-            player.dmg = (char1.atk * (1 - ((char2.def * otherplayer.defenseMultiplier) / 100))) * char1.critMulti;
-            console.log(player.dmg);
+            player.dmg = (char1.atk * (1 - ((char2.def * target.defenseMultiplier) / 100))) * char1.critMulti;
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
-            player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+            player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${target.char[target.active].name} !\`\`\`**`);
         } else {
-            player.dmg = char1.atk * (1 - ((char2.def * otherplayer.defenseMultiplier) / 100));
-            console.log(player.dmg);
+            player.dmg = char1.atk * (1 - ((char2.def * target.defenseMultiplier) / 100));
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
             player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
         }
-        otherplayer.defenseStack = 0;
+        target.defenseStack = 0;
     },
 
-    attack: (player, otherplayer, char1, char2) => {
-        if (otherplayer.action !== 'defense') {
+    attack: (player, target, char1, char2) => {
+        if (target.action !== 'defense') {
             if (char1.critChance > Math.floor(Math.random() * 100)) {
                 player.dmg = (char1.atk * (1 - (char2.def / 100))) * char1.critMulti;
                 if (player.dmg < 0) {
                     player.dmg = 0;
                 }
                 console.log(player.dmg);
-                player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
+                player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${target.char[target.active].name} !\`\`\`**`);
             } else {
                 player.dmg = char1.atk * (1 - (char2.def / 100));
                 if (player.dmg < 0) {
@@ -409,11 +470,11 @@ const func = {
                 console.log(player.dmg);
                 player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
             }
-            func.dodge(player, otherplayer, char2, char1);
+            func.dodge(player, target, char2, char1);
             char2.hp -= Math.floor(player.dmg);
         } else {
-            func.defense(player, otherplayer, char1, char2);
-            player.messageBlock = (`${char2.name} multiplicated their defense for this turn by ${gv.round(otherplayer.defenseMultiplier)} and only took ${Math.floor(player.dmg)} damage.`);
+            func.defense(player, target, char1, char2);
+            player.messageBlock = (`${char2.name} multiplicated their defense for this turn by ${gv.round(target.defenseMultiplier)} and only took ${Math.floor(player.dmg)} damage.`);
             if (player.dmg < 0) {
                 player.dmg = 0;
             }
@@ -421,7 +482,7 @@ const func = {
         }
     },
 
-    dodge: (player, otherplayer, char_1, char_2) => {
+    dodge: (player, target, char_1, char_2) => {
         if (player.action === 'attack') {
             if (char_1.dodgecd === 0) {
                 let dodgeValue = 0;
@@ -429,20 +490,20 @@ const func = {
                 const diceroll = Math.floor(Math.random() * 10);
                 if (diceroll <= 9) {
                     if (dodgeValue >= diceroll) {
-                        otherplayer.totalDodges += 1;
+                        target.totalDodges += 1;
                         player.dmg = 0;
                         char_1.dodgecd = gv.dodgecdMax;
                         player.messageDamage = ' ';
-                        otherplayer.messageDodge = (`**${char_1.name} dodged ${char_2.name}'s attack.**`);
+                        target.messageDodge = (`**${char_1.name} dodged ${char_2.name}'s attack.**`);
                     } else {
                         console.log(`${char_1.name} tried to dodge ${char_2.name}'s attack but failed.`);
                     }
                 } else if (diceroll === 10) {
-                    otherplayer.totalDodges += 1;
+                    target.totalDodges += 1;
                     player.dmg = 0;
                     char_1.dodgecd = gv.dodgecdMax;
                     player.messageDamage = ' ';
-                    otherplayer.messageDodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
+                    target.messageDodge = (`${char_1.name} dodged ${char_2.name}'s attack.`);
                 }
             } else {
                 console.log(`${char_1.name} tried to dodge but couldn't because it is still under cooldown.`);
@@ -451,27 +512,27 @@ const func = {
             if (char_1.magDodgevalue > Math.floor(Math.random() * 100)) {
                 player.dmg = 0;
                 player.messageDamage = ' ';
-                otherplayer.messageDodge = (`${char_1.name} dodged ${char_2.name}'s magic.`);
+                target.messageDodge = (`${char_1.name} dodged ${char_2.name}'s magic.`);
             } else {
                 console.log(`${char_1.name} tried to dodge ${char_2.name}'s magic but failed.`);
             }
         }
     },
 
-    magic: (player, otherplayer, char1, char2, event) => {
+    magic: (player, target, char1, char2, event) => {
         if (char1.magcd === 0) {
             if (char2.tier === 'H') {
                 if (char1.magCritChance > Math.floor(Math.random() * 100)) {
                     player.dmg = ((char1.mag * (1 - (char2.magdef / 100))) * char1.magCritMulti) * 5;
-                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
-                    func.dodge(player, otherplayer, char2, char1);
+                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${target.char[target.active].name} !\`\`\`**`);
+                    func.dodge(player, target, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * 5;
                     player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-                    func.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, target, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
@@ -479,15 +540,15 @@ const func = {
             } else if (char2.tier !== 'H') {
                 if (char1.magCritChance > Math.floor(Math.random() * 100)) {
                     player.dmg = (char1.mag * (1 - (char2.magdef / 100))) * char1.magCritMulti;
-                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${otherplayer.char[otherplayer.active].name} !\`\`\`**`);
-                    func.dodge(player, otherplayer, char2, char1);
+                    player.messageDamage = (`**\`\`\`diff\n- Critical Hit ! ${player.char[player.active].name} inflicts ${Math.floor(player.dmg)} damages to ${target.char[target.active].name} !\`\`\`**`);
+                    func.dodge(player, target, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
                 } else {
                     player.dmg = char1.mag * (1 - (char2.magdef / 100));
                     player.messageDamage = (`\`\`\`diff\n- ${char1.name} inflicts ${Math.floor(player.dmg)} damages to ${char2.name} !\`\`\``);
-                    func.dodge(player, otherplayer, char2, char1);
+                    func.dodge(player, target, char2, char1);
                     char2.hp -= Math.floor(player.dmg);
                     console.log(player.dmg);
                     player.char[player.active].magcd = player.char[player.active].magcdmax;
@@ -555,33 +616,33 @@ const func = {
     },
 
     // function for gameend
-    isGameOver: (player, otherplayer, char1, event, client) => {
+    isGameOver: (player, target, char1, event, client) => {
         if (char1.hp <= 0) {
             char1.hp = 0;
             char1.isAlive = false;
-            if (otherplayer.id === gv.player1.id) {
+            if (target.id === gv.player1.id) {
                 gv.p1CharDied = true;
-            } else if (otherplayer.id === gv.player2.id) {
+            } else if (target.id === gv.player2.id) {
                 gv.p2CharDied = true;
             } else {
                 console.log('An unregistered character had one of his characters dying, good luck with fixing that shit');
             }
             let i;
-            for (i = 0; i <= otherplayer.charAmount; i++) {
-                if (otherplayer.char[i].hp > 0 && otherplayer.char[i].isAlive === true) {
-                    console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
+            for (i = 0; i <= target.charAmount; i++) {
+                if (target.char[i].hp > 0 && target.char[i].isAlive === true) {
+                    console.log(`${target.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is alive, selecting it to be the next char.`);
                     console.log('Now we don\'t care even if another char is dead because if one is alive then the game can continue.');
-                    otherplayer.lastAliveChar = otherplayer.char.indexOf(char1);
-                    otherplayer.futurChar = i;
+                    target.lastAliveChar = target.char.indexOf(char1);
+                    target.futurChar = i;
                     break;
-                } else if (otherplayer.char[i].hp <= 0) {
-                    if (i === (otherplayer.charAmount - 1)) {
+                } else if (target.char[i].hp <= 0) {
+                    if (i === (target.charAmount - 1)) {
                         console.log('No characters are alive anymore so we end the game.');
                         func.statusEnd(event, client);
-                        func.gameEnd(player, otherplayer, event);
+                        func.gameEnd(player, target, event);
                         break;
                     } else {
-                        console.log(`${otherplayer.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
+                        console.log(`${target.char[i].name.toLowerCase().trim().replace(/\s+/g, '')} is K.O. but hey, at least the loop is not over amiright?`);
                     }
                 }
             }
@@ -726,11 +787,11 @@ const func = {
             func.status(event, client);
             func.eachPlayerCharList(gv.player1, gv.player2, event, client);
             if (gv.p1CharDied) {
-                func.omgHeDead(gv.player1, event);
+                func.characterDied(gv.player1, event);
                 gv.p1CharDied = false;
             }
             if (gv.p2CharDied) {
-                func.omgHeDead(gv.player2, event);
+                func.characterDied(gv.player2, event);
                 gv.p2CharDied = false;
             }
             gv.player1.totalDamages += gv.player1.dmg;
@@ -792,7 +853,14 @@ const func = {
         }
     },
 
-    // function for char amount
+    // this function is called at the !start command that initiates the game
+    // it takes an argument from the user and gives its value to the
+    // player.charAmount value that determines how many
+    // characters a player can select
+    // Note that we have to use parseInt to use the amount argument
+    // because it is a user input and is by default a String
+    // Finally it switches the gameStarting value to true
+    // activating the character selection command to progress the game
     charAmount: (amount, event) => {
         gv.player1.charAmount = parseInt(amount);
         gv.player2.charAmount = parseInt(amount);
@@ -801,13 +869,16 @@ const func = {
     },
 
     // this function is supposed to be used inside a loop (see !ad math command inside index.js)
-    // for each iteration 'i' this adds the values of the iterated charac0ter 'c'
+    // for each iteration 'i' this adds the values of the iterated character 'c'
     // inside the tier array to the corresponding key and count how many
     // characters were iterated.
-    // for the mag key, as it is the only one that can be 0, this checks if it is 0
-    // and if it is adds the current character value to the tier array else
-    // it checks if the current character has a mag value, if yes it adds it to
-    // the tier array, if not it increment the noMagChar value and breaks
+    // for the mag key, as it is the only one that can be 0, this checks if it
+    // already has a value inside the tier array, if yes then it check if the
+    // iterated character has a mag value superior to 0.
+    // As we don't want to calcul our average with the characters that has no mag value
+    // we don't add the characters that have a mag value of 0 to the tier array
+    // instead we increment the noMagChar value to count how many characters out of
+    // the iterated characters had no mag and display it to the user
     math: (tier, i, c) => {
         tier.hp.push(c[i].hp);
         tier.atk.push(c[i].atk);
@@ -841,7 +912,7 @@ const func = {
     // function that checks the discord ID of the event caller and checks if it is equal
     // to the ID of a player registered in players.json
     // If the ID is that of a registered player, it breaks the loop and returns the value
-    // of the player as it is registered in players.json
+    // of the player object as it is registered in players.json
     // If the loop is at it's last iteration and the ID is still not found inside players.json
     // the function create a new Player object with the Player class with the event caller
     // ID and username and adds it to players.json

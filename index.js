@@ -3,6 +3,10 @@
 // It particularly shows when you look at older part of the code
 // This could be easily done in way less lines and time it took me to do it and I know it
 // But nevertheless I'm rather proud of the level I was able to aquire in this short amount of time
+// Notice : All the comments are placed above what they're describing
+// so you can read the explanation and then check out the code
+// I don't know if it's the usual way to do but just in case
+// I'm precising it here.
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./config.json');
@@ -11,7 +15,6 @@ const fc = require('./src/functions.js');
 const gv = require('./src/variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
-client.login(token.token);
 // Defining bot activity
 // to the necessary command a user has to type to start a game.
 client.on('ready', () => {
@@ -43,12 +46,12 @@ client.on('message', msg => {
                 msg.channel.send(`\`ERROR\` \`\`\`xl\n${fc.clean(err)}\n\`\`\``);
             }
         } else {
-            msg.channel.send('You don\'t have enough permission and shouldn\'t even be aware of the existence of this command you filthy bastard.');
+            msg.channel.send('You don\'t have enough permission.');
         }
     }
+    // check if user inputted command starts with 'ad' (for admin)
+    // and if so then checks the args of the input to see if it matches with one of the coded admin commands
     if (command === 'ad') {
-        // check if user inputted command starts with 'ad' (for admin)
-        // and if so then checks the args of the input to see if it matches with one of the coded admin commands
         if (msg.member.id === config.ownerID || config.adminID) {
             // command that displays an embedd command that shows every admin
             // commands and how to use them as well as what they do
@@ -242,16 +245,16 @@ client.on('message', msg => {
 'Average Magic           : ' + fc.average(H.mag) + '	' + 'Min Magic : ' + Math.min(...H.mag) + '	' + 'Max Magic : ' + Math.max(...H.mag) + '\n' +
 '```' + `\n*Note that ${H.noMagChar} out of ${H.charCount} characters had no magic and where left out of the average calculation.*`);
             } else if (args[0] === 'gleave') {
+                // this is just a bit of security measure to make sure the user knows what server he is going to leave
                 if (msg.guild.id == args[1]) {
-                    // this is just a bit of security measure to make sure the user knows what server he is going to leave
                     msg.guild.leave()
                         .then(g => console.log(`Left the guild ${g}`))
                         .catch(console.error);
                 } else {
                     console.log('Guild ID didn\'t match with user inputed guild ID.');
                 }
+            // clear bot's message on a channel
             } else if (args[0] === 'clear') {
-                // clear bot's message on a channel
                 const msglimit = args[1];
                 if(msg.channel.type == 'text') {
                     msg.channel.fetchMessages({ limit: msglimit }).then(messages => {
@@ -272,7 +275,6 @@ client.on('message', msg => {
                     });
                 }
             } else if (args[0] === 'editchar') {
-                // editing command for player.char
                 const p = args[4];
                 if (args[1] === 'help') {
                     msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value] [player]');
@@ -302,7 +304,6 @@ client.on('message', msg => {
     }
 
     if (command === 'register') {
-        // command for registering as a "player"
         if (gv.playerCount === 0) {
             msg.reply('is registered as player 1! Waiting for another player...');
             gv.playerCount = 1;
@@ -321,10 +322,8 @@ client.on('message', msg => {
             }
         } else {
             msg.reply(' there is already two registered players.');
-            // failsafe in case someone tries to register when a game is in session
         }
     } else if (command === 'start') {
-        // starting the game
         if (gv.playerCount !== 2) {
             msg.channel.send('Not enough player registered yet. Please type !register.');
         } else if (args.length !== 0) {
@@ -336,17 +335,13 @@ client.on('message', msg => {
             msg.channel.send('An error occured! Please try again.');
         }
     } else if (command === 'list') {
-        // list command
         msg.reply('https://imgur.com/mtzCunX');
     } else if (command === 'stats') {
-        // stat command
         msg.reply('https://i.imgur.com/lY5H53N.jpg');
     } else if (command === 'actions') {
-        // action command
         msg.reply('https://i.imgur.com/nuZbg4x.jpg');
     } else if (command === 'customchar') {
         const custChar = new Object();
-        // const filter = () => true;
         msg.author.send('__**Welcome to the character creation screen**__\n' +
 		'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
 		'If you type anything other than the asked value then the creation will break\n');
@@ -356,7 +351,6 @@ client.on('message', msg => {
 		'*Note that you can only use alphanumerical characters, space and \'*');
         char.push(custChar);
     } else if (gv.gameStarting === true) {
-        // character selection
         let i;
         for (i = 0; i < char.length; i++) {
             const name = char[i].name.toLowerCase().trim();
@@ -691,3 +685,5 @@ client.on('message', msg => {
         }
     }
 });
+
+client.login(token.token);
