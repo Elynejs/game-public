@@ -516,6 +516,8 @@ const func = {
             } else {
                 console.log(`${char_1.name} tried to dodge ${char_2.name}'s magic but failed.`);
             }
+        } else {
+            console.log('dodgte shouldn\'t have been called');
         }
     },
 
@@ -563,6 +565,7 @@ const func = {
         func.reactKo(looser, event);
         func.reactVictory(winner, event);
         event.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
+        gv.turn = 1;
         gv.gamePhase = false;
         gv.turnPhase = false;
         gv.playerCount = 0;
@@ -585,19 +588,14 @@ const func = {
         gv.player2.choseAction = false;
         gv.player1.char = [];
         gv.player2.char = [];
-        gv.player1.id = 0;
-        gv.player2.id = 0;
-        gv.player1.username = '';
-        gv.player2.username = '';
+        gv.player1.action = '';
+        gv.player2.action = '';
         gv.player1.totalDamages += gv.player1.dmg;
         gv.player2.totalDamages += gv.player2.dmg;
         gv.player1.dmg = 0;
         gv.player2.dmg = 0;
-        gv.player1.action = '';
-        gv.player2.action = '';
         gv.player1.totalTurns += gv.turn;
         gv.player2.totalTurns += gv.turn;
-        gv.turn = 1;
         gv.player1.gamesPlayed += 1;
         winner.gamesWon += 1;
         gv.player2.gamesPlayed += 1;
@@ -612,6 +610,10 @@ const func = {
                 console.log('An unregistered player accessed this part which is supposed to be impossible.');
             }
         }
+        gv.player1.id = 0;
+        gv.player2.id = 0;
+        gv.player1.username = '';
+        gv.player2.username = '';
         event.channel.send('Game has been successfully reset and all your stats saved.');
     },
 
@@ -651,7 +653,8 @@ const func = {
         }
     },
 
-    // function for cd reset
+    // called at the beginning of a new game (on turn 1)
+    // sets all cooldown to 0
     resetCd: pl => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
@@ -661,7 +664,12 @@ const func = {
         }
     },
 
-    // function for cd iteration
+    // called at the end of each turn on the newTurnPhase function
+    // checks if the cooldowns of a character are above 0
+    // and if so decrements them
+    // As skillTimer is the amount of turn to let skills activated
+    // if it becomes 0 after the decrementation we run the removeActiveEffect() function
+    // TODO : remove the for loop and only decrement for relevant character pl.char[pl.active]
     cdIteration: (pl, event) => {
         let i;
         for (i = 0; i < pl.char.length; i++) {
@@ -674,11 +682,8 @@ const func = {
             if (pl.char[i].skillCd > 0 && pl.char[i].skillCdMax >= pl.char[i].skillCd) {
                 pl.char[i].skillCd -= 1;
             }
-            if (pl.char[i].skillTimer >= 0) {
+            if (pl.char[i].skillTimer > 0) {
                 pl.char[i].skillTimer -= 1;
-                if (pl.char[i].skillTimer < 0) {
-                    pl.char[i].skillTimer = 0;
-                }
                 if (pl.char[i].skillTimer === 0 && pl.char[i].hasActiveSkill === true) {
                     func.removeActiveEffect(pl, event);
                 }
@@ -707,15 +712,15 @@ const func = {
     },
 
     // function for action phase
-    actionphase: (firstplayer, secondplayer, event, client) => {
+    actionphase: (p1, p2, event, client) => {
         if (gv.actionAmount === 2) {
             func.whoIsActive(gv.player1);
             func.whoIsActive(gv.player2);
-            if (firstplayer.char[firstplayer.active].spd > secondplayer.char[secondplayer.active].spd) {
+            if (p1.char[p1.active].spd > p2.char[p2.active].spd) {
                 // player1.char is faster than player2.char so it's attack is done before
                 const phase = async () => {
-                    await func.actionPhaseActions(firstplayer, secondplayer, event, client);
-                    await func.actionPhaseActions(secondplayer, firstplayer, event, client);
+                    await func.actionPhaseActions(p1, p2, event, client);
+                    await func.actionPhaseActions(p2, p1, event, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
@@ -723,10 +728,10 @@ const func = {
                     await func.addTurn(event, client);
                 };
                 phase();
-            } else if (firstplayer.char[firstplayer.active].spd < secondplayer.char[secondplayer.active].spd) {
+            } else if (p1.char[p1.active].spd < p2.char[p2.active].spd) {
                 const phase = async () => {
-                    await func.actionPhaseActions(secondplayer, firstplayer, event, client);
-                    await func.actionPhaseActions(firstplayer, secondplayer, event, client);
+                    await func.actionPhaseActions(p2, p1, event, client);
+                    await func.actionPhaseActions(p1, p2, event, client);
                     gv.player1.choseAction = false;
                     gv.player2.choseAction = false;
                     gv.turnPhase = false;
@@ -734,11 +739,11 @@ const func = {
                     await func.addTurn(event, client);
                 };
                 phase();
-            } else if (firstplayer.char[firstplayer.active].spd === secondplayer.char[secondplayer.active].spd) {
+            } else if (p1.char[p1.active].spd === p2.char[p2.active].spd) {
                 if (Math.floor(Math.random() * 2) >= 1) {
                     const phase = async () => {
-                        await func.actionPhaseActions(firstplayer, secondplayer, event, client);
-                        await func.actionPhaseActions(secondplayer, firstplayer, event, client);
+                        await func.actionPhaseActions(p1, p2, event, client);
+                        await func.actionPhaseActions(p2, p1, event, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
@@ -748,8 +753,8 @@ const func = {
                     phase();
                 } else {
                     const phase = async () => {
-                        await func.actionPhaseActions(secondplayer, firstplayer, event, client);
-                        await func.actionPhaseActions(firstplayer, secondplayer, event, client);
+                        await func.actionPhaseActions(p2, p1, event, client);
+                        await func.actionPhaseActions(p1, p2, event, client);
                         gv.player1.choseAction = false;
                         gv.player2.choseAction = false;
                         gv.turnPhase = false;
@@ -764,7 +769,9 @@ const func = {
         }
     },
 
-    // function for regen
+    // called during newTurnPhase function
+    // adds the rgn stats as hp to the hp stat
+    // and prevents it from going past hpmax stat
     regen: pl => {
         if (pl.char[pl.active].hp < pl.char[pl.active].hpmax) {
             pl.char[pl.active].hp += pl.char[pl.active].rgn;
@@ -774,9 +781,13 @@ const func = {
         }
     },
 
-    // function for resetting turn phase
+    // called in the addTurn() function
+    // runs every function needed to restart a turn
+    // resets every player message to prevent it from displaying outdated
+    // information next turn
+    // displays the embbed messages asking the players to input actions
+    // TODO : Find a way to make the embbed messages take less places (maybe displaying one at a time ?)
     newTurnPhase: (event, client) => {
-        // allowing combat regen and preventing it from going past max hp and deducing cd
         if (gv.gamePhase === true && gv.turnPhase === false) {
             func.regen(gv.player1);
             func.regen(gv.player2);
@@ -809,7 +820,6 @@ const func = {
             func.isDefenseStackReset(gv.player1);
             func.isDefenseStackReset(gv.player2);
             event.channel.send(`\`\`\`diff\nTurn ${gv.turn} has started. Chose your character's action.\`\`\``);
-            gv.turnPhase = true;
             event.channel.send({
                 embed: {
                     color: 16286691,
@@ -850,6 +860,7 @@ const func = {
                     timestamp: new Date(),
                 },
             });
+            gv.turnPhase = true;
         }
     },
 
