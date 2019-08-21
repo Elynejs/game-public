@@ -606,8 +606,8 @@ const func = {
         gv.player2.action = '';
         gv.player1.totalDamages += gv.player1.dmg;
         gv.player2.totalDamages += gv.player2.dmg;
-        gv.player1 = {};
-        gv.player2 = {};
+        gv.player1.dmg = 0;
+        gv.player2.dmg = 0;
         gv.player1.totalTurns += gv.turn;
         gv.player2.totalTurns += gv.turn;
         gv.player1.gamesPlayed += 1;
@@ -624,6 +624,8 @@ const func = {
                 console.log('An unregistered player accessed this part which is supposed to be impossible.');
             }
         }
+        gv.player1 = {};
+        gv.player2 = {};
         event.channel.send('Game has been successfully reset and all your stats saved.');
     },
 
