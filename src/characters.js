@@ -21,14 +21,11 @@ module.exports = class Characters {
         this.magcdmax = magcd;
         this.dodgecd = 2;
         this.rgn = rgn;
-        this.reactSelection1 = 'undefined';
-        this.reactSelection2 = 'undefined';
-        this.reactKo1 = 'undefined';
-        this.reactKo2 = 'undefined';
-        this.reactVictory1 = 'undefined';
-        this.reactVictory2 = 'undefined';
+        this.reactSelection = ['undefined'];
+        this.reactKo = ['undefined'];
+        this.reactVictory = ['undefined'];
         this.emoji = '<:undefined:597308733026205706>';
-        this.emojiKo = '<:undefinedKo:605139762084315137>';
+        this.emojiKo = '<:undefined_KO:605139762084315137>';
         this.ico = 'https://i.imgur.com/7jVkvUT.png';
         this.hasActiveSkill = false;
         this.hasPassiveSkill = false;
@@ -39,5 +36,17 @@ module.exports = class Characters {
         this.isAlive = true;
         this.receivedPassiveFromGold = false;
         this.receivedPassiveFromAyddan = false;
+    }
+
+    reactSelection() {
+        return `${this.emoji} ${this.reactSelection[Math.floor(Math.random() * this.reactSelection.length)]}`;
+    }
+
+    reactKo() {
+        return `${this.emoji} ${this.reactKo[Math.floor(Math.random() * this.reactKo.length)]}`;
+    }
+
+    reactVictory() {
+        return `${this.emoji} ${this.reactVictory[Math.floor(Math.random() * this.reactVictory.length)]}`;
     }
 };

@@ -4,30 +4,6 @@ const pastPlayers = require('./players.json');
 const fs = require('fs');
 const Player = require('./src/player.js');
 const func = {
-    // these three are placeholders, I plan on adding them as methods
-    // inside the characters class later
-    reactSelection: (selected_char, event) => {
-        if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection1}`);
-        } else {
-            event.channel.send(`${selected_char.emoji} ${selected_char.reactSelection2}`);
-        }
-    },
-    reactKo: (p, event) => {
-        if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo1}`);
-        } else {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactKo2}`);
-        }
-    },
-    reactVictory: (p, event) => {
-        if (Math.floor(Math.random() * 2) >= 1) {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactVictory1}`);
-        } else {
-            event.channel.send(`${p.char[p.active].emoji} ${p.char[p.active].reactVictory1}`);
-        }
-    },
-
     // function for status display of how many characters each players still has
     // it uses array with space as values that we later fill with the corresponding emote
     // we do that to prevent an error with the way embbed messages work
@@ -413,7 +389,7 @@ const func = {
                 timestamp: new Date(),
             },
         });
-        func.reactKo(player, event);
+        event.channel.send(player.char[player.lastAliveChar].reactKo());
         player.active = player.futurChar;
     },
 
@@ -576,8 +552,8 @@ const func = {
     // resets all the variables to their original values
     // we also save the player stats to players.json
     gameEnd: (winner, looser, event) => {
-        func.reactKo(looser, event);
-        func.reactVictory(winner, event);
+        event.channel.send(looser.char[looser.active].reactKo());
+        event.channel.send(winner.char[winner.active].reactVictory());
         event.channel.send(`**\`\`\`fix\nCongratulation to ${winner.username} !\nGAME IS OVER ! \`\`\`**`);
         gv.turn = 1;
         gv.gamePhase = false;

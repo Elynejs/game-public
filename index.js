@@ -359,7 +359,7 @@ client.on('message', msg => {
                     if (!gv.player1.choseChar) {
                         gv.player1.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);
-                        fc.reactSelection(gv.player1.char[gv.arp1], msg);
+                        msg.channel.send(gv.player1.char[gv.arp1].reactSelection());
                         gv.arp1 += 1;
                         if (gv.player1.char.length === gv.player1.charAmount) {
                             msg.channel.send(`${gv.player1.username} chose all of their characters.`);
@@ -373,7 +373,7 @@ client.on('message', msg => {
                     if (!gv.player2.choseChar) {
                         gv.player2.char.push(char[i]);
                         msg.reply(` chose ${char[i].name}`);
-                        fc.reactSelection(gv.player2.char[gv.arp2], msg);
+                        msg.channel.send(gv.player2.char[gv.arp2].reactSelection());
                         gv.arp2 += 1;
                         if (gv.player2.char.length === gv.player2.charAmount) {
                             msg.channel.send(`${gv.player2.username} chose all of their characters.`);
