@@ -1,6 +1,6 @@
 module.exports = class Characters {
-    constructor(name, hp, atk, critMulti, critChance, def, spd, agi, acr, mag, magcd, rgn) {
-        this.tier = undefined;
+    constructor(tier, name, hp, atk, critMulti, critChance, def, spd, agi, acr, mag, magcd, rgn) {
+        this.tier = tier;
         this.name = name;
         this.hpmax = hp;
         this.hp = hp;
