@@ -265,7 +265,6 @@ client.on('message', msg => {
                             botMsg[0].delete();
                         } else {
                             msg.delete();
-                            console.log('Nothing to delete');
                         }
                         const messagesDeleted = botMsg.array().length;
                         // Logging amount of messages deleted
@@ -279,14 +278,14 @@ client.on('message', msg => {
                 if (args[1] === 'help') {
                     msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value] [player]');
                 } else if (args.length > 3) {
-                    let a;
-                    for (a = 0; a < char.length; a++) {
-                        if (args[1] === p.char[a].name.toLowerCase().trim().replace(/\s+/g, '')) {
-                            console.log(`value found : ${p.char[a].name}`);
+                    let i;
+                    for (i = 0; i < char.length; i++) {
+                        if (args[1] === p.char[i].name.toLowerCase().trim().replace(/\s+/g, '')) {
+                            console.log(`value found : ${p.char[i].name}`);
                             const charValue = parseInt(args[3]);
-                            p.char[a][args[2]] = charValue;
-                            msg.channel.send(`Admin changed the value of ${p.char[a].name}'s ${p.char[a][args[2]]} to ${charValue}`);
-                            console.log(p.char[a]);
+                            p.char[i][args[2]] = charValue;
+                            msg.channel.send(`Admin changed the value of ${p.char[i].name}'s ${p.char[i][args[2]]} to ${charValue}`);
+                            console.log(p.char[i]);
                         }
                     }
                 } else {
@@ -450,7 +449,7 @@ client.on('message', msg => {
     // turn phase of the combat phase
     if (gv.gamePhase === true && gv.turnPhase === true) {
         switch (command) {
-        case'surrender':
+        case 'surrender':
             // triggers the function that ends the game for the
             // player that type the command !surrender
             if (msg.member.id === gv.player1.id) {
