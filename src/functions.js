@@ -4,7 +4,7 @@ const pastPlayers = require('./players.json');
 const fs = require('fs');
 const Player = require('./src/player.js');
 const func = {
-    // function for status display of how many characters each players still has
+    // function for status display of how many characters each player still has
     // it uses array with space as values that we later fill with the corresponding emote
     // we do that to prevent an error with the way embbed messages work
     // where if the value of a field is empty and/or not a string it doesn't display
