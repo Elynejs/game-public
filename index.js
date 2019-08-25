@@ -15,6 +15,7 @@ const fc = require('./src/functions.js');
 const gv = require('./src/variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
+const generator = require('./src/characterBulkGenerator.js');
 // Defining bot activity
 // to the necessary command a user has to type to start a game.
 client.on('ready', () => {
@@ -55,7 +56,8 @@ client.on('message', msg => {
         if (msg.member.id === config.ownerID || config.adminID) {
             // command that displays an embedd command that shows every admin
             // commands and how to use them as well as what they do
-            if (args[0] === 'help') {
+            switch (args[0]) {
+            case 'help':
                 msg.channel.send({
                     embed: {
                         color: 16286691,
@@ -81,17 +83,17 @@ client.on('message', msg => {
                             value: '```!ad math => Makes the bot display statistics about characters depending on their Tier ( + It\'s dyanamic!!)```',
                         }],
                     },
-                }
-                );
-            } else if (args[0] === 'generate') {
-                const generator = require('./src/characterBulkGenerator.js/index.js');
+                });
+                break;
+            case 'generate':
                 if (!args[1]) {
                     msg.channel.send('Please input an amount of character to generate');
                 } else {
                     generator(parseInt(args[1]));
                     msg.channel.send(`${args[1]} characters have been automatically generated and saved in charactersBulk.json`);
                 }
-            } else if (args[0] === 'math') {
+                break;
+            case 'math': {
                 // One day, I woke up and said to myself "Math is cool, especially statistics".
                 // So I decided to make a command that would display basics statistics math about the character stats of this game.
                 // Decision I strongly regretted later on when I realised I had no idea what the fuck I am doing
@@ -244,7 +246,9 @@ client.on('message', msg => {
 'Average HP Regen        : ' + fc.average(H.rgn) + '	' + 'Min HP Regen : ' + Math.min(...H.rgn) + '	' + 'Max HP Regen : ' + Math.max(...H.rgn) + '\n' +
 'Average Magic           : ' + fc.average(H.mag) + '	' + 'Min Magic : ' + Math.min(...H.mag) + '	' + 'Max Magic : ' + Math.max(...H.mag) + '\n' +
 '```' + `\n*Note that ${H.noMagChar} out of ${H.charCount} characters had no magic and where left out of the average calculation.*`);
-            } else if (args[0] === 'gleave') {
+                break;
+            }
+            case 'gleave':
                 // this is just a bit of security measure to make sure the user knows what server he is going to leave
                 if (msg.guild.id == args[1]) {
                     msg.guild.leave()
@@ -253,10 +257,10 @@ client.on('message', msg => {
                 } else {
                     console.log('Guild ID didn\'t match with user inputed guild ID.');
                 }
-            // clear bot's message on a channel
-            } else if (args[0] === 'clear') {
+                break;
+            case 'clear': {
                 const msglimit = args[1];
-                if(msg.channel.type == 'text') {
+                if (msg.channel.type == 'text') {
                     msg.channel.fetchMessages({ limit: msglimit }).then(messages => {
                         const botMsg = messages.filter(author => author.author.bot);
                         if (botMsg.array().length > 1) {
@@ -273,7 +277,9 @@ client.on('message', msg => {
                         console.log('Error while deleting files', err);
                     });
                 }
-            } else if (args[0] === 'editchar') {
+                break;
+            }
+            case 'editchar': {
                 const p = args[4];
                 if (args[1] === 'help') {
                     msg.channel.send('Correct syntaxe is !editchar [name] [stat] [value] [player]');
@@ -291,14 +297,17 @@ client.on('message', msg => {
                 } else {
                     msg.channel.send('Syntaxe Error, type !ad editchar help for more information.');
                 }
-            } else if (args[0] === 'reset') {
+                break;
+            }
+            case 'reset':
                 fc.gameEnd(gv.player1, gv.player2, msg);
                 console.log(gv);
-            } else {
-                msg.channel.send('It seems no command matches your input, please type "!ad help" to see the list of admin commands.');
+                break;
+            default:
+                msg.channel.send('It seems no command matched your input, please type "!ad help" to see the list of admin commands.');
             }
         } else {
-            msg.channel.send('You lack permissions to use this command.');
+            msg.channel.send('You lack permissions to use admin commands.');
         }
     }
 
