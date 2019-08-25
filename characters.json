@@ -35,7 +35,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "undefined",
@@ -73,7 +74,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "S",
@@ -111,7 +113,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "S",
@@ -149,7 +152,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "S",
@@ -187,7 +191,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "S",
@@ -225,7 +230,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "S",
@@ -263,7 +269,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -301,7 +308,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -339,7 +347,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -377,7 +386,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -415,7 +425,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -453,7 +464,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "A",
@@ -494,7 +506,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "B",
@@ -532,7 +545,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "B",
@@ -573,7 +587,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "C",
@@ -611,7 +626,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "H",
@@ -649,7 +665,8 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   },
   {
     "tier": "H",
@@ -687,6 +704,7 @@
     "isActive": false,
     "isAlive": true,
     "receivedPassiveFromGold": false,
-    "receivedPassiveFromAyddan": false
+    "receivedPassiveFromAyddan": false,
+    "author": "Elyne"
   }
 ]

@@ -1,5 +1,5 @@
 module.exports = class Characters {
-    constructor(tier, name, hp, atk, critMulti, critChance, def, spd, agi, acr, mag, magcd, rgn) {
+    constructor(tier, name, hp, atk, critMulti, critChance, def, spd, agi, acr, mag, magcd, rgn, author) {
         this.tier = tier;
         this.name = name;
         this.hpmax = hp;
@@ -36,6 +36,7 @@ module.exports = class Characters {
         this.isAlive = true;
         this.receivedPassiveFromGold = false;
         this.receivedPassiveFromAyddan = false;
+        this.author = author;
     }
 
     reactSelection() {
