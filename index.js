@@ -13,8 +13,8 @@ const config = require('./config.json');
 const token = require('./token.json');
 const fc = require('./src/functions.js');
 const gv = require('./src/variables.js');
-const char = require('./characters.json');
-const pastPlayers = require('./players.json');
+const char = require('./src/characters.json');
+const pastPlayers = require('./src/players.json');
 const generator = require('./src/characterBulkGenerator.js');
 // Defining bot activity
 // to the necessary command a user has to type to start a game.

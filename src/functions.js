@@ -2,7 +2,7 @@ const gv = require('./variables.js');
 const char = require('./characters.json');
 const pastPlayers = require('./players.json');
 const fs = require('fs');
-const Player = require('./src/player.js');
+const Player = require('./player');
 const func = {
     // function for status display of how many characters each player still has
     // it uses array with space as values that we later fill with the corresponding emote
