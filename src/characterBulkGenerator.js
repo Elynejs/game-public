@@ -22,7 +22,7 @@ module.exports = function(amount) {
             randInt(3, 10),
             randInt(3, 10),
             randInt(0, 2000),
-            randInt(2, 15),
+            randInt(0, 15),
             randInt(20, 200),
             'Elyne'
         );
