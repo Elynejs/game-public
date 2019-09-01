@@ -17,7 +17,7 @@ Then, download the bot on github [by clicking this](https://github.com/Elynejs/g
 
 And type :
 
-```powershell
+```Node.js
 node index.js
 ```
 
