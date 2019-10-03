@@ -21,4 +21,4 @@ And type :
 node index.js
 ```
 
-__**Don't forget to change the token in the config.json file**__
+**Don't forget to change the token in the config.json file**
