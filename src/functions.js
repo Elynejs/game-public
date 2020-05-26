@@ -590,8 +590,7 @@ const func = {
         winner.gamesWon += 1;
         gv.player2.gamesPlayed += 1;
         looser.gamesLost += 1;
-        let i;
-        for (i = 0; i <= pastPlayers.length; i++) {
+        for (let i = 0; i <= pastPlayers.length; i++) {
             if (gv.player1.id === pastPlayers[i].id) {
                 pastPlayers[i] = gv.player1;
             } else if (gv.player2.id === pastPlayers[i].id) {

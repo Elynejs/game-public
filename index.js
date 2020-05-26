@@ -348,16 +348,6 @@ client.on('message', msg => {
         msg.reply('https://i.imgur.com/lY5H53N.jpg');
     } else if (command === 'actions') {
         msg.reply('https://i.imgur.com/nuZbg4x.jpg');
-    } else if (command === 'customchar') {
-        const custChar = new Object();
-        msg.author.send('__**Welcome to the character creation screen**__\n' +
-		'Be advised that any error you make will be `permanent` so be extra sure when inputting your values.\n' +
-		'If you type anything other than the asked value then the creation will break\n');
-        msg.author.send('So, let\'s begin, what\'s the tier of your character ?\n' +
-		'*Available tiers are S, A, B, C, H, note that H is reserved for healers which this generator is not yet able to make since they require special bit of coding, you can contact me on discord Elyne#6997 and I\'ll create it for you.*');
-        msg.author.send('What\'s the name of your character ?\n' +
-		'*Note that you can only use alphanumerical characters, space and \'*');
-        char.push(custChar);
     } else if (gv.gameStarting === true) {
         let i;
         for (i = 0; i < char.length; i++) {

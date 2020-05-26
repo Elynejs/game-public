@@ -8,8 +8,7 @@ module.exports = function(amount) {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
-    let i;
-    for (i = 0; i <= amount; i++) {
+    for (let i = 0; i <= amount; i++) {
         const generatedChar = new Characters(
             Tiers[Math.floor(Math.random() * Tiers.length)],
             'placeholder',
@@ -24,7 +23,7 @@ module.exports = function(amount) {
             randInt(0, 2000),
             randInt(2, 15),
             randInt(20, 200),
-            'Elyne'
+            'Elyne',
         );
         char.push(generatedChar);
     }
